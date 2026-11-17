@@ -2,7 +2,7 @@
 """
 Local web server for the LishePoa validation site.
 
-    python3 serve.py                 # http://localhost:8000  (this computer only)
+    python3 serve.py                 # http://localhost:8000, or the next free port if 8000 is busy
     python3 serve.py --lan           # also reachable by teammates on the same Wi-Fi/LAN
     python3 serve.py --port 9000
 
@@ -27,6 +27,7 @@ Standard library only.
 from __future__ import annotations
 
 import argparse
+import errno
 import json
 import os
 import re
@@ -143,14 +144,29 @@ class Handler(SimpleHTTPRequestHandler):
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--port", type=int, default=8000)
+    ap.add_argument("--port", type=int, default=None,
+                    help="port to use (default: 8000, or the next free port if 8000 is busy)")
     ap.add_argument("--lan", action="store_true", help="listen on all interfaces so teammates on the LAN can connect")
     a = ap.parse_args()
     host = "0.0.0.0" if a.lan else "127.0.0.1"
-    srv = ThreadingHTTPServer((host, a.port), Handler)
-    print(f"LishePoa validation site: http://localhost:{a.port}/")
+    # An explicit --port must be used as given; otherwise try 8000, 8001, ... 8019.
+    candidates = [a.port] if a.port else range(8000, 8020)
+    srv, port = None, None
+    for port in candidates:
+        try:
+            srv = ThreadingHTTPServer((host, port), Handler)
+            break
+        except OSError as e:
+            if e.errno != errno.EADDRINUSE:
+                raise
+    if srv is None:
+        tried = f"port {a.port}" if a.port else "ports 8000-8019"
+        raise SystemExit(f"Can't start: {tried} already in use. Pick another with --port, e.g. python3 serve.py --port 9000")
+    if not a.port and port != 8000:
+        print(f"Port 8000 is busy (another program is using it), so using {port} instead.")
+    print(f"LishePoa validation site: http://localhost:{port}/")
     if a.lan:
-        print("LAN mode: teammates open http://<this-computer's-IP>:%d/  (find the IP with: hostname -I)" % a.port)
+        print("LAN mode: teammates open http://<this-computer's-IP>:%d/  (find the IP with: hostname -I)" % port)
     print("Manual reviews are saved to reviews/<name>.json. Commit them to share progress. Ctrl+C to stop.")
     try:
         srv.serve_forever()
