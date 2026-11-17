@@ -2,8 +2,16 @@
 Called by judge_eval.py; opens in any browser, no internet needed."""
 import json
 
-def write_report(path, data):
+def write_report(path, data, site_page=False):
+    """site_page=True labels the page '② LLM judge' and adds the shared site navigation."""
     html = TEMPLATE.replace("__DATA__", json.dumps(data, ensure_ascii=False).replace("</", "<\\/"))
+    if site_page:
+        from site_nav import inject
+        html = html.replace("<title>Extraction Accuracy Report</title>",
+                            "<title>② LLM judge · LishePoa product validation</title>")
+        html = html.replace("<h1>Extraction accuracy vs human ground truth</h1>",
+                            "<h1>② LLM judge: extraction accuracy vs human ground truth</h1>")
+        html = inject(html, "llm")
     with open(path, "w", encoding="utf-8") as f:
         f.write(html)
 

@@ -51,7 +51,7 @@ DEFAULT_MODELS = [
 # Ground-truth IDs that the models stored under a different ID: {ground truth ID: model ID}.
 # Empty by default. F406 is skipped: the ground truth splits it into F406_1 (empty) and F406_2
 # (the real product). To include it, use {"F406_2": "F406"}.
-ID_ALIASES = {}
+ID_ALIASES = {"F406_2": "F406"}  # matches the regex comparison, which also pairs F406 with F406_2
 
 # Price per 1M tokens for the judge (USD). Check OpenAI's pricing page and edit if changed.
 PRICE_IN, PRICE_OUT = 0.15, 0.60
@@ -705,6 +705,18 @@ def report_data(rows, names, target, info):
             "target": target, "areas": areas, "fields": fields, "nutrients": nutrients,
             "pass_products": pass_products}
 
+def export_rows(rows, names, target, info):
+    """Per-product marks for the manual-review page: {id: {"f": {field: [[mark, note], ...]},
+    "n": {nutrient: [mark, ...]}, "v": [product verdict per model]}}."""
+    out = {}
+    for r in rows:
+        out[r["id"]] = {
+            "f": {f: fd["marks"] for f, fd in r["fields"].items()},
+            "n": {x["nutrient"]: x["marks"] for x in r["nutrients"]},
+            "v": [list(product_verdict(r, i)) for i in range(len(names))],
+        }
+    return {"models": names, "judge": info["judge"], "when": info["when"], "target": target, "rows": out}
+
 # ---------------------------------------------------------------- main
 def load_dotenv(path=".env"):
     """Read KEY=value lines from .env (next to this script) into the environment."""
@@ -810,6 +822,16 @@ def main():
     report_path = os.path.join(os.path.dirname(os.path.abspath(args.out)), "report.html")
     write_report(report_path, report_data(rows, names, args.target, info))
     print(f"Charts: {report_path}  (open in a browser)")
+    if not args.limit:  # site pages and the manual-review page read these; only publish full runs
+        site_dir = os.path.join(here, "site")
+        os.makedirs(site_dir, exist_ok=True)
+        write_report(os.path.join(site_dir, "llm-judge.html"), report_data(rows, names, args.target, info),
+                     site_page=True)
+        rows_path = os.path.join(here, "results", "llm_judge_rows.json")
+        os.makedirs(os.path.dirname(rows_path), exist_ok=True)
+        with open(rows_path, "w", encoding="utf-8") as f:
+            json.dump(export_rows(rows, names, args.target, info), f, ensure_ascii=False, separators=(",", ":"))
+        print(f"Site page: {os.path.join(site_dir, 'llm-judge.html')}  |  per-product marks: {rows_path}")
     u = judge.usage
     if u["calls"]:
         print(f"API calls {u['calls']} | tokens in {u['in']:,} out {u['out']:,} | "
