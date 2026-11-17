@@ -23,7 +23,8 @@ Outputs:
     results/comparison.json   full per-record, per-field results
     results/summary.csv       one row per model
     results/records.csv       one row per record x model
-    ui/index.html             self-contained dashboard (data inlined, built from ui/template.html)
+    results/regex_summary.json  per-model summary for the overview page
+    site/regex.html           self-contained dashboard (data inlined, built from templates/regex.html)
 """
 from __future__ import annotations
 
@@ -35,12 +36,15 @@ from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any, Callable
 
+from site_nav import inject as inject_nav
+
 ROOT = Path(__file__).resolve().parent
 
+# Same names and order as judge_eval.py so each model keeps one colour on every page.
 DEFAULT_MODELS = [
-    ("Claude Opus 5.5", "claude-opus-5-5.json"),
-    ("GPT-6 Sol", "gpt-6-sol.json"),
+    ("GPT-6-Sol", "gpt-6-sol.json"),
     ("Gemini 3.8 Flash", "gemini-3.8-flash.json"),
+    ("Claude Opus 5.5", "claude-opus-5-5.json"),
 ]
 
 # Group weights for the record-level score (renormalised over applicable groups).
@@ -536,15 +540,22 @@ def run(gt_path: Path, models: list[tuple[str, Path]], threshold: float,
     out_dir.mkdir(parents=True, exist_ok=True)
     ui_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "comparison.json").write_text(json.dumps(bundle, ensure_ascii=False, indent=1))
-    # Inline the data so index.html is a single self-contained file. Sandboxed
+    # Inline the data so regex.html is a single self-contained file. Sandboxed
     # browsers (Flatpak/Snap) only get access to the one file opened, not siblings.
     payload = json.dumps(bundle, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
-    template = (ROOT / "ui" / "template.html").read_text()
+    template = (ROOT / "templates" / "regex.html").read_text()
     marker = '<script src="data.js"></script>'
     if marker not in template:
-        raise SystemExit(f"ui/template.html is missing the {marker} placeholder")
-    (ui_dir / "index.html").write_text(
-        template.replace(marker, f"<script>window.COMPARISON = {payload};</script>"))
+        raise SystemExit(f"templates/regex.html is missing the {marker} placeholder")
+    html = template.replace(marker, f"<script>window.COMPARISON = {payload};</script>")
+    (ui_dir / "regex.html").write_text(inject_nav(html, "regex"))
+
+    # Small summary for the overview page (no per-record detail).
+    (out_dir / "regex_summary.json").write_text(json.dumps({
+        "meta": bundle["meta"],
+        "summary": {n: {k: v for k, v in s_.items() if k not in ("fields", "unmatched_model_ids")}
+                    for n, s_ in summary.items()},
+    }, ensure_ascii=False, indent=1))
 
     with (out_dir / "summary.csv").open("w", newline="") as fh:
         w = csv.writer(fh)
@@ -576,7 +587,7 @@ def main() -> None:
     ap.add_argument("--no-penalise-extra", action="store_true",
                     help="don't penalise nutrients reported by a model but absent from GT")
     ap.add_argument("--out", default=str(ROOT / "results"))
-    ap.add_argument("--ui", default=str(ROOT / "ui"))
+    ap.add_argument("--site", default=str(ROOT / "site"), help="where regex.html is written")
     a = ap.parse_args()
 
     if a.model:
@@ -584,7 +595,7 @@ def main() -> None:
     else:
         models = [(n, ROOT / "data" / f) for n, f in DEFAULT_MODELS]
 
-    b = run(Path(a.gt), models, a.threshold, not a.no_penalise_extra, Path(a.out), Path(a.ui))
+    b = run(Path(a.gt), models, a.threshold, not a.no_penalise_extra, Path(a.out), Path(a.site))
     print(f"Ground truth: {b['meta']['gt_records']} records | threshold {a.threshold:.0%}\n")
     hdr = f"{'Model':<20}{'Matched':>8}{'Pass':>7}{'Fail':>7}{'Pass%':>8}{'Mean':>8}  " + " ".join(
         f"{g[:6]:>7}" for g in GROUP_WEIGHTS)
@@ -593,7 +604,7 @@ def main() -> None:
     for n, s in b["summary"].items():
         print(f"{n:<20}{s['matched']:>8}{s['passed']:>7}{s['failed']:>7}{s['pass_rate']:>8.1%}{s['mean_score']:>8.1%}  "
               + " ".join(f"{(s['groups'][g] or 0):>7.1%}" for g in GROUP_WEIGHTS))
-    print(f"\nWrote {a.out}/comparison.json, summary.csv, records.csv and {a.ui}/index.html")
+    print(f"\nWrote {a.out}/comparison.json, summary.csv, records.csv, regex_summary.json and {a.site}/regex.html")
 
 
 if __name__ == "__main__":

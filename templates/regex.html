@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LishePoa · Model Extraction vs Ground Truth</title>
+<title>① Regex comparison · LishePoa product validation</title>
 <style>
   :root {
     color-scheme: light;
@@ -119,7 +119,7 @@
 <body>
 <header>
   <div>
-    <h1>LishePoa product validation: model extraction vs ground truth</h1>
+    <h1>① Regex comparison: model extraction vs ground truth</h1>
     <div class="sub" id="subtitle"></div>
   </div>
   <div class="spacer"></div>
@@ -218,7 +218,7 @@
 <script>
 (() => {
   const D = window.COMPARISON;
-  if (!D) { document.body.innerHTML = '<p style="padding:40px">No data embedded. Open <code>ui/index.html</code> (not template.html), or run <code>python3 compare.py</code> to rebuild it.</p>'; return; }
+  if (!D) { document.body.innerHTML = '<p style="padding:40px">No data embedded. Open <code>site/regex.html</code> (not the template), or run <code>python3 compare.py</code> to rebuild it.</p>'; return; }
   const M = D.meta.models;
   const COLORS = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)'];
   const color = name => COLORS[M.indexOf(name) % COLORS.length];
@@ -510,7 +510,7 @@
     `<b>Ingredients:</b> 55% token Dice + 25% sequence similarity + 20% recall of regex-extracted key facts: E-numbers/INS codes (<code>E\\s?\\d{3,4}[a-z]?</code>) and percentages (<code>\\d+(\\.\\d+)?\\s*%</code>). <b>Other label info:</b> recall of GT words (models may add extra lines).`,
     `<b>Missing</b> (GT has a value, model doesn't) = 0. <b>Extra</b> nutrients (model invents a value GT doesn't have) = ${D.meta.penalise_extra_nutrients ? '0 (penalized)' : 'not scored'}. Extra non-nutrient text is shown but not scored.`,
     `<b>Record score</b> = weighted mean of group scores, re-weighted over the groups present: ${Object.entries(W).map(([g, w]) => `${GROUP_LABEL[g]} ${Math.round(w / tw * 100)}%`).join(', ')}. A record passes (YES) when score ≥ threshold (default ${Math.round(D.meta.threshold * 100)}%).`,
-    `Regenerate with <code>python3 compare.py [--threshold 0.85]</code>. Outputs go to <code>results/</code> (comparison.json, summary.csv, records.csv) and <code>ui/index.html</code> (self-contained, data inlined).`,
+    `Regenerate with <code>python3 compare.py [--threshold 0.85]</code>. Outputs go to <code>results/</code> (comparison.json, summary.csv, records.csv) and <code>site/regex.html</code> (self-contained, data inlined).`,
   ].map(x => `<li>${x}</li>`).join('');
 
   // ---------- threshold ----------

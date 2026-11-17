@@ -1,0 +1,112 @@
+{
+ "meta": {
+  "ground_truth": "ground_truth.json",
+  "models": [
+   "GPT-6-Sol",
+   "Gemini 3.8 Flash",
+   "Claude Opus 5.5"
+  ],
+  "model_files": {
+   "GPT-6-Sol": "gpt-6-sol.json",
+   "Gemini 3.8 Flash": "gemini-3.8-flash.json",
+   "Claude Opus 5.5": "claude-opus-5-5.json"
+  },
+  "threshold": 0.8,
+  "group_weights": {
+   "identity": 20,
+   "package": 10,
+   "basis": 10,
+   "nutrients": 40,
+   "ingredients": 15,
+   "label": 5
+  },
+  "gt_records": 1501,
+  "penalise_extra_nutrients": true
+ },
+ "summary": {
+  "GPT-6-Sol": {
+   "matched": 1500,
+   "missing_records": 1,
+   "passed": 1314,
+   "failed": 186,
+   "pass_rate": 0.876,
+   "mean_score": 0.899,
+   "groups": {
+    "identity": 0.8225,
+    "package": 0.8332,
+    "basis": 0.95,
+    "nutrients": 0.9558,
+    "ingredients": 0.8652,
+    "label": 0.84
+   },
+   "field_status": {
+    "mismatch": 1216,
+    "match": 24569,
+    "missing": 968,
+    "partial": 2001,
+    "extra": 1772
+   },
+   "match_log": {
+    "by_gt_uid": 1499,
+    "by_record_id": 1,
+    "unmatched": 0
+   }
+  },
+  "Gemini 3.8 Flash": {
+   "matched": 1500,
+   "missing_records": 1,
+   "passed": 1394,
+   "failed": 106,
+   "pass_rate": 0.9293,
+   "mean_score": 0.9178,
+   "groups": {
+    "identity": 0.8387,
+    "package": 0.8558,
+    "basis": 0.9689,
+    "nutrients": 0.9655,
+    "ingredients": 0.9083,
+    "label": 0.8741
+   },
+   "field_status": {
+    "mismatch": 1034,
+    "match": 25079,
+    "missing": 649,
+    "partial": 1992,
+    "extra": 1957
+   },
+   "match_log": {
+    "by_gt_uid": 1499,
+    "by_record_id": 1,
+    "unmatched": 0
+   }
+  },
+  "Claude Opus 5.5": {
+   "matched": 1500,
+   "missing_records": 1,
+   "passed": 1391,
+   "failed": 109,
+   "pass_rate": 0.9273,
+   "mean_score": 0.915,
+   "groups": {
+    "identity": 0.838,
+    "package": 0.8442,
+    "basis": 0.9633,
+    "nutrients": 0.9621,
+    "ingredients": 0.91,
+    "label": 0.8964
+   },
+   "field_status": {
+    "mismatch": 1035,
+    "match": 24871,
+    "missing": 856,
+    "partial": 1992,
+    "extra": 1772
+   },
+   "match_log": {
+    "by_gt_uid": 1499,
+    "by_record_id": 1,
+    "unmatched": 0
+   }
+  }
+ }
+}
