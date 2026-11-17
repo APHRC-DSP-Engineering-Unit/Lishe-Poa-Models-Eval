@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>③ Manual review · LishePoa product validation</title>
+<style>
+  .lp-nav { position: relative; z-index: 10; display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+    padding: 8px 20px; background: #0b0b0b; color: #f0efec; font: 600 13.5px/1.2 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .lp-nav .lp-brand { margin-right: 14px; font-weight: 700; letter-spacing: .2px; color: #f0efec; text-decoration: none; }
+  .lp-nav .lp-brand small { font-weight: 500; color: #a3a29b; margin-left: 6px; }
+  .lp-nav a.lp-link { color: #c3c2b7; text-decoration: none; padding: 7px 12px; border-radius: 6px; }
+  .lp-nav a.lp-link:hover { background: #262624; color: #fff; }
+  .lp-nav a.lp-link.active { background: #f0efec; color: #0b0b0b; }
+
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7; --surface-1: #fcfcfb; --surface-2: #f0efec;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7;
+    /* models: same slots/order as the regex and LLM-judge pages */
+    --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a;
+    /* reviewers */
+    --rev-1: #6250d6; --rev-2: #e87ba4; --rev-3: #eda100;
+    --good: #0ca30c; --good-text: #006300; --warning: #fab219; --critical: #d03b3b;
+    --good-bg: #e6f4e6; --warn-bg: #fdf3dc; --crit-bg: #fbe7e7; --neutral-bg: #efeee9;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface-1: #1a1a19; --surface-2: #262624;
+    --text-primary: #f0efec; --text-secondary: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835;
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70;
+    --rev-1: #9085e9; --rev-2: #d55181; --rev-3: #c98500;
+    --good-text: #0ca30c; --good-bg: #13301a; --warn-bg: #3a2f12; --crit-bg: #3b1919; --neutral-bg: #2c2c2a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--page);
+         color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  main { padding: 18px 24px 80px; max-width: 1560px; margin: 0 auto; }
+  h1 { font-size: 20px; margin: 0; }
+  .sub { color: var(--text-secondary); font-size: 13px; margin: 2px 0 0; }
+  .muted { color: var(--muted); }
+  .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .spacer { flex: 1; }
+  section, .panel { background: var(--surface-1); border: 1px solid var(--grid); border-radius: 10px; padding: 16px 18px; margin-top: 16px; }
+  section h2 { font-size: 15px; margin: 0 0 4px; }
+  button, select, textarea { font: inherit; color: var(--text-primary); background: var(--surface-1); border: 1px solid var(--axis); border-radius: 6px; padding: 5px 10px; }
+  button { cursor: pointer; }
+  button:hover:not(:disabled) { background: var(--surface-2); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  button.primary { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); font-weight: 600; }
+  button.primary:hover:not(:disabled) { opacity: .88; background: var(--text-primary); }
+  .swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; flex: none; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
+
+  /* reviewer sections */
+  .reviewers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  @media (max-width: 900px) { .reviewers { grid-template-columns: 1fr; } }
+  .rcard { border: 1px solid var(--grid); border-radius: 10px; padding: 12px 14px; background: var(--surface-1); cursor: pointer; text-align: left; width: 100%; }
+  .rcard:hover { background: var(--surface-2); }
+  .rcard.active { outline: 2px solid var(--text-primary); outline-offset: -1px; }
+  .rcard .rname { display: flex; align-items: center; gap: 8px; font-weight: 650; font-size: 15px; }
+  .rcard .rname .you { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--surface-1); background: var(--text-primary); padding: 1px 7px; border-radius: 9px; }
+  .rcard .rstats { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; font-size: 12.5px; color: var(--text-secondary); margin-top: 6px; }
+  .rcard .rstats b { color: var(--text-primary); }
+
+  /* progress bars */
+  .bars { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 16px; }
+  @media (max-width: 1000px) { .bars { grid-template-columns: 1fr; } }
+  .bar-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; gap: 8px; }
+  .bar-label b { font-size: 15px; }
+  .track { height: 14px; border-radius: 4px; background: var(--surface-2); overflow: hidden; display: flex; gap: 2px; }
+  .track > span { display: block; height: 100%; border-radius: 4px; transition: width .25s ease; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+  .legend span { display: inline-flex; gap: 6px; align-items: center; }
+
+  /* workspace */
+  .workspace { display: grid; grid-template-columns: 300px 1fr; gap: 16px; margin-top: 16px; align-items: start; }
+  @media (max-width: 1000px) { .workspace { grid-template-columns: 1fr; } }
+  .list { background: var(--surface-1); border: 1px solid var(--grid); border-radius: 10px; overflow: hidden; position: sticky; top: 10px; max-height: calc(100vh - 20px); display: flex; flex-direction: column; }
+  .list header { padding: 10px 12px; border-bottom: 1px solid var(--grid); font-size: 12.5px; color: var(--text-secondary); }
+  .list ol { list-style: none; margin: 0; padding: 0; overflow: auto; }
+  .list li { padding: 8px 12px; border-bottom: 1px solid var(--grid); cursor: pointer; display: grid; grid-template-columns: 22px 1fr auto; gap: 6px; align-items: center; font-size: 13px; }
+  .list li:hover { background: var(--surface-2); }
+  .list li.sel { background: var(--surface-2); box-shadow: inset 3px 0 0 var(--text-primary); }
+  .list li .n { color: var(--muted); font-size: 11.5px; }
+  .list li .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .list li .t small { display: block; color: var(--muted); font-size: 11px; }
+  .st { font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 9px; white-space: nowrap; }
+  .st-done { background: var(--good-bg); color: var(--good-text); }
+  .st-prog { background: var(--warn-bg); color: #8a5d00; }
+  :root[data-theme="dark"] .st-prog { color: var(--warning); }
+  .st-todo { background: var(--neutral-bg); color: var(--muted); }
+
+  .product { background: var(--surface-1); border: 1px solid var(--grid); border-radius: 10px; }
+  .product .ph { padding: 14px 18px; border-bottom: 1px solid var(--grid); display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
+  .product .ph h3 { margin: 0; font-size: 18px; }
+  .autos { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .auto { border: 1px solid var(--grid); border-radius: 8px; padding: 5px 9px; font-size: 12px; color: var(--text-secondary); }
+  .auto b { color: var(--text-primary); }
+  .group { padding: 12px 18px 16px; border-bottom: 1px solid var(--grid); }
+  .group:last-of-type { border-bottom: none; }
+  .group h4 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: .5px; display: flex; align-items: center; gap: 10px; }
+  .group h4 .gstate { text-transform: none; letter-spacing: 0; }
+  table.vals { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  table.vals th, table.vals td { text-align: left; padding: 5px 7px; border-bottom: 1px solid var(--grid); vertical-align: top; font-size: 12.5px; word-break: break-word; }
+  table.vals th { color: var(--text-secondary); font-weight: 600; font-size: 12px; }
+  table.vals td.k { font-family: ui-monospace, monospace; font-size: 11.5px; color: var(--text-secondary); }
+  table.vals td.gt { background: var(--surface-2); font-weight: 500; }
+  table.vals td.same { color: var(--muted); }
+  table.vals td .eq { font-size: 10.5px; color: var(--muted); margin-left: 4px; }
+  .longtext { display: block; max-height: 120px; overflow: auto; }
+  .autohint { font-size: 11px; color: var(--muted); display: block; margin-top: 2px; }
+  .checks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+  .check { border: 1px dashed var(--axis); border-radius: 8px; padding: 8px 10px; }
+  .check.set { border-style: solid; }
+  .check .who { display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 12.5px; margin-bottom: 6px; }
+  .seg { display: flex; gap: 6px; flex-wrap: wrap; }
+  .seg label { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--axis); border-radius: 6px; padding: 4px 9px; font-size: 12.5px; cursor: pointer; user-select: none; }
+  .seg input { margin: 0; accent-color: var(--text-primary); }
+  .seg label.on-ok { background: var(--good-bg); border-color: var(--good); color: var(--good-text); font-weight: 600; }
+  .seg label.on-bad { background: var(--crit-bg); border-color: var(--critical); color: var(--critical); font-weight: 600; }
+  .seg label.on-na { background: var(--neutral-bg); border-color: var(--muted); font-weight: 600; }
+  .gtools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; font-size: 12.5px; }
+  .gtools label { display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
+  .pf { padding: 14px 18px; display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; border-top: 1px solid var(--grid); }
+  .pf textarea { flex: 1; min-width: 260px; min-height: 54px; }
+
+  .save { font-size: 12.5px; }
+  .save.ok { color: var(--good-text); } .save.err { color: var(--critical); font-weight: 600; }
+  .banner { border-radius: 8px; padding: 10px 14px; margin-top: 14px; font-size: 13px; }
+  .banner.err { background: var(--crit-bg); color: var(--critical); }
+  .banner.info { background: var(--surface-2); color: var(--text-secondary); }
+  .banner code { background: var(--surface-1); padding: 1px 5px; border-radius: 4px; }
+  .tabs { display: flex; gap: 4px; margin-top: 16px; }
+  .tabs button.active { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); }
+  table.res { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  table.res th, table.res td { padding: 6px 8px; border-bottom: 1px solid var(--grid); text-align: right; font-size: 13px; }
+  table.res th:first-child, table.res td:first-child { text-align: left; }
+  table.res th { color: var(--text-secondary); font-size: 12px; }
+  .meter { display: inline-block; width: 60px; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; vertical-align: middle; margin-left: 6px; }
+  .meter i { display: block; height: 100%; border-radius: 3px; }
+  .empty { padding: 40px; text-align: center; color: var(--text-secondary); }
+  .kbd { font: 11px ui-monospace, monospace; border: 1px solid var(--axis); border-radius: 4px; padding: 0 4px; }
+</style>
+</head>
+<body>
+<nav class="lp-nav" aria-label="Validation pages"><a class="lp-brand" href="index.html">LishePoa<small>Product validation</small></a><a class=lp-link href="regex.html">① Regex comparison</a><a class=lp-link href="llm-judge.html">② LLM judge</a><a class="lp-link active" aria-current="page" href="manual-review.html">③ Manual review</a></nav>
+<main>
+  <div class="row">
+    <div>
+      <h1>③ Manual review: human check against the ground truth</h1>
+      <p class="sub">Each reviewer gets batches of 33 random products. For every product, compare each model's output to the ground truth in the six categories, then tick <b>Correct</b>, <b>Wrong</b> or <b>N/A</b>.</p>
+    </div>
+    <div class="spacer"></div>
+    <span class="save" id="saveState"></span>
+    <button id="theme" title="Toggle light/dark">◐ Theme</button>
+  </div>
+  <div id="banner"></div>
+
+  <div class="reviewers" id="reviewers"></div>
+
+  <section>
+    <div class="bars" id="bars"></div>
+  </section>
+
+  <div class="tabs">
+    <button data-tab="review" class="active">My batch</button>
+    <button data-tab="results">Team results</button>
+    <button data-tab="help">How to review</button>
+  </div>
+
+  <div id="tab-review">
+    <div class="panel row" id="batchBar"></div>
+    <div class="workspace">
+      <div class="list" id="list"></div>
+      <div id="productPane"></div>
+    </div>
+  </div>
+
+  <div id="tab-results" hidden></div>
+
+  <section id="tab-help" hidden>
+    <h2>How to review</h2>
+    <ol>
+      <li><b>Pick your name</b> in the reviewer sections at the top. Your choice is remembered in this browser.</li>
+      <li><b>Generate a batch</b> of 33 random products. They are drawn from your share of the dataset (the 1,500 products are split evenly and at random between Clive, Abigail and Roda), so no two reviewers ever get the same product.</li>
+      <li>For each product, read the <b>ground truth</b> column, then each model's column, one category at a time:
+        <b>Identity</b> (name, brand, manufacturer, category, country, barcode), <b>Package</b>, <b>Nutrition basis</b> (per 100 g / ml / serving, serving size), <b>Nutrients</b>, <b>Ingredients</b>, and <b>Other label information</b>.</li>
+      <li>Tick <b>✓ Correct</b> if the model's values for that category mean the same as the ground truth (ignore capital letters, spacing and harmless wording). Tick <b>✗ Wrong</b> if any value is wrong, missing or invented. Tick <b>N/A</b> only if there is nothing to compare (both empty).
+        Categories that are empty everywhere are pre-set to N/A.
+        <br><b>Empty ground truth?</b> If the model gives a value the ground truth doesn't have, check the label image if you can. A made-up value is ✗ Wrong.
+        For <b>Other label information</b>, the people typing the ground truth only copied part of the label, so extra text from the model is fine. If the ground truth is empty there, choose N/A.</li>
+      <li>If the <b>ground truth itself</b> looks wrong (typo, wrong unit, wrong product), tick <b>⚠ Ground truth looks wrong</b> and add a note. These are listed under Team results.</li>
+      <li>A product counts as <b>checked</b> once all 18 boxes (6 categories × 3 models) are set. Work is saved automatically to <code>reviews/&lt;your-name&gt;.json</code>.</li>
+      <li><b>Share progress</b> by committing your <code>reviews/&lt;name&gt;.json</code> file to git (each reviewer has their own file, so there are no merge conflicts), or have one person run <code>python3 serve.py --lan</code> so everyone reviews on the same server.</li>
+    </ol>
+    <p class="muted">Tip: keep “Show automated verdicts” off while you review so the regex and LLM-judge results don't influence your decision. The Team results tab compares human verdicts with both automated methods.</p>
+    <p class="muted">Keyboard: <span class="kbd">J</span>/<span class="kbd">K</span> next/previous product · <span class="kbd">N</span> next unchecked.</p>
+  </section>
+</main>
+
+<script>
+(() => {
+  const REVIEWERS = ['Clive', 'Abigail', 'Roda'];
+  const REV_COLOR = { Clive: 'var(--rev-1)', Abigail: 'var(--rev-2)', Roda: 'var(--rev-3)' };
+  const BATCH_SIZE = 33;
+  const POOL_SEED = 'lishepoa-manual-review-v1';
+  const GROUPS = ['identity', 'package', 'basis', 'nutrients', 'ingredients', 'label'];
+  const GROUP_LABEL = { identity: 'Identity', package: 'Package', basis: 'Nutrition basis', nutrients: 'Nutrients', ingredients: 'Ingredients', label: 'Other label information' };
+  const GROUP_HINT = { identity: 'name · brand · manufacturer · category · country · barcode', package: 'size · unit · count · type',
+    basis: 'per 100 g / 100 ml / serving · serving size', nutrients: 'every nutrient value, unit and qualifier', ingredients: 'ingredient list as printed', label: 'storage, allergens, directions, other text' };
+  const LLM_GROUP = { name: 'identity', brand: 'identity', manufacturer: 'identity', country_of_origin: 'identity', category: 'identity', barcode: 'identity',
+    package_size: 'package', package_count: 'package', package_type: 'package', serving_size: 'basis', nutrition_basis: 'basis', ingredients: 'ingredients', other_info: 'label' };
+  const SERIES = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)'];
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const pct = (a, b, d = 1) => b ? (a / b * 100).toFixed(d) + '%' : '–';
+
+  // theme (shared key with the regex page)
+  document.documentElement.dataset.theme = localStorage.getItem('lp-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  $('theme').onclick = () => { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('lp-theme', t); };
+
+  let C, J = null, docs = {}, me = localStorage.getItem('lp-reviewer'), M = [], byUid = {}, pools = {}, allUids = [];
+  let curUid = null, viewBatch = null, showAuto = localStorage.getItem('lp-show-auto') === '1', online = true;
+
+  // ---------- deterministic split of the dataset between reviewers ----------
+  function seededRandom(seedStr) {
+    let h = 1779033703 ^ seedStr.length;
+    for (let i = 0; i < seedStr.length; i++) { h = Math.imul(h ^ seedStr.charCodeAt(i), 3432918353); h = h << 13 | h >>> 19; }
+    let a = h >>> 0;
+    return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  }
+  function buildPools() {
+    const ids = [...allUids].sort();
+    const rnd = seededRandom(POOL_SEED);
+    for (let i = ids.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [ids[i], ids[j]] = [ids[j], ids[i]]; }
+    REVIEWERS.forEach(r => pools[r] = []);
+    ids.forEach((id, i) => pools[REVIEWERS[i % REVIEWERS.length]].push(id));
+  }
+
+  // ---------- review state helpers ----------
+  const blankDoc = name => ({ reviewer: name, version: 1, batches: [], reviews: {} });
+  const groupsWithData = rec => new Set(rec.fields.map(f => f.group));
+  function isComplete(rv) {
+    if (!rv) return false;
+    return GROUPS.every(g => M.every(m => rv.checks?.[g]?.[m]));
+  }
+  function setCount(rv) { return rv ? GROUPS.reduce((a, g) => a + M.filter(m => rv.checks?.[g]?.[m]).length, 0) : 0; }
+  function completedSet() {
+    const s = new Map();
+    REVIEWERS.forEach(r => Object.entries(docs[r]?.reviews || {}).forEach(([uid, rv]) => { if (isComplete(rv)) s.set(uid, r); }));
+    return s;
+  }
+  const currentBatch = name => { const b = docs[name]?.batches || []; return b[b.length - 1] || null; };
+  function ensureReview(uid) {
+    const d = docs[me];
+    if (!d.reviews[uid]) {
+      const rec = byUid[uid], has = groupsWithData(rec), checks = {};
+      GROUPS.forEach(g => { checks[g] = {}; if (!has.has(g)) M.forEach(m => checks[g][m] = 'na'); });
+      d.reviews[uid] = { checks, gt_issue: {}, note: '', updated: null };
+    }
+    return d.reviews[uid];
+  }
+
+  // ---------- persistence ----------
+  let saveTimer = null;
+  function setSave(text, cls = '') { const el = $('saveState'); el.textContent = text; el.className = 'save ' + cls; }
+  function queueSave() {
+    if (!me) return;
+    setSave('Saving…'); clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveNow, 400);
+  }
+  async function saveNow() {
+    try {
+      const res = await fetch('/api/reviews/' + encodeURIComponent(me), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(docs[me]) });
+      if (!res.ok) throw new Error((await res.json()).error || res.status);
+      localStorage.removeItem('lp-unsaved-' + me);
+      setSave(`✓ Saved to reviews/${me.toLowerCase()}.json`, 'ok');
+    } catch (e) {
+      localStorage.setItem('lp-unsaved-' + me, JSON.stringify(docs[me]));
+      setSave('✗ Not saved: server unreachable. Kept in this browser; will retry.', 'err');
+      clearTimeout(saveTimer); saveTimer = setTimeout(saveNow, 5000);
+    }
+  }
+  async function refreshOthers() {
+    try {
+      const all = await (await fetch('/api/reviews')).json();
+      REVIEWERS.forEach(r => { if (r !== me) docs[r] = all[r] || blankDoc(r); });
+      renderTop();
+      if (!$('tab-results').hidden) renderResults();
+    } catch { /* offline: keep what we have */ }
+  }
+
+  // ---------- top: reviewer sections + progress bars ----------
+  function reviewerStats(r) {
+    const d = docs[r] || blankDoc(r);
+    const done = Object.entries(d.reviews).filter(([, rv]) => isComplete(rv)).map(([u]) => u);
+    const b = currentBatch(r);
+    const bDone = b ? b.items.filter(u => isComplete(d.reviews[u])).length : 0;
+    const poolSet = new Set(pools[r]);
+    return { d, done: done.length, poolDone: done.filter(u => poolSet.has(u)).length, pool: pools[r].length, batch: b, bDone,
+      batches: d.batches.length, gtIssues: Object.values(d.reviews).reduce((a, rv) => a + Object.values(rv.gt_issue || {}).filter(Boolean).length, 0) };
+  }
+  function renderTop() {
+    $('reviewers').innerHTML = REVIEWERS.map(r => {
+      const s = reviewerStats(r);
+      return `<button class="rcard ${r === me ? 'active' : ''}" data-r="${r}" aria-pressed="${r === me}">
+        <div class="rname"><span class="dot" style="background:${REV_COLOR[r]}"></span>${r}${r === me ? '<span class="you">You</span>' : ''}</div>
+        <div class="rstats">
+          <span>Products checked</span><b>${s.done}</b>
+          <span>Current batch</span><b>${s.batch ? `${s.bDone} / ${s.batch.items.length}` : 'none yet'}</b>
+          <span>Share of dataset done</span><b>${s.poolDone} / ${s.pool} (${pct(s.poolDone, s.pool, 0)})</b>
+          <span>Batches · GT issues flagged</span><b>${s.batches} · ${s.gtIssues}</b>
+        </div></button>`;
+    }).join('');
+    $('reviewers').querySelectorAll('.rcard').forEach(el => el.onclick = () => selectReviewer(el.dataset.r));
+
+    const completed = completedSet(), total = allUids.length;
+    const perRev = REVIEWERS.map(r => [...completed.values()].filter(x => x === r).length);
+    let html = '';
+    if (me) {
+      const s = reviewerStats(me);
+      const bt = s.batch ? s.batch.items.length : BATCH_SIZE;
+      html += `<div><div class="bar-label"><span>Your current batch (${me})</span><span><b>${s.bDone} / ${s.batch ? bt : 0}</b> checked</span></div>
+        <div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="${bt}" aria-valuenow="${s.bDone}"><span style="width:${s.batch ? s.bDone / bt * 100 : 0}%;background:${REV_COLOR[me]}"></span></div>
+        <div class="legend"><span>${s.batch ? `Batch #${s.batches} · ${bt - s.bDone} left` : 'Generate your first batch below'}</span></div></div>`;
+      html += `<div><div class="bar-label"><span>Your share of the dataset</span><span><b>${s.poolDone} / ${s.pool}</b> · ${pct(s.poolDone, s.pool)}</span></div>
+        <div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="${s.pool}" aria-valuenow="${s.poolDone}"><span style="width:${s.poolDone / s.pool * 100}%;background:${REV_COLOR[me]}"></span></div>
+        <div class="legend"><span>≈ ${Math.ceil((s.pool - s.poolDone) / BATCH_SIZE)} batches of ${BATCH_SIZE} to go</span></div></div>`;
+    } else {
+      html += `<div style="grid-column:span 2" class="muted">Choose your name above to see your batch progress.</div>`;
+    }
+    html += `<div><div class="bar-label"><span>Entire dataset manually checked (all reviewers)</span><span><b>${completed.size.toLocaleString()} / ${total.toLocaleString()}</b> · ${pct(completed.size, total)}</span></div>
+      <div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${completed.size}">${REVIEWERS.map((r, i) => perRev[i] ? `<span style="width:${perRev[i] / total * 100}%;background:${REV_COLOR[r]}" title="${r}: ${perRev[i]}"></span>` : '').join('')}</div>
+      <div class="legend">${REVIEWERS.map((r, i) => `<span><i class="dot" style="background:${REV_COLOR[r]}"></i>${r}: ${perRev[i]}</span>`).join('')}<span>Remaining: ${(total - completed.size).toLocaleString()}</span></div></div>`;
+    $('bars').innerHTML = html;
+  }
+
+  function selectReviewer(r) {
+    if (r === me) return;
+    me = r; localStorage.setItem('lp-reviewer', r);
+    docs[me] = docs[me] || blankDoc(me);
+    const unsaved = localStorage.getItem('lp-unsaved-' + me);
+    if (unsaved) { try { docs[me] = JSON.parse(unsaved); queueSave(); } catch { } }
+    viewBatch = null; curUid = null;
+    renderTop(); renderBatch();
+  }
+
+  // ---------- batch generation ----------
+  function generateBatch() {
+    const d = docs[me], cur = currentBatch(me);
+    if (cur) {
+      const left = cur.items.filter(u => !isComplete(d.reviews[u])).length;
+      if (left && !confirm(`${left} product(s) in your current batch are not checked yet. They stay in that batch. Generate a new batch anyway?`)) return;
+    }
+    const completed = completedSet();
+    const assigned = new Set();
+    REVIEWERS.forEach(r => (docs[r]?.batches || []).forEach(b => b.items.forEach(u => { if (!isComplete(docs[r].reviews[u])) assigned.add(u); })));
+    const free = u => !completed.has(u) && !assigned.has(u);
+    let cand = pools[me].filter(free), helping = 0;
+    if (cand.length < BATCH_SIZE) { // own share done: help with the rest of the dataset
+      const extra = allUids.filter(u => free(u) && !cand.includes(u));
+      helping = Math.min(extra.length, BATCH_SIZE - cand.length);
+      cand = cand.concat(shuffle(extra).slice(0, helping));
+    }
+    if (!cand.length) { alert('Everything has been checked or is already assigned. 🎉'); return; }
+    const items = shuffle(cand).slice(0, BATCH_SIZE);
+    d.batches.push({ id: d.batches.length + 1, created: new Date().toISOString(), items, helping });
+    viewBatch = null; curUid = items[0];
+    queueSave(); renderTop(); renderBatch();
+  }
+  function shuffle(a) { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+  // ---------- batch bar + list ----------
+  function shownBatch() {
+    const b = docs[me]?.batches || [];
+    return viewBatch != null ? b.find(x => x.id === viewBatch) : b[b.length - 1];
+  }
+  function renderBatch() {
+    if (!me) {
+      $('batchBar').innerHTML = '<span class="muted">Choose your name in the reviewer sections above to start.</span>';
+      $('list').innerHTML = ''; $('productPane').innerHTML = ''; return;
+    }
+    const d = docs[me], b = shownBatch();
+    $('batchBar').innerHTML = `
+      <button class="primary" id="gen">🎲 Generate ${BATCH_SIZE} random products</button>
+      ${d.batches.length ? `<label class="row" style="gap:6px">Batch <select id="bsel">${d.batches.map(x => `<option value="${x.id}" ${b && x.id === b.id ? 'selected' : ''}>#${x.id} · ${new Date(x.created).toLocaleDateString()} · ${x.items.filter(u => isComplete(d.reviews[u])).length}/${x.items.length}</option>`).join('')}</select></label>` : ''}
+      <button id="nextOpen" ${b ? '' : 'disabled'}>Next unchecked ›</button>
+      <div class="spacer"></div>
+      <label class="row" style="gap:6px;font-size:13px"><input type="checkbox" id="showAuto" ${showAuto ? 'checked' : ''}> Show automated verdicts (regex & LLM judge)</label>
+      <button id="exportMine">⬇ Export my reviews</button>`;
+    $('gen').onclick = generateBatch;
+    if ($('bsel')) $('bsel').onchange = e => { viewBatch = +e.target.value; curUid = null; renderBatch(); };
+    $('nextOpen').onclick = nextUnchecked;
+    $('showAuto').onchange = e => { showAuto = e.target.checked; localStorage.setItem('lp-show-auto', showAuto ? '1' : '0'); renderProduct(); };
+    $('exportMine').onclick = () => download(`reviews_${me.toLowerCase()}.json`, JSON.stringify(docs[me], null, 1), 'application/json');
+
+    if (!b) {
+      $('list').innerHTML = `<header>No batch yet</header>`;
+      $('productPane').innerHTML = `<div class="product empty">Click <b>Generate ${BATCH_SIZE} random products</b> to get your first batch.<br><span class="muted">You have ${pools[me].length} products in your share of the dataset.</span></div>`;
+      return;
+    }
+    if (!curUid || !b.items.includes(curUid)) curUid = b.items.find(u => !isComplete(d.reviews[u])) || b.items[0];
+    renderList(); renderProduct();
+  }
+  function statusOf(uid) {
+    const rv = docs[me].reviews[uid];
+    if (isComplete(rv)) return ['done', '✓ Checked'];
+    const n = setCount(rv), auto = rv ? GROUPS.filter(g => !groupsWithData(byUid[uid]).has(g)).length * M.length : 0;
+    return n > auto ? ['prog', `${n}/${GROUPS.length * M.length}`] : ['todo', 'To do'];
+  }
+  function renderList() {
+    const b = shownBatch(), d = docs[me];
+    const done = b.items.filter(u => isComplete(d.reviews[u])).length;
+    $('list').innerHTML = `<header>Batch #${b.id}: <b>${done}/${b.items.length}</b> checked${b.helping ? ` · ${b.helping} from other shares` : ''}</header><ol>` +
+      b.items.map((u, i) => { const r = byUid[u], [k, t] = statusOf(u);
+        return `<li data-u="${esc(u)}" class="${u === curUid ? 'sel' : ''}"><span class="n">${i + 1}</span><span class="t">${esc(r?.name || '(no name)')}<small>${esc(u)} · ${esc(r?.brand || '')}</small></span><span class="st st-${k}">${t}</span></li>`; }).join('') + '</ol>';
+    $('list').querySelectorAll('li').forEach(li => li.onclick = () => { curUid = li.dataset.u; renderList(); renderProduct(); $('productPane').scrollIntoView({ block: 'start', behavior: 'smooth' }); });
+  }
+  function nextUnchecked() {
+    const b = shownBatch(); if (!b) return;
+    const i = b.items.indexOf(curUid);
+    const order = b.items.slice(i + 1).concat(b.items.slice(0, i + 1));
+    const nx = order.find(u => !isComplete(docs[me].reviews[u]));
+    if (nx) { curUid = nx; renderList(); renderProduct(); } else alert('Every product in this batch is checked. Generate a new batch when ready.');
+  }
+  function step(dir) {
+    const b = shownBatch(); if (!b) return;
+    const i = b.items.indexOf(curUid), n = b.items[i + dir];
+    if (n) { curUid = n; renderList(); renderProduct(); }
+  }
+
+  // ---------- automated verdicts per category ----------
+  function regexVerdict(rec, m, g) {
+    const s = rec.models[m]?.groups?.[g];
+    return s == null ? 'na' : (s >= C.meta.threshold ? 'ok' : 'bad');
+  }
+  function llmVerdict(uid, m, g) {
+    if (!J) return null;
+    const row = J.rows[uid]; if (!row) return null;
+    const i = J.models.indexOf(m); if (i < 0) return null;
+    let marks = [];
+    if (g === 'nutrients') marks = Object.values(row.n).map(x => x[i]);
+    else Object.entries(row.f).forEach(([f, ms]) => { if (LLM_GROUP[f] === g) marks.push(ms[i]?.[0]); });
+    marks = marks.filter(x => x && x !== '' && x !== '?');
+    if (!marks.length) return 'na';
+    return marks.every(x => x === '✓') ? 'ok' : 'bad';
+  }
+  const VLABEL = { ok: '✓', bad: '✗', na: 'N/A' };
+
+  // ---------- product pane ----------
+  function cellVal(v, long) {
+    if (v == null || v === '') return '<span class="muted">—</span>';
+    return long ? `<span class="longtext">${esc(v)}</span>` : esc(v);
+  }
+  const normTxt = v => String(v ?? '').toLowerCase().replace(/[^a-z0-9%.]+/g, ' ').trim();
+  function renderProduct() {
+    const rec = byUid[curUid];
+    if (!rec) { $('productPane').innerHTML = ''; return; }
+    const rv = ensureReview(curUid), readOnly = false;
+    const b = shownBatch(), pos = b.items.indexOf(curUid) + 1;
+    let h = `<div class="product"><div class="ph"><div style="flex:1;min-width:260px">
+        <div class="muted">${pos} of ${b.items.length} · GT UID <b>${esc(rec.uid)}</b> · record_id ${esc(rec.record_id)} · collector ${esc(rec.collector ?? '–')}</div>
+        <h3>${esc(rec.name || '(no product name in ground truth)')}</h3>
+        <div class="muted">${esc([rec.brand, rec.category].filter(Boolean).join(' · '))}</div>
+        ${showAuto ? `<div class="autos">${M.map((m, i) => {
+          const rs = rec.models[m]; const jv = J?.rows[rec.uid]?.v?.[J.models.indexOf(m)];
+          return `<span class="auto"><i class="swatch" style="background:${SERIES[i]}"></i> ${esc(m)}: regex <b>${rs ? (rs.score * 100).toFixed(1) + '%' : '–'}</b>${jv ? ` · LLM judge <b>${jv[2] ? (jv[1] / jv[2] * 100).toFixed(0) + '%' : '–'}</b>` : ''}</span>`; }).join('')}</div>` : ''}
+      </div>
+      <div class="row"><button id="prevP" ${pos <= 1 ? 'disabled' : ''}>‹ Prev</button><button id="nextP" ${pos >= b.items.length ? 'disabled' : ''}>Next ›</button></div></div>`;
+
+    GROUPS.forEach(g => {
+      const fields = rec.fields.filter(f => f.group === g);
+      const long = g === 'ingredients' || g === 'label';
+      const setN = M.filter(m => rv.checks[g]?.[m]).length;
+      h += `<div class="group" data-g="${g}"><h4>${GROUP_LABEL[g]} <span class="muted gstate">${GROUP_HINT[g]}</span><span class="spacer"></span><span class="gstate st ${setN === M.length ? 'st-done' : setN ? 'st-prog' : 'st-todo'}">${setN}/${M.length} set</span></h4>`;
+      if (!fields.length) {
+        h += `<div class="muted" style="font-size:12.5px">No data in the ground truth or any model for this category. Pre-set to N/A.</div>`;
+      } else {
+        h += `<table class="vals"><colgroup><col style="width:14%"><col style="width:${long ? 24 : 21.5}%">${M.map(() => '<col>').join('')}</colgroup>
+          <thead><tr><th>Field</th><th>Ground truth</th>${M.map((m, i) => `<th><i class="swatch" style="background:${SERIES[i]}"></i> ${esc(m)}</th>`).join('')}</tr></thead><tbody>`;
+        fields.forEach(f => {
+          const gtn = normTxt(f.gt);
+          h += `<tr><td class="k">${esc(f.key.replace(/^(product|package|nutrients|nutrition_basis|serving_size)\./, (x, p) => p === 'nutrients' ? '' : p === 'product' ? '' : p + ' ').replace(/_/g, ' '))}</td><td class="gt">${cellVal(f.gt, long)}</td>` +
+            M.map(m => { const x = f.m[m]; const v = x?.v; const same = v != null && f.gt != null && normTxt(v) === gtn;
+              return `<td class="${same ? 'same' : ''}">${cellVal(v, long)}${same ? '<span class="eq">= GT</span>' : ''}${showAuto && x?.s != null ? `<span class="autohint">regex ${(x.s * 100).toFixed(0)}% · ${x.st}</span>` : ''}</td>`; }).join('') + '</tr>';
+        });
+        h += `</tbody></table>`;
+      }
+      h += `<div class="checks">` + M.map((m, i) => {
+        const v = rv.checks[g]?.[m];
+        const auto = showAuto ? `<span class="autohint">regex ${VLABEL[regexVerdict(rec, m, g)]}${J ? ` · LLM judge ${VLABEL[llmVerdict(rec.uid, m, g)] ?? '–'}` : ''}</span>` : '';
+        const opt = (val, lbl) => `<label class="${v === val ? 'on-' + val : ''}"><input type="checkbox" data-g="${g}" data-m="${esc(m)}" data-v="${val}" ${v === val ? 'checked' : ''} ${readOnly ? 'disabled' : ''}>${lbl}</label>`;
+        return `<div class="check ${v ? 'set' : ''}"><div class="who"><i class="swatch" style="background:${SERIES[i]}"></i>${esc(m)}</div>
+          <div class="seg">${opt('ok', '✓ Correct')}${opt('bad', '✗ Wrong')}${opt('na', 'N/A')}</div>${auto}</div>`;
+      }).join('') + `</div>
+        <div class="gtools"><button data-all="${g}" title="Mark every model correct for ${GROUP_LABEL[g]}">All ✓ correct</button>
+        <label><input type="checkbox" data-gtissue="${g}" ${rv.gt_issue?.[g] ? 'checked' : ''}> ⚠ Ground truth looks wrong for ${GROUP_LABEL[g].toLowerCase()}</label></div></div>`;
+    });
+    const complete = isComplete(rv);
+    h += `<div class="pf"><textarea id="note" placeholder="Notes for this product (optional): what was wrong, ground-truth problems, unclear label…">${esc(rv.note || '')}</textarea>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+        <span class="st ${complete ? 'st-done' : 'st-prog'}">${complete ? '✓ Product checked' : `${setCount(rv)} / ${GROUPS.length * M.length} boxes set`}</span>
+        <button class="primary" id="saveNext">Save & next unchecked ›</button>
+        ${rv.updated ? `<span class="muted" style="font-size:11.5px">Last edit ${new Date(rv.updated).toLocaleString()}</span>` : ''}
+      </div></div></div>`;
+    $('productPane').innerHTML = h;
+
+    const touch = () => { rv.updated = new Date().toISOString(); rv.by = me; queueSave(); };
+    $('productPane').querySelectorAll('input[data-v]').forEach(inp => inp.onchange = () => {
+      const { g, m, v } = inp.dataset; rv.checks[g] = rv.checks[g] || {};
+      if (inp.checked) rv.checks[g][m] = v; else delete rv.checks[g][m];
+      touch(); refreshAfterEdit();
+    });
+    $('productPane').querySelectorAll('[data-all]').forEach(bt => bt.onclick = () => {
+      const g = bt.dataset.all; rv.checks[g] = {}; M.forEach(m => rv.checks[g][m] = 'ok'); touch(); refreshAfterEdit();
+    });
+    $('productPane').querySelectorAll('[data-gtissue]').forEach(inp => inp.onchange = () => {
+      rv.gt_issue = rv.gt_issue || {}; if (inp.checked) rv.gt_issue[inp.dataset.gtissue] = true; else delete rv.gt_issue[inp.dataset.gtissue]; touch(); renderTop();
+    });
+    $('note').oninput = e => { rv.note = e.target.value; touch(); };
+    $('saveNext').onclick = () => { saveNow(); nextUnchecked(); };
+    $('prevP').onclick = () => step(-1); $('nextP').onclick = () => step(1);
+  }
+  function refreshAfterEdit() {
+    const y = scrollY; renderBatch(); renderTop(); scrollTo(0, y);
+  }
+
+  // ---------- team results ----------
+  function renderResults() {
+    const cell = (a, b, color) => b ? `${pct(a, b)}<span class="meter"><i style="width:${a / b * 100}%;background:${color}"></i></span> <span class="muted">(${b})</span>` : '<span class="muted">–</span>';
+    const reviewed = [];
+    REVIEWERS.forEach(r => Object.entries(docs[r]?.reviews || {}).forEach(([u, rv]) => { if (isComplete(rv) && byUid[u]) reviewed.push([u, rv, r]); }));
+    let h = `<section><h2>Team results: ${reviewed.length.toLocaleString()} products manually checked</h2>
+      <p class="sub">Human accuracy = share of categories marked ✓ Correct (N/A excluded). Only fully checked products are counted.</p>
+      <div class="row" style="margin-top:8px"><button id="expCsv">⬇ Export all manual reviews (CSV)</button><span class="muted" style="font-size:12.5px">One row per product × category × model, with the regex and LLM-judge verdicts alongside.</span></div>`;
+    if (!reviewed.length) { $('tab-results').innerHTML = h + '<p class="muted">No products fully checked yet.</p></section>'; bindCsv(reviewed); return; }
+
+    // human accuracy
+    h += `<h3 style="font-size:14px;margin:16px 0 0">Human-judged accuracy by category</h3><table class="res"><thead><tr><th>Category</th>${M.map((m, i) => `<th><i class="swatch" style="background:${SERIES[i]}"></i> ${esc(m)}</th>`).join('')}</tr></thead><tbody>`;
+    const tot = M.map(() => [0, 0]);
+    GROUPS.forEach(g => {
+      h += `<tr><td>${GROUP_LABEL[g]}</td>` + M.map((m, i) => {
+        let ok = 0, n = 0; reviewed.forEach(([, rv]) => { const v = rv.checks[g][m]; if (v !== 'na') { n++; ok += v === 'ok'; } });
+        tot[i][0] += ok; tot[i][1] += n; return `<td>${cell(ok, n, SERIES[i])}</td>`; }).join('') + '</tr>';
+    });
+    h += `<tr style="font-weight:650"><td>All categories</td>${tot.map((t, i) => `<td>${cell(t[0], t[1], SERIES[i])}</td>`).join('')}</tr>`;
+    // products fully correct
+    h += `<tr><td>Products with every category correct</td>${M.map((m, i) => { const ok = reviewed.filter(([, rv]) => GROUPS.every(g => rv.checks[g][m] !== 'bad')).length; return `<td>${cell(ok, reviewed.length, SERIES[i])}</td>`; }).join('')}</tr></tbody></table>`;
+
+    // agreement with automated methods
+    const agree = (fn) => {
+      return GROUPS.map(g => M.map(m => { let a = 0, n = 0; reviewed.forEach(([u, rv]) => { const hv = rv.checks[g][m], av = fn(u, m, g); if (hv === 'na' || !av || av === 'na') return; n++; a += hv === av; }); return [a, n]; }));
+    };
+    const ra = agree((u, m, g) => regexVerdict(byUid[u], m, g));
+    const la = J ? agree((u, m, g) => llmVerdict(u, m, g)) : null;
+    h += `<h3 style="font-size:14px;margin:18px 0 0">Do the automated methods agree with the humans?</h3>
+      <p class="sub">Share of category verdicts where the automated method gives the same ✓/✗ as the reviewer. Regex: category score ≥ ${Math.round(C.meta.threshold * 100)}% counts as ✓. LLM judge: ✓ only if every field in the category is ✓.</p>
+      <table class="res"><thead><tr><th>Category</th>${M.map((m, i) => `<th><i class="swatch" style="background:${SERIES[i]}"></i> ${esc(m)}<br><span class="muted">regex · LLM judge</span></th>`).join('')}</tr></thead><tbody>` +
+      GROUPS.map((g, gi) => `<tr><td>${GROUP_LABEL[g]}</td>${M.map((m, i) => `<td>${pct(...ra[gi][i])} · ${la ? pct(...la[gi][i]) : '<span class="muted">n/a</span>'}</td>`).join('')}</tr>`).join('');
+    const sumA = arr => arr.flat().reduce((x, [a, n]) => [x[0] + a, x[1] + n], [0, 0]);
+    h += `<tr style="font-weight:650"><td>Overall agreement</td><td colspan="${M.length}" style="text-align:left">Regex ${pct(...sumA(ra))}${la ? ` · LLM judge ${pct(...sumA(la))}` : ' · LLM judge results not loaded'}</td></tr></tbody></table>`;
+
+    // GT issues
+    const issues = [];
+    REVIEWERS.forEach(r => Object.entries(docs[r]?.reviews || {}).forEach(([u, rv]) => Object.entries(rv.gt_issue || {}).forEach(([g, on]) => { if (on) issues.push({ u, g, r, note: rv.note }); })));
+    h += `<h3 style="font-size:14px;margin:18px 0 0">Ground-truth issues flagged (${issues.length})</h3>`;
+    h += issues.length ? `<table class="res"><thead><tr><th>GT UID</th><th style="text-align:left">Product</th><th style="text-align:left">Category</th><th style="text-align:left">Reviewer</th><th style="text-align:left">Note</th></tr></thead><tbody>` +
+      issues.map(x => `<tr><td><b>${esc(x.u)}</b></td><td style="text-align:left">${esc(byUid[x.u]?.name)}</td><td style="text-align:left">${GROUP_LABEL[x.g]}</td><td style="text-align:left"><i class="dot" style="background:${REV_COLOR[x.r]}"></i> ${x.r}</td><td style="text-align:left">${esc(x.note)}</td></tr>`).join('') + '</tbody></table>'
+      : '<p class="muted">None flagged yet.</p>';
+    $('tab-results').innerHTML = h + '</section>';
+    bindCsv(reviewed);
+  }
+  function bindCsv(reviewed) {
+    const b = $('expCsv'); if (!b) return;
+    b.onclick = () => {
+      const rows = [['gt_uid', 'product', 'reviewer', 'category', 'model', 'human', 'regex', 'llm_judge', 'gt_issue', 'note', 'updated']];
+      reviewed.forEach(([u, rv, r]) => GROUPS.forEach(g => M.forEach(m => rows.push([u, byUid[u]?.name, r, GROUP_LABEL[g], m, rv.checks[g][m], regexVerdict(byUid[u], m, g), J ? llmVerdict(u, m, g) : '', rv.gt_issue?.[g] ? 'yes' : '', rv.note, rv.updated]))));
+      download('lishepoa_manual_reviews.csv', rows.map(r => r.map(x => `"${String(x ?? '').replace(/"/g, '""')}"`).join(',')).join('\n'), 'text/csv');
+    };
+  }
+  function download(name, text, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; a.click(); }
+
+  // ---------- tabs + keys ----------
+  document.querySelectorAll('.tabs button').forEach(bt => bt.onclick = () => {
+    document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('active', x === bt));
+    ['review', 'results', 'help'].forEach(t => $('tab-' + t).hidden = t !== bt.dataset.tab);
+    if (bt.dataset.tab === 'results') { renderResults(); refreshOthers(); }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.target.matches('textarea, input[type=text], select') || e.ctrlKey || e.metaKey || e.altKey || $('tab-review').hidden) return;
+    if (e.key === 'j') step(1); else if (e.key === 'k') step(-1); else if (e.key === 'n') nextUnchecked();
+  });
+  addEventListener('beforeunload', e => { if ($('saveState').classList.contains('err') || $('saveState').textContent === 'Saving…') { e.preventDefault(); e.returnValue = ''; } });
+
+  // ---------- boot ----------
+  (async () => {
+    $('productPane').innerHTML = '<div class="product empty">Loading products…</div>';
+    try {
+      const [c, rv] = await Promise.all([fetch('/data/comparison.json').then(r => { if (!r.ok) throw new Error('comparison'); return r.json(); }),
+                                         fetch('/api/reviews').then(r => { if (!r.ok) throw new Error('api'); return r.json(); })]);
+      C = c; docs = rv;
+    } catch (e) {
+      online = false;
+      $('banner').innerHTML = `<div class="banner err"><b>This page needs the local server to load products and save reviews.</b><br>
+        In the project folder run <code>python3 serve.py</code>, then open <a href="http://localhost:8000/manual-review.html">http://localhost:8000/manual-review.html</a>.
+        (Opening the file directly from disk can't save anything.)</div>`;
+      $('productPane').innerHTML = ''; return;
+    }
+    try { const r = await fetch('/data/llm_judge_rows.json'); if (r.ok) J = await r.json(); } catch { }
+    if (!J) $('banner').innerHTML = `<div class="banner info">LLM-judge results not found (<code>results/llm_judge_rows.json</code>), so the LLM-judge comparison is hidden. Run <code>judge_eval.py</code> to add it.</div>`;
+    M = C.meta.models;
+    C.records.forEach(r => { byUid[r.uid] = r; });
+    allUids = C.records.filter(r => Object.keys(r.models).length).map(r => r.uid);
+    buildPools();
+    REVIEWERS.forEach(r => docs[r] = docs[r] || blankDoc(r));
+    if (me && !REVIEWERS.includes(me)) me = null;
+    if (me) { const unsaved = localStorage.getItem('lp-unsaved-' + me); if (unsaved) { try { docs[me] = JSON.parse(unsaved); queueSave(); } catch { } } }
+    renderTop(); renderBatch();
+    setInterval(refreshOthers, 30000);
+  })();
+})();
+</script>
+</body>
+</html>
