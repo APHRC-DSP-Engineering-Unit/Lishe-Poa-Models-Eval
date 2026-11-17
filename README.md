@@ -1,154 +1,122 @@
 # LishePoa Product Validation
 
-Compares product-label extractions from three models against the ground truth, using regex-based normalization and per-field scoring.
+How accurately do three AI models read food product labels, compared with the human-typed **ground truth**?
 
-| Input | Role |
+| Model | File |
 |---|---|
-| `ground_truth.json` | Reference data (1,501 records) |
-| `claude-opus-5-5.json` | Claude Opus 5.5 extraction |
-| `gpt-6-sol.json` | GPT-6 Sol extraction |
-| `gemini-3.8-flash.json` | Gemini 3.8 Flash extraction |
+| GPT-6-Sol | `data/gpt-6-sol.json` |
+| Gemini 3.8 Flash | `data/gemini-3.8-flash.json` |
+| Claude Opus 5.5 | `data/claude-opus-5-5.json` |
+| **Ground truth** (1,501 records) | `data/ground_truth.json` |
 
-## Run
+Products are matched on `gt_uid` (for example `J001`, `F001`). The ground truth splits `F406` into `F406_1` (empty) and `F406_2`. Both methods pair the models' `F406` with `F406_2`.
+
+The project has three ways of checking, each with its own page:
+
+| Page | What it does |
+|---|---|
+| **① Regex comparison** (`site/regex.html`) | Rule-based and fully automatic. Regex normalization, a 0–100% score per field, and PASS when the weighted score is at least 80%. |
+| **② LLM judge** (`site/llm-judge.html`) | GPT-4o mini grades text fields blind; numbers and codes are checked exactly in Python. PASS at 85%. |
+| **③ Manual review** (`site/manual-review.html`) | Clive, Abigail and Roda check random batches of 33 products by hand. |
+
+All three use the same six categories: **Identity**, **Package**, **Nutrition basis**, **Nutrients**, **Ingredients**, and **Other label information**.
+
+## Quick start
 
 ```bash
-python3 compare.py                   # pass threshold 80% (default)
-python3 compare.py --threshold 0.85  # stricter
-xdg-open ui/index.html               # open the dashboard (works offline, no server needed)
+python3 serve.py          # then open http://localhost:8000
 ```
 
-Only Python 3.10+ is required. It uses the standard library only.
+`serve.py` needs only Python 3.10+, with no extra packages. The regex page also works when opened directly as a file. The manual review page needs the server so it can save your work.
 
-## Outputs
+## ③ Manual review: how the team works
 
-- `results/summary.csv`: one row per model with pass rate, mean accuracy, and per-group accuracy
-- `results/records.csv`: one row per product × model with score and YES/NO
-- `results/comparison.json`: full per-field detail
-- `ui/index.html`: self-contained dashboard with the data embedded, built from `ui/template.html` (edit the template, not index.html)
+1. Run `python3 serve.py`, open **③ Manual review**, and click your name (Clive, Abigail or Roda).
+2. Click **Generate 33 random products**. The 1,500 products are split evenly and at random between the three reviewers (about 500 each), so nobody gets the same product twice.
+3. For each product and category, compare each model with the ground truth and tick **✓ Correct**, **✗ Wrong** or **N/A**. Tick **⚠ Ground truth looks wrong** when the reference itself is the problem.
+4. A product counts as checked when all 18 boxes (6 categories × 3 models) are set. The page shows three progress bars: **your batch (x / 33)**, **your share**, and **the entire dataset**, split by reviewer.
+5. Work is saved automatically to `reviews/<your-name>.json`.
 
-## How scoring works
+**Sharing progress.** There are two options:
 
-Records are matched on `gt_uid`. If there's no exact match, matching falls back to `record_id` (for example, F406 is split in the GT into F406_1 and F406_2).
-Each field is normalized with regexes and scored from 0 to 1. Fields are grouped as follows:
-Identity 20%, Package 10%, Nutrition basis 10%, Nutrients 40%, Ingredients 15%, Other label info 5%.
-A record **passes (YES)** when its weighted score is at or above the threshold. The dashboard's Methodology section has the full rules.
+- **Through git:** each reviewer commits their own `reviews/<name>.json`, and the team's progress adds up after a `git pull`. One file per person means no merge conflicts.
+- **One shared server:** one person runs `python3 serve.py --lan`, and the others open `http://<that-computer's-IP>:8000` on the same network.
 
----
+**Team results** (on the same page) shows:
 
-# LLM judge (judge_eval.py)
+- human-judged accuracy per model and category
+- how often the regex and LLM-judge verdicts agree with the humans
+- every ground-truth issue that was flagged
+- a CSV export
 
-This compares how well three AI models read food product labels:
+## ① Regex comparison
 
-- GPT-6-Sol
-- Gemini 3.8 Flash
-- Claude Opus 5.5
+```bash
+python3 compare.py                   # default pass threshold 80%
+python3 compare.py --threshold 0.85
+```
 
-Each model read photos of 1,500 product labels and saved what it found (name, brand, nutrients, ingredients and so on) as JSON. People also typed the same labels by hand. That is the **ground truth**.
+Outputs:
 
-This project checks each model's answers against the ground truth, product by product, using the unique product ID (`gt_uid`, for example `J001` or `F001`).
+- `site/regex.html`: self-contained dashboard. It's built from `templates/regex.html`, so edit the template, not the output.
+- `results/summary.csv`, `results/records.csv`, `results/comparison.json`, and `results/regex_summary.json`
 
-## How the checking works
+Category weights: Identity 20%, Package 10%, Nutrition basis 10%, Nutrients 40%, Ingredients 15%, Other label info 5%. The page's Methodology section has the full rules.
 
-| What is checked | Who checks it | Examples |
-|---|---|---|
-| Text | **GPT-4o mini** acting as a judge | product name, brand, manufacturer, country, package type, ingredients, other label info |
-| Numbers and codes | Python, with an exact match | nutrient values, barcode, package size, serving size, category |
+## ② LLM judge
 
-- **Numbers are checked by Python, not the judge.** An AI judge can mistake 0.07 for 0.7, and Python can't.
-- **The judge doesn't know which model wrote which answer.** It sees them as A, B and C, so it can't favour one.
-- **Marks:** ✓ correct, ✗ wrong, missing or made up, ~ partly correct (ingredients and other label info only).
-- **Capital letters, spacing and punctuation don't matter.** Spelling mistakes in names count as ✗.
-- **Fields that are empty everywhere aren't counted:** empty in the ground truth and in every model.
-- **Other label info:** people typed only part of this text. A model gets ✓ if it includes everything they typed, and extra text is fine. If the people left it empty, it isn't scored.
-- **Nutrients:** the value, unit and qualifier (for example `<` or `Max`) must all match.
-- **Target:** 85% accuracy. Anything at or above that is PASS.
+One-time setup:
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+echo "OPENAI_API_KEY=sk-..." > .env       # never commit this file (it is in .gitignore)
+```
+
+Run it:
+
+```bash
+.venv/bin/python judge_eval.py --limit 100   # test on 100 products
+.venv/bin/python judge_eval.py               # all products (asks before spending; well under US$1)
+```
+
+- **Restarting costs nothing extra.** Every judge answer is cached in `output/judge_cache.jsonl`, so a rerun continues where it stopped and never pays twice.
+- **Full runs publish their results:** `site/llm-judge.html` and `results/llm_judge_rows.json` (the per-product marks used by the manual review page).
+- **Other outputs:** `output/extraction_judge_results.xlsx` (Excel workbook) and `output/report.html`.
+
+Options:
+
+| Option | What it does |
+|---|---|
+| `--limit N` | only the first N products (doesn't update the site page) |
+| `--target 0.9` | change the PASS target (default 85%) |
+| `--yes` | skip the cost question |
+| `--offline` | no API calls; text graded by plain string match |
+| `--model <name>` | a different judge model (default `gpt-4o-mini`) |
+
+How the judge grades:
+
+- **Text fields:** name, brand, manufacturer, country, package type, ingredients, and other label info are graded by the LLM. The judge sees the models as A, B and C, not by name.
+- **Numbers and codes:** nutrients, barcode, sizes, category and nutrition basis are checked exactly in Python.
+- **Other label info:** people typed only part of this text, so extra text from a model is fine.
+
+## Things to know about the data
+
+- **Missing ground truth.** Manufacturer and country of origin sometimes come from outside the label, so the ground truth has values the models can't see.
+- **Units and fractions.** Some ground-truth nutrient values are stored as fractions (for example "20%" stored as 0.2 g). The regex method accepts either reading.
+- **When all three models are wrong the same way,** check the ground truth first. Use the ⚠ flag on the manual review page to record it.
 
 ## Folder layout
 
 ```
-Lishe-Poa-Models-Eval/
-├── judge_eval.py            main script
-├── report.py                makes the chart page
-├── requirements.txt         libraries to install
-├── .env                     your OpenAI key (never share this file)
-├── data/
-│   ├── ground_truth.json
-│   ├── gpt-6-sol.json
-│   ├── gemini-3.8-flash.json
-│   └── claude-opus-5-5.json
-└── output/                  created automatically
-    ├── extraction_judge_results.xlsx   final Excel file
-    ├── report.html                     charts, open in a browser
-    └── judge_cache.jsonl               saved judge answers (keep this)
+data/            ground truth + model outputs (inputs)
+compare.py       ① regex comparison
+judge_eval.py    ② LLM judge   (report.py draws its charts)
+serve.py         local server for the site + manual review storage
+site/            the web pages: index, regex, llm-judge, manual-review
+site_nav.py      shared top navigation for generated pages
+templates/       source template for the regex page
+results/         generated results (committed)
+reviews/         manual review files, one per reviewer (committed)
+output/          LLM-judge Excel, report and answer cache (not committed)
 ```
-
-## Setup (once)
-
-1. Open the folder in VS Code and open a terminal (**Terminal → New Terminal**).
-2. Create a virtual environment and install the libraries:
-   ```
-   python3 -m venv .venv
-   .venv/bin/pip install -r requirements.txt
-   ```
-   On Windows, use `.venv\Scripts\pip` instead.
-3. Put your OpenAI key in the `.env` file, as one line:
-   ```
-   OPENAI_API_KEY=sk-your-key-here
-   ```
-
-## Running it
-
-Test on the first 100 products:
-
-```
-.venv/bin/python judge_eval.py --limit 100
-```
-
-Then run all products:
-
-```
-.venv/bin/python judge_eval.py
-```
-
-- **Cost:** before calling OpenAI, the script prints an estimate and asks you to type `y`. A full run of about 1,480 judge calls costs well under US$1 with GPT-4o mini.
-- **Restarting:** every judge answer is saved in `output/judge_cache.jsonl`. If the run stops, run the same command again and it continues where it stopped. Products already judged are never sent or paid for again.
-- **Rebuilding the results:** once everything is judged, running the command again makes no API calls. It just rebuilds the Excel file, the chart page and the terminal summary.
-
-Useful options:
-
-| Option | What it does |
-|---|---|
-| `--limit 100` | only the first 100 products |
-| `--target 0.9` | change the PASS target (default `0.85` = 85%) |
-| `--yes` | skip the cost question |
-| `--offline` | no API calls; text graded by plain text match (layout test only) |
-
-To add or remove a model, edit the `DEFAULT_MODELS` list near the top of `judge_eval.py`.
-
-## What you get
-
-**1. Summary in the terminal:** accuracy per model, per nutrient and per field, each marked PASS or FAIL against the 85% target.
-
-**2. `output/report.html`:** a page with simple charts:
-- one card per model with its overall accuracy
-- accuracy by area: text, codes and sizes, nutrients, overall
-- accuracy per field
-- accuracy per nutrient (nutrients found on at least 20 products)
-
-Each chart has a "Show table" link with the exact numbers.
-
-**3. `output/extraction_judge_results.xlsx`:** the final Excel file.
-
-| Sheet | Contents |
-|---|---|
-| Basic analysis | one row per product ID, one ✓/✗ per model (✓ = everything on that product correct) |
-| Summary | leaderboard and accuracy per field |
-| Comparison | per product: ground truth, then each model's value with ✓/✗ and the judge's notes |
-| Nutrients | one row per product and nutrient, with ✓/✗ per model |
-
-## Things to know about the data
-
-- **F406 is not compared.** The ground truth splits it into F406_1 (empty) and F406_2 (Tropicana Slim), while the models have one F406. To include it, set `ID_ALIASES = {"F406_2": "F406"}` in `judge_eval.py`. That leaves 1,499 products compared.
-- **Check the ground truth when all models are wrong.** If all three models are wrong in the same way (for example vitamin A, vitamin C or iron values), the ground truth or the units (mg vs µg) may be the problem, not the models.
-- **Manufacturer and country sometimes come from outside the label.** The ground truth often has them when the label doesn't, so the models can be marked ✗ unfairly.
-- **The judge model.** The script uses `gpt-4o-mini`. If OpenAI renames or retires it, add `--model <new-name>`.
