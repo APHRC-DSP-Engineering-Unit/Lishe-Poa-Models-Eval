@@ -569,7 +569,7 @@ def run(gt_path: Path, models: list[tuple[str, Path]], threshold: float,
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--gt", default=str(ROOT / "ground_truth.json"))
+    ap.add_argument("--gt", default=str(ROOT / "data" / "ground_truth.json"))
     ap.add_argument("--model", action="append", metavar="NAME=PATH",
                     help="model output to compare (repeatable). Defaults to the three bundled files.")
     ap.add_argument("--threshold", type=float, default=0.80, help="pass threshold, 0..1 (default 0.80)")
@@ -582,7 +582,7 @@ def main() -> None:
     if a.model:
         models = [(s.split("=", 1)[0], Path(s.split("=", 1)[1])) for s in a.model]
     else:
-        models = [(n, ROOT / f) for n, f in DEFAULT_MODELS]
+        models = [(n, ROOT / "data" / f) for n, f in DEFAULT_MODELS]
 
     b = run(Path(a.gt), models, a.threshold, not a.no_penalise_extra, Path(a.out), Path(a.ui))
     print(f"Ground truth: {b['meta']['gt_records']} records | threshold {a.threshold:.0%}\n")
