@@ -23,7 +23,7 @@ Outputs:
     results/comparison.json   full per-record, per-field results
     results/summary.csv       one row per model
     results/records.csv       one row per record x model
-    ui/data.js                data bundle loaded by ui/index.html
+    ui/index.html             self-contained dashboard (data inlined, built from ui/template.html)
 """
 from __future__ import annotations
 
@@ -536,8 +536,15 @@ def run(gt_path: Path, models: list[tuple[str, Path]], threshold: float,
     out_dir.mkdir(parents=True, exist_ok=True)
     ui_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "comparison.json").write_text(json.dumps(bundle, ensure_ascii=False, indent=1))
-    (ui_dir / "data.js").write_text("window.COMPARISON = " + json.dumps(bundle, ensure_ascii=False,
-                                                                        separators=(",", ":")) + ";\n")
+    # Inline the data so index.html is a single self-contained file. Sandboxed
+    # browsers (Flatpak/Snap) only get access to the one file opened, not siblings.
+    payload = json.dumps(bundle, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    template = (ROOT / "ui" / "template.html").read_text()
+    marker = '<script src="data.js"></script>'
+    if marker not in template:
+        raise SystemExit(f"ui/template.html is missing the {marker} placeholder")
+    (ui_dir / "index.html").write_text(
+        template.replace(marker, f"<script>window.COMPARISON = {payload};</script>"))
 
     with (out_dir / "summary.csv").open("w", newline="") as fh:
         w = csv.writer(fh)
@@ -586,7 +593,7 @@ def main() -> None:
     for n, s in b["summary"].items():
         print(f"{n:<20}{s['matched']:>8}{s['passed']:>7}{s['failed']:>7}{s['pass_rate']:>8.1%}{s['mean_score']:>8.1%}  "
               + " ".join(f"{(s['groups'][g] or 0):>7.1%}" for g in GROUP_WEIGHTS))
-    print(f"\nWrote {a.out}/comparison.json, summary.csv, records.csv and {a.ui}/data.js")
+    print(f"\nWrote {a.out}/comparison.json, summary.csv, records.csv and {a.ui}/index.html")
 
 
 if __name__ == "__main__":

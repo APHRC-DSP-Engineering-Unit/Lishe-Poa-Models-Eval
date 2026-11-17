@@ -24,7 +24,7 @@ Only Python 3.10+ is required. It uses the standard library only.
 - `results/summary.csv`: one row per model with pass rate, mean accuracy, and per-group accuracy
 - `results/records.csv`: one row per product × model with score and YES/NO
 - `results/comparison.json`: full per-field detail
-- `ui/data.js`: data bundle for `ui/index.html`
+- `ui/index.html`: self-contained dashboard with the data embedded, built from `ui/template.html` (edit the template, not index.html)
 
 ## How scoring works
 

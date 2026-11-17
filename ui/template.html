@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LishePoa · Model Extraction vs Ground Truth</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7; --surface-1: #fcfcfb; --surface-2: #f0efec;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7;
+    --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a;
+    --good: #0ca30c; --good-text: #006300; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
+    --good-bg: #e6f4e6; --warn-bg: #fdf3dc; --crit-bg: #fbe7e7; --neutral-bg: #efeee9;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface-1: #1a1a19; --surface-2: #262624;
+    --text-primary: #f0efec; --text-secondary: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835;
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70;
+    --good-text: #0ca30c;
+    --good-bg: #13301a; --warn-bg: #3a2f12; --crit-bg: #3b1919; --neutral-bg: #2c2c2a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         background: var(--page); color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  header { position: sticky; top: 0; z-index: 20; background: var(--surface-1); border-bottom: 1px solid var(--grid);
+           padding: 12px 24px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  header h1 { font-size: 17px; margin: 0; }
+  header .sub { color: var(--text-secondary); font-size: 12px; }
+  .ctrl { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 13px; }
+  .ctrl input[type=range] { width: 160px; }
+  .spacer { flex: 1; }
+  button, select, input[type=search] { font: inherit; color: var(--text-primary); background: var(--surface-1);
+           border: 1px solid var(--axis); border-radius: 6px; padding: 5px 10px; }
+  button { cursor: pointer; }
+  button:hover { background: var(--surface-2); }
+  main { padding: 20px 24px 60px; max-width: 1500px; margin: 0 auto; }
+  section { background: var(--surface-1); border: 1px solid var(--grid); border-radius: 10px; padding: 18px 20px; margin-bottom: 18px; }
+  section h2 { font-size: 15px; margin: 0 0 4px; }
+  section p.hint { margin: 0 0 14px; color: var(--text-secondary); font-size: 12.5px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .card { border: 1px solid var(--grid); border-radius: 10px; padding: 14px 16px; background: var(--surface-1); position: relative; }
+  .card .name { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+  .swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; flex: none; }
+  .card .hero { font-size: 34px; font-weight: 650; margin: 6px 0 0; letter-spacing: -0.5px; }
+  .card .hero small { font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-left: 4px; }
+  .card .kv { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; font-size: 12.5px; color: var(--text-secondary); margin-top: 8px; }
+  .card .kv b { color: var(--text-primary); font-weight: 600; }
+  .card .rank { position: absolute; top: 12px; right: 14px; font-size: 11px; color: var(--muted); }
+  .stack { display: flex; height: 10px; border-radius: 4px; overflow: hidden; margin-top: 10px; gap: 2px; background: var(--surface-1); }
+  .stack span { display: block; height: 100%; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-secondary); margin-bottom: 8px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 1000px) { .grid2 { grid-template-columns: 1fr; } }
+  svg text { fill: var(--text-secondary); font-size: 11.5px; }
+  svg .val { fill: var(--text-primary); font-size: 10.5px; }
+  .tip { position: fixed; pointer-events: none; z-index: 50; background: var(--surface-1); color: var(--text-primary);
+         border: 1px solid var(--axis); border-radius: 6px; padding: 6px 9px; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.15);
+         display: none; max-width: 320px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+  th { font-size: 12px; color: var(--text-secondary); font-weight: 600; position: sticky; top: 0; background: var(--surface-1); }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--text-primary); }
+  tr.rec { cursor: pointer; }
+  tr.rec:hover td { background: var(--surface-2); }
+  td.num, th.num { text-align: right; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 1px 7px; border-radius: 10px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+  .b-yes { background: var(--good-bg); color: var(--good-text); }
+  .b-no { background: var(--crit-bg); color: var(--critical); }
+  .b-na { background: var(--neutral-bg); color: var(--muted); }
+  .scorecell { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+  .meter { width: 56px; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+  .meter i { display: block; height: 100%; border-radius: 3px; }
+  .filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  .filters input[type=search] { width: 280px; }
+  .pager { display: flex; gap: 8px; align-items: center; justify-content: flex-end; margin-top: 10px; color: var(--text-secondary); font-size: 12.5px; }
+  .muted { color: var(--muted); }
+  .tablewrap { max-height: 560px; overflow: auto; }
+  /* Detail drawer */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 30; display: none; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(1180px, 96vw); background: var(--surface-1); z-index: 40;
+            transform: translateX(100%); transition: transform .2s ease; display: flex; flex-direction: column; border-left: 1px solid var(--grid); }
+  .drawer.open { transform: none; }
+  .drawer .dh { padding: 16px 20px; border-bottom: 1px solid var(--grid); display: flex; gap: 16px; align-items: flex-start; }
+  .drawer .dh h3 { margin: 0; font-size: 17px; }
+  .drawer .db { padding: 16px 20px; overflow: auto; flex: 1; }
+  .mscores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+  .mscore { border: 1px solid var(--grid); border-radius: 8px; padding: 10px 12px; }
+  .mscore .big { font-size: 22px; font-weight: 650; }
+  .mscore .groups { display: grid; grid-template-columns: auto 1fr auto; gap: 3px 8px; font-size: 11.5px; color: var(--text-secondary); margin-top: 6px; align-items: center; }
+  .cmp { table-layout: fixed; }
+  .cmp td { font-size: 12.5px; word-break: break-word; }
+  .cmp td.fk { color: var(--text-secondary); white-space: nowrap; font-family: ui-monospace, monospace; font-size: 11.5px; }
+  .cmp td.gtv { background: var(--surface-2); font-weight: 500; }
+  .cell { border-radius: 5px; padding: 4px 6px; }
+  .st-match { background: var(--good-bg); }
+  .st-partial { background: var(--warn-bg); }
+  .st-mismatch, .st-missing { background: var(--crit-bg); }
+  .st-extra { background: var(--neutral-bg); }
+  .st-label { display: block; font-size: 10.5px; font-weight: 600; margin-top: 2px; }
+  .st-match .st-label { color: var(--good-text); }
+  .st-partial .st-label { color: #9a6a00; }
+  :root[data-theme="dark"] .st-partial .st-label { color: var(--warning); }
+  .st-mismatch .st-label, .st-missing .st-label { color: var(--critical); }
+  .st-extra .st-label { color: var(--muted); }
+  .grouprow td { background: var(--page); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; color: var(--text-secondary); }
+  .longtext { max-height: 140px; overflow: auto; display: block; }
+  .method li { margin-bottom: 4px; }
+  .method code { background: var(--surface-2); padding: 0 4px; border-radius: 3px; font-size: 12px; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+  .tabs button.active { background: var(--text-primary); color: var(--surface-1); border-color: var(--text-primary); }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>LishePoa product validation: model extraction vs ground truth</h1>
+    <div class="sub" id="subtitle"></div>
+  </div>
+  <div class="spacer"></div>
+  <label class="ctrl">Pass threshold
+    <input type="range" id="thr" min="50" max="100" step="1">
+    <b id="thrv"></b>
+  </label>
+  <button id="theme" title="Toggle light/dark">◐ Theme</button>
+</header>
+
+<main>
+  <section>
+    <h2>Model scorecards</h2>
+    <p class="hint">A record <b>passes</b> (YES) when its weighted accuracy against the ground truth is at or above the threshold. Move the slider to re-score live.</p>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <div class="grid2">
+    <section>
+      <h2>Accuracy by field group</h2>
+      <p class="hint">Mean per-record accuracy for each part of the label. Hover a bar for exact values.</p>
+      <div class="legend" id="legend1"></div>
+      <div id="groupChart"></div>
+    </section>
+    <section>
+      <h2>Score distribution</h2>
+      <p class="hint">Share of records in each accuracy band. The dashed line marks the pass threshold.</p>
+      <div class="legend" id="legend2"></div>
+      <div id="histChart"></div>
+    </section>
+  </div>
+
+  <section>
+    <h2>Head-to-head agreement</h2>
+    <p class="hint">How the three models' pass/fail decisions line up on the same product. Click a box to filter the records table.</p>
+    <div class="cards" id="agree"></div>
+  </section>
+
+  <section>
+    <h2>Field-level accuracy</h2>
+    <p class="hint">Accuracy per extracted field, averaged over records where the ground truth or the model has a value. <i>n</i> = records scored.</p>
+    <div class="tabs" id="fieldTabs"></div>
+    <div class="tablewrap" style="max-height:420px"><table id="fieldTable"></table></div>
+  </section>
+
+  <section>
+    <h2>Records: side-by-side</h2>
+    <p class="hint">Click a row to open the full side-by-side field comparison against the ground truth.</p>
+    <div class="filters">
+      <input type="search" id="q" placeholder="Search UID, product, brand, category…">
+      <select id="fstatus">
+        <option value="all">All records</option>
+        <option value="anyfail">Any model fails</option>
+        <option value="allpass">All models pass</option>
+        <option value="allfail">All models fail</option>
+        <option value="disagree">Models disagree</option>
+      </select>
+      <select id="fmodel"><option value="">Model fails: any</option></select>
+      <select id="fcat"><option value="">All categories</option></select>
+      <span class="muted" id="count"></span>
+      <div class="spacer"></div>
+      <button id="csv">⬇ Export view (CSV)</button>
+    </div>
+    <div class="tablewrap"><table id="recTable"></table></div>
+    <div class="pager">
+      <button id="prev">‹ Prev</button><span id="pageinfo"></span><button id="next">Next ›</button>
+    </div>
+  </section>
+
+  <section class="method">
+    <h2>Methodology</h2>
+    <ul id="methodList"></ul>
+  </section>
+</main>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dh">
+    <div style="flex:1">
+      <div class="muted" id="dUid"></div>
+      <h3 id="dTitle"></h3>
+      <div class="muted" id="dMeta"></div>
+    </div>
+    <label class="ctrl"><input type="checkbox" id="onlyDiff"> Only differences</label>
+    <button id="dPrev">‹</button><button id="dNext">›</button>
+    <button id="close">✕ Close</button>
+  </div>
+  <div class="db">
+    <div class="mscores" id="dScores"></div>
+    <table class="cmp" id="dTable"></table>
+  </div>
+</aside>
+<div class="tip" id="tip"></div>
+
+<script src="data.js"></script>
+<script>
+(() => {
+  const D = window.COMPARISON;
+  if (!D) { document.body.innerHTML = '<p style="padding:40px">No data embedded. Open <code>ui/index.html</code> (not template.html), or run <code>python3 compare.py</code> to rebuild it.</p>'; return; }
+  const M = D.meta.models;
+  const COLORS = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)'];
+  const color = name => COLORS[M.indexOf(name) % COLORS.length];
+  const GROUPS = Object.keys(D.meta.group_weights);
+  const GROUP_LABEL = { identity: 'Identity', package: 'Package', basis: 'Nutrition basis', nutrients: 'Nutrients', ingredients: 'Ingredients', label: 'Other label info' };
+  const pct = (v, d = 1) => v == null ? '–' : (v * 100).toFixed(d) + '%';
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const $ = id => document.getElementById(id);
+  let thr = D.meta.threshold;
+  const passes = (rec, m) => rec.models[m] ? rec.models[m].score >= thr : null;
+
+  // ---------- theme ----------
+  const savedTheme = localStorage.getItem('lp-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.dataset.theme = savedTheme;
+  $('theme').onclick = () => {
+    const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = t; localStorage.setItem('lp-theme', t);
+  };
+
+  // ---------- tooltip ----------
+  const tip = $('tip');
+  const showTip = (e, html) => { tip.innerHTML = html; tip.style.display = 'block'; moveTip(e); };
+  const moveTip = e => { tip.style.left = Math.min(e.clientX + 14, innerWidth - 330) + 'px'; tip.style.top = (e.clientY + 14) + 'px'; };
+  const hideTip = () => tip.style.display = 'none';
+  const bindTips = root => root.querySelectorAll('[data-tip]').forEach(el => {
+    el.addEventListener('mouseenter', e => showTip(e, el.dataset.tip));
+    el.addEventListener('mousemove', moveTip);
+    el.addEventListener('mouseleave', hideTip);
+  });
+
+  const legendHTML = () => M.map(m => `<span><i class="swatch" style="background:${color(m)}"></i>${esc(m)}</span>`).join('');
+  $('legend1').innerHTML = $('legend2').innerHTML = legendHTML();
+  $('subtitle').textContent = `Ground truth: ${D.meta.ground_truth} (${D.meta.gt_records.toLocaleString()} records) · compared: ${M.map(m => D.meta.model_files[m]).join(', ')}`;
+
+  // ---------- cards ----------
+  function renderCards() {
+    const stats = M.map(m => {
+      const recs = D.records.filter(r => r.models[m]);
+      const pass = recs.filter(r => r.models[m].score >= thr).length;
+      return { m, n: recs.length, pass, fail: recs.length - pass, s: D.summary[m] };
+    });
+    const order = [...stats].sort((a, b) => b.pass / b.n - a.pass / a.n || b.s.mean_score - a.s.mean_score);
+    $('cards').innerHTML = stats.map(st => {
+      const rank = order.indexOf(st) + 1;
+      const fs = st.s.field_status;
+      const tot = Object.values(fs).reduce((a, b) => a + b, 0);
+      const seg = (k, c, lbl) => `<span style="width:${(fs[k] || 0) / tot * 100}%;background:${c}" data-tip="${lbl}: ${(fs[k] || 0).toLocaleString()} fields (${pct((fs[k] || 0) / tot)})"></span>`;
+      return `<div class="card">
+        <div class="rank">#${rank} by pass rate</div>
+        <div class="name"><i class="swatch" style="background:${color(st.m)}"></i>${esc(st.m)}</div>
+        <div class="hero">${pct(st.pass / st.n)}<small>pass rate</small></div>
+        <div class="kv">
+          <span>Passed (YES)</span><b style="color:var(--good-text)">✓ ${st.pass.toLocaleString()}</b>
+          <span>Failed (NO)</span><b style="color:var(--critical)">✗ ${st.fail.toLocaleString()}</b>
+          <span>Mean record accuracy</span><b>${pct(st.s.mean_score)}</b>
+          <span>Records matched</span><b>${st.n.toLocaleString()} / ${D.meta.gt_records.toLocaleString()}</b>
+          <span>Matched by gt_uid / record_id</span><b>${st.s.match_log.by_gt_uid} / ${st.s.match_log.by_record_id}</b>
+        </div>
+        <div class="stack">${seg('match', 'var(--good)', 'Exact match')}${seg('partial', 'var(--warning)', 'Partial match')}${seg('mismatch', 'var(--critical)', 'Mismatch')}${seg('missing', 'var(--serious)', 'Missing (in GT, not extracted)')}${seg('extra', 'var(--axis)', 'Extra (not in GT)')}</div>
+        <div class="muted" style="font-size:11px;margin-top:4px">Field outcomes: match · partial · mismatch · missing · extra (hover)</div>
+      </div>`;
+    }).join('');
+    bindTips($('cards'));
+  }
+
+  // ---------- grouped bar chart ----------
+  function renderGroupChart() {
+    const W = 640, H = 300, L = 40, B = 34, T = 12, R = 8;
+    const iw = W - L - R, ih = H - T - B;
+    const gw = iw / GROUPS.length, bw = Math.min(26, (gw - 18) / M.length);
+    const ymin = 0.5, y = v => T + ih - (Math.max(v, ymin) - ymin) / (1 - ymin) * ih;
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Accuracy by field group">`;
+    for (let t = 0.5; t <= 1.0001; t += 0.1) s += `<line x1="${L}" x2="${W - R}" y1="${y(t)}" y2="${y(t)}" stroke="var(--grid)"/><text x="${L - 6}" y="${y(t) + 4}" text-anchor="end">${Math.round(t * 100)}%</text>`;
+    GROUPS.forEach((g, gi) => {
+      const x0 = L + gi * gw + (gw - bw * M.length - 2 * (M.length - 1)) / 2;
+      M.forEach((m, mi) => {
+        const v = D.summary[m].groups[g] ?? 0, x = x0 + mi * (bw + 2), top = y(v), h = T + ih - top;
+        s += `<path d="M${x},${T + ih} V${top + 4} q0,-4 4,-4 h${bw - 8} q4,0 4,4 V${T + ih} Z" fill="${color(m)}"/>`;
+        s += `<rect x="${x - 1}" y="${T}" width="${bw + 2}" height="${ih}" fill="transparent" data-tip="<b>${esc(m)}</b><br>${GROUP_LABEL[g]}: ${pct(v)}"/>`;
+      });
+      const best = M.reduce((a, m) => (D.summary[m].groups[g] > D.summary[a].groups[g] ? m : a), M[0]);
+      s += `<text x="${L + gi * gw + gw / 2}" y="${H - 16}" text-anchor="middle">${GROUP_LABEL[g]}</text>`;
+      s += `<text x="${L + gi * gw + gw / 2}" y="${H - 3}" text-anchor="middle" class="val">best ${pct(D.summary[best].groups[g])}</text>`;
+    });
+    s += `<line x1="${L}" x2="${W - R}" y1="${T + ih}" y2="${T + ih}" stroke="var(--axis)"/></svg>`;
+    s += `<div class="muted" style="font-size:11px">y-axis starts at 50% to show differences between models.</div>`;
+    $('groupChart').innerHTML = s; bindTips($('groupChart'));
+  }
+
+  // ---------- histogram ----------
+  function renderHist() {
+    const bins = [0, .5, .6, .7, .75, .8, .85, .9, .95, 1.0001];
+    const labels = ['<50', '50–60', '60–70', '70–75', '75–80', '80–85', '85–90', '90–95', '95–100'];
+    const counts = M.map(m => {
+      const c = new Array(labels.length).fill(0); let n = 0;
+      D.records.forEach(r => { const x = r.models[m]?.score; if (x == null) return; n++;
+        for (let i = 0; i < labels.length; i++) if (x >= bins[i] && x < bins[i + 1]) { c[i]++; break; } });
+      return c.map(v => v / n);
+    });
+    const W = 640, H = 300, L = 40, B = 34, T = 12, R = 8, iw = W - L - R, ih = H - T - B;
+    const max = Math.max(...counts.flat()) * 1.08;
+    const gw = iw / labels.length, bw = Math.min(16, (gw - 8) / M.length);
+    const y = v => T + ih - v / max * ih;
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Score distribution">`;
+    const step = max > 0.5 ? 0.2 : 0.1;
+    for (let t = 0; t <= max; t += step) s += `<line x1="${L}" x2="${W - R}" y1="${y(t)}" y2="${y(t)}" stroke="var(--grid)"/><text x="${L - 6}" y="${y(t) + 4}" text-anchor="end">${Math.round(t * 100)}%</text>`;
+    labels.forEach((lb, i) => {
+      const x0 = L + i * gw + (gw - bw * M.length - 2 * (M.length - 1)) / 2;
+      M.forEach((m, mi) => {
+        const v = counts[mi][i], x = x0 + mi * (bw + 2), top = y(v);
+        if (v > 0) s += `<path d="M${x},${T + ih} V${Math.min(top + 3, T + ih)} q0,-3 3,-3 h${bw - 6} q3,0 3,3 V${T + ih} Z" fill="${color(m)}"/>`;
+        s += `<rect x="${x - 1}" y="${T}" width="${bw + 2}" height="${ih}" fill="transparent" data-tip="<b>${esc(m)}</b><br>Score ${lb}%: ${pct(v)} of records"/>`;
+      });
+      s += `<text x="${L + i * gw + gw / 2}" y="${H - 16}" text-anchor="middle">${lb}</text>`;
+    });
+    // threshold marker
+    let tx = L; for (let i = 0; i < labels.length; i++) if (thr >= bins[i] && thr < bins[i + 1]) tx = L + i * gw + (thr - bins[i]) / (bins[i + 1] - bins[i]) * gw;
+    s += `<line x1="${tx}" x2="${tx}" y1="${T}" y2="${T + ih}" stroke="var(--text-secondary)" stroke-dasharray="4 3"/><text x="${tx + 4}" y="${T + 10}" class="val">pass ≥ ${Math.round(thr * 100)}%</text>`;
+    s += `<line x1="${L}" x2="${W - R}" y1="${T + ih}" y2="${T + ih}" stroke="var(--axis)"/><text x="${L + iw / 2}" y="${H - 2}" text-anchor="middle">record accuracy (%)</text></svg>`;
+    $('histChart').innerHTML = s; bindTips($('histChart'));
+  }
+
+  // ---------- agreement ----------
+  function renderAgree() {
+    const recs = D.records.filter(r => M.every(m => r.models[m]));
+    const c = { allpass: 0, allfail: 0, disagree: 0 };
+    const onlyFail = Object.fromEntries(M.map(m => [m, 0]));
+    const onlyPass = Object.fromEntries(M.map(m => [m, 0]));
+    recs.forEach(r => {
+      const p = M.map(m => passes(r, m)), k = p.filter(Boolean).length;
+      if (k === M.length) c.allpass++; else if (k === 0) c.allfail++; else {
+        c.disagree++;
+        if (k === M.length - 1) onlyFail[M[p.indexOf(false)]]++;
+        if (k === 1) onlyPass[M[p.indexOf(true)]]++;
+      }
+    });
+    const box = (key, title, n, extra = '') => `<div class="card" style="cursor:pointer" data-f="${key}">
+      <div class="name">${title}</div><div class="hero">${n.toLocaleString()}<small>${pct(n / recs.length)} of products</small></div>${extra}</div>`;
+    $('agree').innerHTML =
+      box('allpass', '<span class="badge b-yes">✓ All 3 pass</span>', c.allpass) +
+      box('allfail', '<span class="badge b-no">✗ All 3 fail</span>', c.allfail, '<div class="muted" style="font-size:12px;margin-top:6px">Often hard labels or ground-truth gaps worth reviewing.</div>') +
+      box('disagree', '<span class="badge b-na">≠ Models disagree</span>', c.disagree,
+        `<div class="kv">${M.map(m => `<span><i class="swatch" style="background:${color(m)}"></i> ${esc(m)}: only one failing</span><b>${onlyFail[m]}</b>`).join('')}
+         ${M.map(m => `<span><i class="swatch" style="background:${color(m)}"></i> ${esc(m)}: only one passing</span><b>${onlyPass[m]}</b>`).join('')}</div>`);
+    $('agree').querySelectorAll('[data-f]').forEach(el => el.onclick = () => {
+      $('fstatus').value = el.dataset.f; $('fmodel').value = ''; page = 0; renderRecords();
+      $('recTable').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  // ---------- field table ----------
+  let fieldGroup = 'all', fieldSort = { k: 'min', dir: 1 };
+  function renderFieldTable() {
+    $('fieldTabs').innerHTML = ['all', ...GROUPS].map(g => `<button data-g="${g}" class="${g === fieldGroup ? 'active' : ''}">${g === 'all' ? 'All fields' : GROUP_LABEL[g]}</button>`).join('');
+    $('fieldTabs').querySelectorAll('button').forEach(b => b.onclick = () => { fieldGroup = b.dataset.g; renderFieldTable(); });
+    const keys = new Set(); M.forEach(m => Object.keys(D.summary[m].fields).forEach(k => keys.add(k)));
+    const groupOf = k => k.startsWith('nutrients.') ? 'nutrients' : k.startsWith('product.') ? 'identity' : k.startsWith('package.') ? 'package'
+      : k.startsWith('ingredients') ? 'ingredients' : k.startsWith('other_label') ? 'label' : 'basis';
+    let rows = [...keys].filter(k => fieldGroup === 'all' || groupOf(k) === fieldGroup).map(k => {
+      const v = M.map(m => D.summary[m].fields[k]);
+      const n = Math.max(...v.map(x => x?.n || 0));
+      return { k, v, n, min: Math.min(...v.map(x => x?.accuracy ?? 1)) };
+    }).filter(r => r.n >= (fieldGroup === 'all' ? 5 : 1));
+    rows.sort((a, b) => fieldSort.k === 'k' ? a.k.localeCompare(b.k) * fieldSort.dir
+      : fieldSort.k === 'n' ? (b.n - a.n) * fieldSort.dir : fieldSort.k === 'min' ? (a.min - b.min) * fieldSort.dir
+      : ((a.v[fieldSort.k]?.accuracy ?? 0) - (b.v[fieldSort.k]?.accuracy ?? 0)) * fieldSort.dir);
+    const meter = (v, m) => `<div class="scorecell">${pct(v)}<div class="meter"><i style="width:${(v ?? 0) * 100}%;background:${color(m)}"></i></div></div>`;
+    $('fieldTable').innerHTML = `<thead><tr><th class="sortable" data-s="k">Field</th><th class="sortable num" data-s="n">n</th>${M.map((m, i) => `<th class="sortable num" data-s="${i}"><i class="swatch" style="background:${color(m)}"></i> ${esc(m)}</th>`).join('')}<th class="num">Best</th></tr></thead>
+      <tbody>${rows.map(r => {
+        const accs = r.v.map(x => x?.accuracy ?? -1), bi = accs.indexOf(Math.max(...accs));
+        const tie = accs.filter(a => a === accs[bi]).length > 1;
+        return `<tr><td style="font-family:ui-monospace,monospace;font-size:12px">${esc(r.k)}</td><td class="num muted">${r.n}</td>${r.v.map((x, i) => `<td class="num">${x ? meter(x.accuracy, M[i]) : '<span class="muted">–</span>'}</td>`).join('')}<td class="num">${tie ? '<span class="muted">tie</span>' : esc(M[bi])}</td></tr>`;
+      }).join('')}</tbody>`;
+    $('fieldTable').querySelectorAll('th[data-s]').forEach(th => th.onclick = () => {
+      const k = isNaN(+th.dataset.s) ? th.dataset.s : +th.dataset.s;
+      fieldSort = { k, dir: fieldSort.k === k ? -fieldSort.dir : (k === 'k' || k === 'min' ? 1 : -1) }; renderFieldTable();
+    });
+  }
+
+  // ---------- records table ----------
+  const cats = [...new Set(D.records.map(r => r.category).filter(Boolean))].sort();
+  $('fcat').innerHTML += cats.map(c => `<option>${esc(c)}</option>`).join('');
+  $('fmodel').innerHTML += M.map(m => `<option value="${esc(m)}">Fails: ${esc(m)}</option>`).join('');
+  let page = 0, PAGE = 50, recSort = { k: 'uid', dir: 1 }, view = [];
+  function filtered() {
+    const q = $('q').value.trim().toLowerCase(), fs = $('fstatus').value, fm = $('fmodel').value, fc = $('fcat').value;
+    return D.records.filter(r => {
+      if (q && ![r.uid, r.name, r.brand, r.category].some(x => String(x ?? '').toLowerCase().includes(q))) return false;
+      if (fc && r.category !== fc) return false;
+      const p = M.map(m => passes(r, m)).filter(x => x !== null), k = p.filter(Boolean).length;
+      if (fs === 'anyfail' && (k === p.length)) return false;
+      if (fs === 'allpass' && (k !== p.length || !p.length)) return false;
+      if (fs === 'allfail' && k !== 0) return false;
+      if (fs === 'disagree' && (k === 0 || k === p.length)) return false;
+      if (fm && passes(r, fm) !== false) return false;
+      return true;
+    });
+  }
+  function renderRecords() {
+    view = filtered();
+    const sv = r => recSort.k === 'uid' ? r.uid : recSort.k === 'name' ? (r.name || '').toLowerCase() : recSort.k === 'min'
+      ? Math.min(...M.map(m => r.models[m]?.score ?? 0)) : (r.models[recSort.k]?.score ?? -1);
+    view.sort((a, b) => { const x = sv(a), y = sv(b); return (x < y ? -1 : x > y ? 1 : 0) * recSort.dir; });
+    const pages = Math.max(1, Math.ceil(view.length / PAGE)); page = Math.min(page, pages - 1);
+    $('count').textContent = `${view.length.toLocaleString()} records`;
+    $('pageinfo').textContent = `Page ${page + 1} / ${pages}`;
+    const badge = (r, m) => {
+      const c = r.models[m];
+      if (!c) return '<span class="badge b-na">— missing</span>';
+      const ok = c.score >= thr;
+      return `<div class="scorecell"><span>${pct(c.score)}</span><div class="meter"><i style="width:${c.score * 100}%;background:${color(m)}"></i></div><span class="badge ${ok ? 'b-yes' : 'b-no'}">${ok ? '✓ YES' : '✗ NO'}</span></div>`;
+    };
+    const arrow = k => recSort.k === k ? (recSort.dir > 0 ? ' ▲' : ' ▼') : '';
+    $('recTable').innerHTML = `<thead><tr><th class="sortable" data-s="uid">GT UID${arrow('uid')}</th><th class="sortable" data-s="name">Product${arrow('name')}</th><th>Brand</th><th>Category</th>
+      ${M.map(m => `<th class="sortable num" data-s="${esc(m)}"><i class="swatch" style="background:${color(m)}"></i> ${esc(m)}${arrow(m)}</th>`).join('')}
+      <th class="sortable num" data-s="min">Worst${arrow('min')}</th></tr></thead><tbody>` +
+      view.slice(page * PAGE, page * PAGE + PAGE).map(r => `<tr class="rec" data-uid="${esc(r.uid)}"><td><b>${esc(r.uid)}</b></td><td>${esc(r.name) || '<span class="muted">(no name in GT)</span>'}</td><td>${esc(r.brand)}</td><td class="muted">${esc(r.category)}</td>
+        ${M.map(m => `<td class="num">${badge(r, m)}</td>`).join('')}<td class="num muted">${pct(Math.min(...M.map(m => r.models[m]?.score ?? 0)))}</td></tr>`).join('') + '</tbody>';
+    $('recTable').querySelectorAll('th[data-s]').forEach(th => th.onclick = () => {
+      const k = th.dataset.s; recSort = { k, dir: recSort.k === k ? -recSort.dir : (k === 'uid' || k === 'name' ? 1 : 1) }; renderRecords();
+    });
+    $('recTable').querySelectorAll('tr.rec').forEach(tr => tr.onclick = () => openDetail(tr.dataset.uid));
+  }
+  ['q', 'fstatus', 'fmodel', 'fcat'].forEach(id => $(id).addEventListener('input', () => { page = 0; renderRecords(); }));
+  $('prev').onclick = () => { page = Math.max(0, page - 1); renderRecords(); };
+  $('next').onclick = () => { page++; renderRecords(); };
+  $('csv').onclick = () => {
+    const rows = [['gt_uid', 'product', 'brand', 'category', ...M.flatMap(m => [m + ' score', m + ' pass'])]];
+    view.forEach(r => rows.push([r.uid, r.name, r.brand, r.category, ...M.flatMap(m => r.models[m] ? [r.models[m].score, r.models[m].score >= thr ? 'YES' : 'NO'] : ['', 'MISSING'])]));
+    const blob = new Blob([rows.map(r => r.map(x => `"${String(x ?? '').replace(/"/g, '""')}"`).join(',')).join('\n')], { type: 'text/csv' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'lishepoa_comparison_view.csv'; a.click();
+  };
+
+  // ---------- detail drawer ----------
+  let cur = null;
+  const ST = { match: '✓ match', partial: '≈ partial', mismatch: '✗ mismatch', missing: '∅ missing', extra: '+ extra (not in GT)' };
+  function openDetail(uid) {
+    cur = uid;
+    const r = D.records.find(x => x.uid === uid);
+    $('dUid').textContent = `GT UID ${r.uid} · record_id ${r.record_id} · collector ${r.collector ?? '–'}`;
+    $('dTitle').textContent = r.name || '(no product name in ground truth)';
+    $('dMeta').textContent = [r.brand, r.category].filter(Boolean).join(' · ');
+    $('dScores').innerHTML = M.map(m => {
+      const c = r.models[m];
+      if (!c) return `<div class="mscore"><div class="name"><i class="swatch" style="background:${color(m)}"></i> <b>${esc(m)}</b></div><div class="big muted">no record</div></div>`;
+      const ok = c.score >= thr;
+      return `<div class="mscore"><div style="display:flex;justify-content:space-between;align-items:center"><span><i class="swatch" style="background:${color(m)}"></i> <b>${esc(m)}</b></span><span class="badge ${ok ? 'b-yes' : 'b-no'}">${ok ? '✓ YES' : '✗ NO'}</span></div>
+        <div class="big">${pct(c.score)}</div>
+        ${c.matched_by === 'by_record_id' ? `<div class="muted" style="font-size:11px">matched via record_id (model UID ${esc(c.model_id)})</div>` : ''}
+        <div class="groups">${GROUPS.map(g => c.groups[g] == null ? '' : `<span>${GROUP_LABEL[g]}</span><div class="meter" style="width:100%"><i style="width:${c.groups[g] * 100}%;background:${color(m)}"></i></div><span>${pct(c.groups[g], 0)}</span>`).join('')}</div></div>`;
+    }).join('');
+    renderDetailTable(r);
+    $('drawer').classList.add('open'); $('overlay').style.display = 'block'; $('drawer').setAttribute('aria-hidden', 'false');
+  }
+  function renderDetailTable(r) {
+    const only = $('onlyDiff').checked;
+    let html = `<thead><tr><th style="width:15%">Field</th><th style="width:22%">Ground truth</th>${M.map(m => `<th><i class="swatch" style="background:${color(m)}"></i> ${esc(m)}</th>`).join('')}</tr></thead><tbody>`;
+    GROUPS.forEach(g => {
+      const fields = r.fields.filter(f => f.group === g && (!only || M.some(m => f.m[m] && f.m[m].st !== 'match')));
+      if (!fields.length) return;
+      html += `<tr class="grouprow"><td colspan="${2 + M.length}">${GROUP_LABEL[g]}</td></tr>`;
+      fields.forEach(f => {
+        const long = g === 'ingredients' || g === 'label';
+        const val = v => v == null ? '<span class="muted">—</span>' : long ? `<span class="longtext">${esc(v)}</span>` : esc(v);
+        html += `<tr><td class="fk">${esc(f.key.replace(/^nutrients\./, ''))}</td><td class="gtv">${val(f.gt)}</td>` +
+          M.map(m => { const x = f.m[m]; if (!x) return '<td class="muted">—</td>';
+            return `<td><div class="cell st-${x.st}">${val(x.v)}<span class="st-label">${ST[x.st]}${x.s != null && x.st !== 'match' ? ' · ' + pct(x.s, 0) : ''}</span></div></td>`; }).join('') + '</tr>';
+      });
+    });
+    $('dTable').innerHTML = html + '</tbody>';
+  }
+  const closeDetail = () => { $('drawer').classList.remove('open'); $('overlay').style.display = 'none'; $('drawer').setAttribute('aria-hidden', 'true'); };
+  $('close').onclick = closeDetail; $('overlay').onclick = closeDetail;
+  $('onlyDiff').onchange = () => cur && renderDetailTable(D.records.find(x => x.uid === cur));
+  const step = d => { const i = view.findIndex(r => r.uid === cur); const n = view[i + d]; if (n) openDetail(n.uid); };
+  $('dPrev').onclick = () => step(-1); $('dNext').onclick = () => step(1);
+  document.addEventListener('keydown', e => {
+    if (!$('drawer').classList.contains('open')) return;
+    if (e.key === 'Escape') closeDetail(); if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1);
+  });
+
+  // ---------- methodology ----------
+  const W = D.meta.group_weights, tw = Object.values(W).reduce((a, b) => a + b, 0);
+  $('methodList').innerHTML = [
+    `<b>Matching:</b> each model record is paired with the ground-truth record that has the same <code>gt_uid</code>. If there's no exact match, it falls back to <code>record_id</code>, normalized with a regex (<code>^([A-Za-z]+\\d+)(?:_\\d+)?$</code>). This handles GT splits such as F406 → F406_1 / F406_2, and the best-scoring candidate is used.`,
+    `<b>Regex normalization</b> before comparing: case, punctuation, <code>&amp;</code>→"and", decimal commas (1,5→1.5), thousands separators, unit aliases (gms→g, ltrs→l), legal suffixes (Ltd/Limited/PLC…), trailing addresses, country aliases (Türkiye→Turkey, A.R.E→Egypt), UPC/EAN leading zeros, and nutrition-basis strings ("PER 100 ML"→per_100ml).`,
+    `<b>Numbers</b> (nutrients, package size after kg→g / l→ml conversion, serving size): 100% if within 2% (or ±0.05), 50% if within 10%, otherwise 0. A qualifier mismatch such as "&lt;0.1" vs "0.1" costs 25 points. Ranges are compared at both ends.`,
+    `<b>Names and companies:</b> word order doesn't matter. Score = 60% recall of GT words + 40% Dice overlap, so extra descriptors cost a little and missing words cost more. <b>Category</b> and <b>country</b> must match exactly after normalization. <b>Package type</b> uses fuzzy token similarity (e.g. plastic_pouch vs plastic_wrapper gets partial credit).`,
+    `<b>Ingredients:</b> 55% token Dice + 25% sequence similarity + 20% recall of regex-extracted key facts: E-numbers/INS codes (<code>E\\s?\\d{3,4}[a-z]?</code>) and percentages (<code>\\d+(\\.\\d+)?\\s*%</code>). <b>Other label info:</b> recall of GT words (models may add extra lines).`,
+    `<b>Missing</b> (GT has a value, model doesn't) = 0. <b>Extra</b> nutrients (model invents a value GT doesn't have) = ${D.meta.penalise_extra_nutrients ? '0 (penalized)' : 'not scored'}. Extra non-nutrient text is shown but not scored.`,
+    `<b>Record score</b> = weighted mean of group scores, re-weighted over the groups present: ${Object.entries(W).map(([g, w]) => `${GROUP_LABEL[g]} ${Math.round(w / tw * 100)}%`).join(', ')}. A record passes (YES) when score ≥ threshold (default ${Math.round(D.meta.threshold * 100)}%).`,
+    `Regenerate with <code>python3 compare.py [--threshold 0.85]</code>. Outputs go to <code>results/</code> (comparison.json, summary.csv, records.csv) and <code>ui/index.html</code> (self-contained, data inlined).`,
+  ].map(x => `<li>${x}</li>`).join('');
+
+  // ---------- threshold ----------
+  $('thr').value = Math.round(thr * 100); $('thrv').textContent = Math.round(thr * 100) + '%';
+  $('thr').oninput = e => { thr = +e.target.value / 100; $('thrv').textContent = e.target.value + '%'; renderAll(); };
+  function renderAll() { renderCards(); renderHist(); renderAgree(); renderRecords(); if (cur && $('drawer').classList.contains('open')) openDetail(cur); }
+  renderGroupChart(); renderFieldTable(); renderAll();
+})();
+</script>
+</body>
+</html>
