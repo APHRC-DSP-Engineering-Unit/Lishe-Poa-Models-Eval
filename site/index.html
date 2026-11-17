@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LishePoa product validation · Overview</title>
+<style>
+  .lp-nav { position: relative; z-index: 10; display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+    padding: 8px 20px; background: #0b0b0b; color: #f0efec; font: 600 13.5px/1.2 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .lp-nav .lp-brand { margin-right: 14px; font-weight: 700; letter-spacing: .2px; color: #f0efec; text-decoration: none; }
+  .lp-nav .lp-brand small { font-weight: 500; color: #a3a29b; margin-left: 6px; }
+  .lp-nav a.lp-link { color: #c3c2b7; text-decoration: none; padding: 7px 12px; border-radius: 6px; }
+  .lp-nav a.lp-link:hover { background: #262624; color: #fff; }
+
+  :root { color-scheme: light; --page: #f9f9f7; --surface-1: #fcfcfb; --surface-2: #f0efec; --text-primary: #0b0b0b; --text-secondary: #52514e;
+    --muted: #898781; --grid: #e1e0d9; --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a;
+    --rev-1: #6250d6; --rev-2: #e87ba4; --rev-3: #eda100; }
+  :root[data-theme="dark"] { color-scheme: dark; --page: #0d0d0d; --surface-1: #1a1a19; --surface-2: #262624; --text-primary: #f0efec;
+    --text-secondary: #c3c2b7; --muted: #898781; --grid: #2c2c2a; --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70;
+    --rev-1: #9085e9; --rev-2: #d55181; --rev-3: #c98500; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--page); color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  main { max-width: 1200px; margin: 0 auto; padding: 28px 24px 60px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  .sub { color: var(--text-secondary); margin: 0; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
+  @media (max-width: 950px) { .cards { grid-template-columns: 1fr; } }
+  a.card { display: flex; flex-direction: column; gap: 8px; background: var(--surface-1); border: 1px solid var(--grid); border-radius: 12px; padding: 18px 20px;
+    color: inherit; text-decoration: none; transition: border-color .15s; }
+  a.card:hover { border-color: var(--text-secondary); }
+  .card h2 { margin: 0; font-size: 18px; }
+  .card p { margin: 0; color: var(--text-secondary); font-size: 13.5px; }
+  .card .go { margin-top: auto; font-weight: 600; font-size: 13.5px; }
+  .stat { display: grid; grid-template-columns: auto 1fr auto; gap: 4px 8px; align-items: center; font-size: 13px; padding: 10px 0 4px; border-top: 1px solid var(--grid); }
+  .stat b { font-size: 14px; }
+  .swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .track { height: 10px; border-radius: 4px; background: var(--surface-2); display: flex; gap: 2px; overflow: hidden; margin-top: 4px; }
+  .track span { display: block; height: 100%; border-radius: 4px; }
+  .muted { color: var(--muted); }
+  .box { background: var(--surface-1); border: 1px solid var(--grid); border-radius: 12px; padding: 18px 20px; margin-top: 18px; }
+  .box h2 { margin: 0 0 6px; font-size: 16px; }
+  code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; font-size: 12.5px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  td, th { padding: 6px 8px; border-bottom: 1px solid var(--grid); text-align: left; vertical-align: top; }
+  th { color: var(--text-secondary); font-size: 12px; }
+</style>
+</head>
+<body>
+<nav class="lp-nav" aria-label="Validation pages"><a class="lp-brand" href="index.html">LishePoa<small>Product validation</small></a><a class=lp-link href="regex.html">① Regex comparison</a><a class=lp-link href="llm-judge.html">② LLM judge</a><a class=lp-link href="manual-review.html">③ Manual review</a></nav>
+<main>
+  <h1>LishePoa product validation</h1>
+  <p class="sub">How accurately do three AI models (GPT-6-Sol, Gemini 3.8 Flash, Claude Opus 5.5) read food product labels, compared with the human-typed ground truth? Three ways of checking, side by side.</p>
+
+  <div class="cards">
+    <a class="card" href="regex.html">
+      <h2>① Regex comparison</h2>
+      <p>Rule-based, fully automatic. Text and numbers are normalized with regular expressions, every field gets a 0–100% score, and a product passes when its weighted score is at least 80%.</p>
+      <div id="s-regex"></div>
+      <span class="go">Open regex comparison →</span>
+    </a>
+    <a class="card" href="llm-judge.html">
+      <h2>② LLM judge</h2>
+      <p>GPT-4o mini grades text fields blind (models shown as A/B/C); numbers and codes are checked exactly in Python. Marks are ✓ / ✗ / ~, and the target is 85%.</p>
+      <div id="s-llm"></div>
+      <span class="go">Open LLM judge →</span>
+    </a>
+    <a class="card" href="manual-review.html">
+      <h2>③ Manual review</h2>
+      <p>Clive, Abigail and Roda each check batches of 33 random products by hand, ticking ✓/✗ per model in six categories. This is the human reference that keeps both automated methods honest.</p>
+      <div id="s-manual"></div>
+      <span class="go">Open manual review →</span>
+    </a>
+  </div>
+
+  <div class="box">
+    <h2>The six comparison categories</h2>
+    <table>
+      <tr><th>Category</th><th>What it covers</th></tr>
+      <tr><td>Identity</td><td>Product name, brand, manufacturer, category, country of origin, barcode</td></tr>
+      <tr><td>Package</td><td>Package size and unit, count, package type</td></tr>
+      <tr><td>Nutrition basis</td><td>Per 100 g / per 100 ml / per serving, serving size</td></tr>
+      <tr><td>Nutrients</td><td>Every nutrient value with its unit and qualifier (&lt;, min, max, range)</td></tr>
+      <tr><td>Ingredients</td><td>The ingredient list as printed, including E-numbers and percentages</td></tr>
+      <tr><td>Other label information</td><td>Storage, allergen, usage and other printed text</td></tr>
+    </table>
+  </div>
+
+  <div class="box">
+    <h2>Running it</h2>
+    <p class="sub">Start the site with <code>python3 serve.py</code> and open <code>http://localhost:8000</code>. Use <code>python3 serve.py --lan</code> to let teammates on the same network review on your server. Rebuild the regex results with <code>python3 compare.py</code> and the LLM-judge results with <code>.venv/bin/python judge_eval.py</code>. Saved judge answers mean reruns cost nothing.</p>
+  </div>
+</main>
+<script>
+(() => {
+  document.documentElement.dataset.theme = localStorage.getItem('lp-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const S = ['var(--series-1)', 'var(--series-2)', 'var(--series-3)'];
+  const pct = (a, b) => b ? (a / b * 100).toFixed(1) + '%' : '–';
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const offline = '<div class="stat"><span></span><span class="muted">Live numbers appear when the site is opened through <code>python3 serve.py</code>.</span><span></span></div>';
+  const get = u => fetch(u).then(r => r.ok ? r.json() : null).catch(() => null);
+
+  get('/data/regex_summary.json').then(d => {
+    if (!d) return document.getElementById('s-regex').innerHTML = offline;
+    document.getElementById('s-regex').innerHTML = '<div class="stat"><span></span><span class="muted">Products passing (≥ ' + Math.round(d.meta.threshold * 100) + '%)</span><span class="muted">mean</span>' +
+      d.meta.models.map((m, i) => `<span class="swatch" style="background:${S[i]}"></span><span>${esc(m)}</span><b>${pct(d.summary[m].passed, d.summary[m].matched)} <span class="muted" style="font-weight:400">· ${(d.summary[m].mean_score * 100).toFixed(1)}%</span></b>`).join('') + '</div>';
+  });
+  get('/data/llm_judge_rows.json').then(d => {
+    if (!d) return document.getElementById('s-llm').innerHTML = offline;
+    const ids = Object.keys(d.rows);
+    const rows = d.models.map((m, i) => {
+      let ok = 0, n = 0, pass = 0;
+      ids.forEach(id => { const v = d.rows[id].v[i]; ok += v[1]; n += v[2]; pass += v[2] && v[1] / v[2] >= d.target; });
+      return `<span class="swatch" style="background:${S[i]}"></span><span>${esc(m)}</span><b>${pct(pass, ids.length)} <span class="muted" style="font-weight:400">· ${pct(ok, n)}</span></b>`;
+    }).join('');
+    document.getElementById('s-llm').innerHTML = `<div class="stat"><span></span><span class="muted">Products passing (≥ ${Math.round(d.target * 100)}%)</span><span class="muted">values ✓</span>${rows}</div><div class="muted" style="font-size:12px">Judge: ${esc(d.judge)} · ${esc(d.when)} · ${ids.length.toLocaleString()} products</div>`;
+  });
+  Promise.all([get('/api/reviews'), get('/data/regex_summary.json')]).then(([r, s]) => {
+    if (!r || !s) return document.getElementById('s-manual').innerHTML = offline;
+    const REV = [['Clive', 'var(--rev-1)'], ['Abigail', 'var(--rev-2)'], ['Roda', 'var(--rev-3)']];
+    const total = Math.max(...s.meta.models.map(m => s.summary[m].matched));  // products with model output (F406_1 is an empty GT split)
+    const done = REV.map(([n]) => Object.values(r[n]?.reviews || {}).filter(rv => ['identity', 'package', 'basis', 'nutrients', 'ingredients', 'label'].every(g => s.meta.models.every(m => rv.checks?.[g]?.[m]))).length);
+    const all = done.reduce((a, b) => a + b, 0);
+    document.getElementById('s-manual').innerHTML = `<div class="stat" style="grid-template-columns:1fr auto"><span class="muted">Entire dataset manually checked</span><b>${all} / ${total.toLocaleString()} · ${pct(all, total)}</b></div>
+      <div class="track">${REV.map(([n, c], i) => done[i] ? `<span style="width:${done[i] / total * 100}%;background:${c}"></span>` : '').join('')}</div>
+      <div class="stat" style="grid-template-columns:auto 1fr auto;border:none">${REV.map(([n, c], i) => `<span class="dot" style="background:${c}"></span><span>${n}</span><b>${done[i]}</b>`).join('')}</div>`;
+  });
+})();
+</script>
+</body>
+</html>
