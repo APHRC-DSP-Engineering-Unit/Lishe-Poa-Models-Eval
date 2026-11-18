@@ -31,7 +31,8 @@ This project checks each model's answers against the ground truth, product by pr
 ```
 Lishe-Poa-Models-Eval/
 ├── judge_eval.py            main script
-├── report.py                makes the chart page
+├── report.py                makes the dashboard page
+├── export_dashboard_data.py data files for the online dashboard (optional)
 ├── requirements.txt         libraries to install
 ├── .env                     your OpenAI key (never share this file)
 ├── data/
@@ -41,7 +42,7 @@ Lishe-Poa-Models-Eval/
 │   └── claude-opus-5-5.json
 └── output/                  created automatically
     ├── extraction_judge_results.xlsx   final Excel file
-    ├── report.html                     charts, open in a browser
+    ├── dashboard.html                  the dashboard, open in a browser
     └── judge_cache.jsonl               saved judge answers (keep this)
 ```
 
@@ -75,7 +76,7 @@ Then run all products:
 
 - **Cost:** before calling OpenAI, the script prints an estimate and asks you to type `y`. A full run of about 1,480 judge calls costs well under US$1 with GPT-4o mini.
 - **Restarting:** every judge answer is saved in `output/judge_cache.jsonl`. If the run stops, run the same command again and it continues where it stopped. Products already judged are never sent or paid for again.
-- **Rebuilding the results:** once everything is judged, running the command again makes no API calls. It just rebuilds the Excel file, the chart page and the terminal summary.
+- **Rebuilding the results:** once everything is judged, running the command again makes no API calls. It just rebuilds the Excel file, the dashboard and the terminal summary.
 
 Useful options:
 
@@ -92,13 +93,14 @@ To add or remove a model, edit the `DEFAULT_MODELS` list near the top of `judge_
 
 **1. Summary in the terminal:** accuracy per model, per nutrient and per field, each marked PASS or FAIL against the 85% target.
 
-**2. `output/report.html`:** a page with simple charts:
-- one card per model with its overall accuracy
-- accuracy by area: text, codes and sizes, nutrients, overall
-- accuracy per field
-- accuracy per nutrient (nutrients found on at least 20 products)
+**2. `output/dashboard.html` (the dashboard):** double-click it to open it in any browser; no internet needed. It is rebuilt every time you run `judge_eval.py`. It shows:
+- a one-sentence summary at the top (who leads, how many models pass)
+- one card per model: overall accuracy, rank, pass/fail, and nutrients, codes and text with ✓/✗
+- the scorecard: every area and field for every model, green ✓ or red ✗
+- "Products mostly right": products with at least the pass mark of their checks correct
+- a nutrient chart for nutrients found on 50+ products
 
-Each chart has a "Show table" link with the exact numbers.
+**The pass-mark slider** sets the target (50–100%). Accuracy percentages don't change when you move it, because they are fixed by the results. What changes is the ✓/✗ marks, the colours, the pass/fail badges, the summary sentence and the "products mostly right" counts. The browser remembers your last setting.
 
 **3. `output/extraction_judge_results.xlsx`:** the final Excel file.
 
@@ -109,9 +111,17 @@ Each chart has a "Show table" link with the exact numbers.
 | Comparison | per product: ground truth, then each model's value with ✓/✗ and the judge's notes |
 | Nutrients | one row per product and nutrient, with ✓/✗ per model |
 
+**4. Online dashboard (Label Extraction Scorecard):** a one-page summary on claude.ai: one card per model, a colour-coded scorecard for every area and field, a nutrient chart and a "products mostly right" chart, all controlled by one pass-mark slider. Its data comes from:
+
+```
+.venv/bin/python export_dashboard_data.py
+```
+
+That script writes `output/dashboard/scorecard.json`, `nutrients.json` and `products.json` from the saved results, with no API calls. After a new judge run, run it again and ask Claude to replace the dashboard's files.
+
 ## Things to know about the data
 
-- **F406 is not compared.** The ground truth splits it into F406_1 (empty) and F406_2 (Tropicana Slim), while the models have one F406. To include it, set `ID_ALIASES = {"F406_2": "F406"}` in `judge_eval.py`. That leaves 1,499 products compared.
+- **F406.** The ground truth splits it into F406_1 (empty) and F406_2 (Tropicana Slim), while the models have one F406. The models' F406 is compared with F406_2, so 1,500 products are compared. F406_1 has nothing to compare against and is left out. This is set by `ID_ALIASES` in `judge_eval.py`.
 - **Check the ground truth when all models are wrong.** If all three models are wrong in the same way (for example vitamin A, vitamin C or iron values), the ground truth or the units (mg vs µg) may be the problem, not the models.
 - **Manufacturer and country sometimes come from outside the label.** The ground truth often has them when the label doesn't, so the models can be marked ✗ unfairly.
 - **The judge model.** The script uses `gpt-4o-mini`. If OpenAI renames or retires it, add `--model <new-name>`.
