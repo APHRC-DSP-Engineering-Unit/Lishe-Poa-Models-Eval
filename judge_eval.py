@@ -49,9 +49,10 @@ DEFAULT_MODELS = [
 ]
 
 # Ground-truth IDs that the models stored under a different ID: {ground truth ID: model ID}.
-# Empty by default. F406 is skipped: the ground truth splits it into F406_1 (empty) and F406_2
-# (the real product). To include it, use {"F406_2": "F406"}.
-ID_ALIASES = {"F406_2": "F406"}  # matches the regex comparison, which also pairs F406 with F406_2
+# The ground truth splits F406 into F406_1 (empty) and F406_2 (the real product, Tropicana Slim);
+# the models have one F406, so it is compared with F406_2. F406_1 has no model record and is left out.
+# compare.py (the regex comparison) pairs F406 the same way, so both methods cover the same 1,500 products.
+ID_ALIASES = {"F406_2": "F406"}
 
 # Price per 1M tokens for the judge (USD). Check OpenAI's pricing page and edit if changed.
 PRICE_IN, PRICE_OUT = 0.15, 0.60
@@ -492,6 +493,48 @@ def write_excel(path, rows, names, unmatched, info):
     for i, w in enumerate([11, 28, 18] + [18, 6] * n, 1):
         wn.column_dimensions[get_column_letter(i)].width = w
 
+    # ---- One sheet per field: ground truth vs each model, ✓/✗, judge note
+    field_sheets = []
+    for f in FIELD_ORDER:
+        wf = wb.create_sheet(LABEL[f][:31]); field_sheets.append(wf)
+        judged = f in TEXT_FIELDS
+        per = 3 if judged else 2  # columns per model: value, mark, (note)
+        how = "graded by the LLM judge" if judged else "checked exactly in code"
+        wf["A1"] = f"{LABEL[f]} ({how})"; wf["A1"].font = Font(bold=True, size=13)
+        listed = [r for r in rows if any(m[0] != NA for m in r["fields"][f]["marks"])]
+        wf["A2"] = "Accuracy"; wf["A2"].font = BF
+        for i in range(n):
+            s_ = stats([r["fields"][f]["marks"][i][0] for r in rows])
+            c = wf.cell(2, 3 + per * i, f"{s_[1] / s_[0]:.1%} ({s_[1]}/{s_[0]})" if s_[0] else "-")
+            c.font = BF
+        hdr = ["Product ID", "Ground truth"]
+        for nm in names:
+            hdr += [nm, "✓/✗"] + (["Judge note"] if judged else [])
+        for i, h_ in enumerate(hdr, 1):
+            c = wf.cell(4, i, h_); c.font = WF; c.fill = HEAD
+            c.alignment = Alignment(wrap_text=True, vertical="center")
+        for r_i, r in enumerate(listed, start=5):
+            fd = r["fields"][f]
+            wf.cell(r_i, 1, r["id"]).font = BF
+            wf.cell(r_i, 2, show(fd["gt"])).alignment = Alignment(wrap_text=True, vertical="top")
+            for i in range(n):
+                col0 = 3 + per * i
+                wf.cell(r_i, col0, show(fd["vals"][i])).alignment = Alignment(wrap_text=True, vertical="top")
+                style_mark(wf.cell(r_i, col0 + 1, fd["marks"][i][0]))
+                if judged:
+                    wf.cell(r_i, col0 + 2, fd["marks"][i][1]).alignment = Alignment(wrap_text=True, vertical="top")
+        wf.freeze_panes = "C5"
+        wf.auto_filter.ref = f"A4:{get_column_letter(len(hdr))}{max(len(listed) + 4, 4)}"
+        long = f in ("ingredients", "other_info")
+        wf.column_dimensions["A"].width = 12
+        wf.column_dimensions["B"].width = 50 if long else 28
+        for i in range(n):
+            col0 = 3 + per * i
+            wf.column_dimensions[get_column_letter(col0)].width = 50 if long else 28
+            wf.column_dimensions[get_column_letter(col0 + 1)].width = 7
+            if judged:
+                wf.column_dimensions[get_column_letter(col0 + 2)].width = 34
+
     # ---- Summary sheet
     ws_sum["A1"] = "Extraction accuracy vs human ground truth"; ws_sum["A1"].font = Font(bold=True, size=14)
     ws_sum["A2"] = f"Judge: {info['judge']}  |  Products compared: {len(rows)}  |  Generated: {info['when']}"
@@ -576,6 +619,9 @@ def write_excel(path, rows, names, unmatched, info):
     ws_sum.column_dimensions["B"].width = 20
     for i in range(3, len(hdr) + 1):
         ws_sum.column_dimensions[get_column_letter(i)].width = 12
+    # sheet order: Basic analysis, Summary, one sheet per field, Nutrients, Comparison
+    wb._sheets = [wbasic, ws_sum] + field_sheets + [wn, ws]
+    wb.active = 0
     wb.save(path)
 
 # ---------------------------------------------------------------- terminal summary
@@ -694,16 +740,11 @@ def report_data(rows, names, target, info):
     for nt in order:
         c = [cnt([x["marks"][i] for r in rows for x in r["nutrients"] if x["nutrient"] == nt]) for i in range(n)]
         nutrients.append({"label": nt, "n": max(k[1] for k in c), "counts": c})
-    pass_products = []
-    for i in range(n):
-        k = 0
-        for r in rows:
-            _, ok, sc = product_verdict(r, i)
-            k += bool(sc) and ok / sc >= target
-        pass_products.append(k)
+    # [correct, checked] per product, so the page can recount products at any target
+    product_scores = [[list(product_verdict(r, i)[1:]) for r in rows] for i in range(n)]
     return {"models": names, "judge": info["judge"], "when": info["when"], "products": len(rows),
             "target": target, "areas": areas, "fields": fields, "nutrients": nutrients,
-            "pass_products": pass_products}
+            "product_scores": product_scores}
 
 def export_rows(rows, names, target, info):
     """Per-product marks for the manual-review page: {id: {"f": {field: [[mark, note], ...]},
@@ -819,9 +860,9 @@ def main():
     write_excel(args.out, rows, names, unmatched, info)
     print_summary(rows, names, args.target)
     from report import write_report
-    report_path = os.path.join(os.path.dirname(os.path.abspath(args.out)), "report.html")
+    report_path = os.path.join(os.path.dirname(os.path.abspath(args.out)), "dashboard.html")
     write_report(report_path, report_data(rows, names, args.target, info))
-    print(f"Charts: {report_path}  (open in a browser)")
+    print(f"Dashboard: {report_path}  (open in a browser)")
     if not args.limit:  # site pages and the manual-review page read these; only publish full runs
         site_dir = os.path.join(here, "site")
         os.makedirs(site_dir, exist_ok=True)

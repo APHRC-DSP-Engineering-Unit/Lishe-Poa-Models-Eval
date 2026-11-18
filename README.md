@@ -82,7 +82,35 @@ Run it:
 
 - **Restarting costs nothing extra.** Every judge answer is cached in `output/judge_cache.jsonl`, so a rerun continues where it stopped and never pays twice.
 - **Full runs publish their results:** `site/llm-judge.html` and `results/llm_judge_rows.json` (the per-product marks used by the manual review page).
-- **Other outputs:** `output/extraction_judge_results.xlsx` (Excel workbook) and `output/report.html`.
+- **Every run rebuilds:** the terminal summary (PASS/FAIL per model, field and nutrient), `output/dashboard.html`, and `output/extraction_judge_results.xlsx`.
+
+**The LLM-judge dashboard** is the same page whether you open `site/llm-judge.html` (with the site's top navigation) or `output/dashboard.html` (standalone; just double-click it). It shows:
+
+- a one-sentence summary
+- one card per model with its rank and pass/fail
+- a scorecard of every area and field, green ✓ or red ✗
+- a "Products mostly right" count
+- a nutrient chart for nutrients found on 50+ products
+
+**The pass-mark slider** (50–100%) changes the ✓/✗ marks, badges and product counts, but not the accuracy percentages, which are fixed by the results. The browser remembers your setting.
+
+**The Excel workbook** has these sheets:
+
+| Sheet | Contents |
+|---|---|
+| Basic analysis | one row per product, one ✓/✗ per model (✓ = everything on that product correct) |
+| Summary | leaderboard and accuracy per field |
+| One sheet per field | ground truth vs each model, with ✓/✗ and the judge's note for text fields; filterable |
+| Nutrients | one row per product and nutrient, with ✓/✗ per model |
+| Comparison | per product: ground truth, then each model's value with ✓/✗ and the judge's notes |
+
+**Online dashboard data (optional):**
+
+```bash
+.venv/bin/python export_dashboard_data.py
+```
+
+This writes `output/dashboard/scorecard.json`, `nutrients.json` and `products.json` from the saved judge answers, with no API calls. It feeds the online "Label Extraction Scorecard". Rerun it after a new judge run.
 
 Options:
 
@@ -99,9 +127,11 @@ How the judge grades:
 - **Text fields:** name, brand, manufacturer, country, package type, ingredients, and other label info are graded by the LLM. The judge sees the models as A, B and C, not by name.
 - **Numbers and codes:** nutrients, barcode, sizes, category and nutrition basis are checked exactly in Python.
 - **Other label info:** people typed only part of this text, so extra text from a model is fine.
+- **Changing the models:** edit `DEFAULT_MODELS` near the top of `judge_eval.py`. Keep `compare.py` in step, so each model keeps the same name and colour on every page.
 
 ## Things to know about the data
 
+- **F406.** The ground truth splits it into F406_1 (empty) and F406_2 (Tropicana Slim), while the models have one F406. Both methods compare the models' F406 with F406_2, so 1,500 products are compared. F406_1 has nothing to compare against and is left out (`ID_ALIASES` in `judge_eval.py`).
 - **Missing ground truth.** Manufacturer and country of origin sometimes come from outside the label, so the ground truth has values the models can't see.
 - **Units and fractions.** Some ground-truth nutrient values are stored as fractions (for example "20%" stored as 0.2 g). The regex method accepts either reading.
 - **When all three models are wrong the same way,** check the ground truth first. Use the ⚠ flag on the manual review page to record it.
@@ -111,12 +141,13 @@ How the judge grades:
 ```
 data/            ground truth + model outputs (inputs)
 compare.py       ① regex comparison
-judge_eval.py    ② LLM judge   (report.py draws its charts)
+judge_eval.py    ② LLM judge   (report.py draws its dashboard)
+export_dashboard_data.py   optional data files for the online LLM-judge dashboard
 serve.py         local server for the site + manual review storage
 site/            the web pages: index, regex, llm-judge, manual-review
 site_nav.py      shared top navigation for generated pages
 templates/       source template for the regex page
 results/         generated results (committed)
 reviews/         manual review files, one per reviewer (committed)
-output/          LLM-judge Excel, report and answer cache (not committed)
+output/          LLM-judge Excel, dashboard.html and answer cache (not committed)
 ```
