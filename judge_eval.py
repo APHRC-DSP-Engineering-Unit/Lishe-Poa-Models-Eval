@@ -742,9 +742,26 @@ def report_data(rows, names, target, info):
         nutrients.append({"label": nt, "n": max(k[1] for k in c), "counts": c})
     # [correct, checked] per product, so the page can recount products at any target
     product_scores = [[list(product_verdict(r, i)[1:]) for r in rows] for i in range(n)]
+    # one record per product for the side-by-side table:
+    # [id, name, brand, category, [[correct, checked] per model],
+    #  [[field index, ground truth, [values], [marks], [notes]]], [[nutrient, ground truth, [values], [marks]]]]
+    records = []
+    for r in rows:
+        fd = r["fields"]
+        flist = []
+        for k, f in enumerate(FIELD_ORDER):
+            x = fd[f]
+            if empty(x["gt"]) and all(empty(v) for v in x["vals"]):
+                continue
+            flist.append([k, show(x["gt"]), [show(v) for v in x["vals"]],
+                          [m[0] for m in x["marks"]], [m[1] or "" for m in x["marks"]]])
+        nlist = [[x["nutrient"], x["gt"], x["vals"], x["marks"]] for x in r["nutrients"]]
+        records.append([r["id"], show(fd["name"]["gt"]), show(fd["brand"]["gt"]), show(fd["category"]["gt"]),
+                        [list(product_verdict(r, i)[1:]) for i in range(n)], flist, nlist])
     return {"models": names, "judge": info["judge"], "when": info["when"], "products": len(rows),
             "target": target, "areas": areas, "fields": fields, "nutrients": nutrients,
-            "product_scores": product_scores}
+            "product_scores": product_scores, "field_labels": [LABEL[f] for f in FIELD_ORDER],
+            "records": records}
 
 def export_rows(rows, names, target, info):
     """Per-product marks for the manual-review page: {id: {"f": {field: [[mark, note], ...]},

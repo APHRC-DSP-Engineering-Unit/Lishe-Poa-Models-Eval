@@ -100,6 +100,42 @@ details { color: var(--muted); font-size: 12.5px; }
 summary { cursor: pointer; }
 details ul { padding-left: 18px; margin: 8px 0 0; max-width: 75ch; }
 details li { margin: 4px 0; }
+/* records: side-by-side */
+.rec-tools { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; margin-bottom: 10px; }
+.rec-tools input[type=search] { flex: 1 1 240px; min-width: 0; }
+.rec-tools input, .rec-tools select, .btn { font: inherit; font-size: 13px; color: var(--fg); background: var(--panel);
+  border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; }
+.btn { cursor: pointer; }
+.btn:hover:not(:disabled) { border-color: var(--muted); }
+.btn:disabled { opacity: .45; cursor: default; }
+.rec-count { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; margin-left: auto; }
+table.rec { min-width: 900px; border-spacing: 0; }
+table.rec th { cursor: pointer; user-select: none; border-bottom: 1px solid var(--line); }
+table.rec th.sorted::after { content: " ▾"; } table.rec th.sorted.asc::after { content: " ▴"; }
+table.rec th.c, table.rec td.c { text-align: center; }
+table.rec td { border-radius: 0; border-bottom: 1px solid var(--line); padding: 6px 8px; }
+table.rec td.prodname { white-space: normal; min-width: 180px; max-width: 320px; }
+table.rec td.cat { white-space: normal; min-width: 140px; color: var(--muted); font-size: 12.5px; }
+table.rec tbody tr.row { cursor: pointer; }
+table.rec tbody tr.row:hover td, table.rec tbody tr.row.open td { background: var(--bg); }
+table.rec td.uid { font-weight: 600; font-variant-numeric: tabular-nums; }
+table.rec td.score { font-variant-numeric: tabular-nums; text-align: right; }
+table.rec td.low { font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+.yn { display: inline-block; border-radius: 999px; padding: 1px 8px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.yn.ok { background: var(--ok-bg); color: var(--ok); } .yn.bad { background: var(--bad-bg); color: var(--bad); }
+tr.detail > td { background: var(--bg); padding: 12px; }
+table.side { min-width: 760px; border-spacing: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+table.side th { cursor: default; border-bottom: 1px solid var(--line); background: var(--panel); }
+table.side td { border-radius: 0; border-bottom: 1px solid var(--line); white-space: normal; vertical-align: top; max-width: 320px; padding: 6px 8px; }
+table.side td.fl { font-weight: 600; white-space: nowrap; }
+table.side td.gt { color: var(--fg); }
+table.side td.mv.ok { background: var(--ok-bg); } table.side td.mv.bad { background: var(--bad-bg); }
+table.side td.mv.part { background: color-mix(in srgb, #eda100 18%, transparent); }
+table.side .mk { font-weight: 700; margin-right: 4px; }
+table.side .note { display: block; color: var(--muted); font-size: 11.5px; margin-top: 2px; }
+table.side .empty { color: var(--muted); font-style: italic; }
+table.side tr.sec td { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 600; padding-top: 10px; }
+.pager { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 12px; font-size: 13px; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -143,11 +179,41 @@ details li { margin: 4px 0; }
     <div class="chart" id="c-nut"></div>
   </section>
 
+  <section class="panel" id="records">
+    <h2>Records: side-by-side</h2>
+    <p class="sub">Each product's score is the share of its checks (fields and nutrients) that match the ground truth; YES means it meets the pass mark. Click a row to open the full side-by-side field comparison against the ground truth. Click a column heading to sort.</p>
+    <div class="rec-tools">
+      <input type="search" id="rec-q" placeholder="Search UID, product, brand, category…" aria-label="Search records">
+      <select id="rec-filter" aria-label="Which records">
+        <option value="all">All records</option>
+        <option value="anyfail">At least one model fails</option>
+        <option value="allfail">All models fail</option>
+        <option value="disagree">Models disagree</option>
+        <option value="allpass">All models pass</option>
+      </select>
+      <select id="rec-model" aria-label="Model fails"></select>
+      <select id="rec-cat" aria-label="Category"></select>
+      <span class="rec-count" id="rec-count"></span>
+      <button class="btn" id="rec-export" type="button">⬇ Export view (CSV)</button>
+    </div>
+    <div class="tablewrap">
+      <table class="rec" aria-label="Per-product scores for each model">
+        <thead><tr id="rec-head"></tr></thead>
+        <tbody id="rec-body"></tbody>
+      </table>
+    </div>
+    <div class="pager">
+      <button class="btn" id="rec-prev" type="button">‹ Prev</button>
+      <span id="rec-page"></span>
+      <button class="btn" id="rec-next" type="button">Next ›</button>
+    </div>
+  </section>
+
   <details>
     <summary>How the checking works</summary>
     <ul>
       <li>Each model read photos of the same product labels. People typed the same labels by hand; that is the ground truth.</li>
-      <li>Products are matched across files by their product ID. Products not in every file (such as F406) are left out.</li>
+      <li>Products are matched across files by their product ID. The ground truth splits F406 into an empty F406_1 and F406_2; the models' F406 is compared with F406_2.</li>
       <li>Text fields (name, brand, manufacturer, country, package type, ingredients, other label info) are graded by the judge model, which sees the models only as A, B and C.</li>
       <li>Numbers and codes (nutrients, barcode, sizes, category, nutrition basis) must match exactly; 1.5 l equals 1500 ml.</li>
       <li>A partly correct answer for ingredients or other label info counts as not correct. Fields empty in the ground truth and in every model are not counted.</li>
@@ -317,7 +383,147 @@ function nutrientChart() {
   });
 }
 
-function drawAll() { header(); cards(); scorecard(); productsChart(); nutrientChart(); }
+// ---------- records: side-by-side
+const PAGE = 50;
+const R = D.records.map((r) => ({ id: r[0], name: r[1], brand: r[2], cat: r[3], s: r[4], f: r[5], n: r[6],
+  hay: (r[0] + " " + r[1] + " " + r[2] + " " + r[3]).toLowerCase() }));
+const RS = { q: "", filter: "all", model: "any", cat: "", sort: "id", asc: true, page: 0, open: null };
+const score = (c) => (c && c[1] ? (100 * c[0]) / c[1] : null);
+const lowest = (r) => Math.min(...r.s.map(score).filter((v) => v != null));
+
+(function setupRecords() {
+  const ms = document.getElementById("rec-model");
+  ms.append(new Option("Model fails: any", "any"));
+  MODELS.forEach((m, i) => ms.append(new Option(`${m} fails`, String(i))));
+  const cs = document.getElementById("rec-cat");
+  cs.append(new Option("All categories", ""));
+  [...new Set(R.map((r) => r.cat).filter(Boolean))].sort((a, b) => a.localeCompare(b)).forEach((c) => cs.append(new Option(c, c)));
+  let qt;
+  document.getElementById("rec-q").addEventListener("input", (e) => { clearTimeout(qt); qt = setTimeout(() => { RS.q = e.target.value.trim().toLowerCase(); RS.page = 0; RS.open = null; records(); }, 150); });
+  document.getElementById("rec-filter").addEventListener("change", (e) => { RS.filter = e.target.value; RS.page = 0; RS.open = null; records(); });
+  ms.addEventListener("change", (e) => { RS.model = e.target.value; RS.page = 0; RS.open = null; records(); });
+  cs.addEventListener("change", (e) => { RS.cat = e.target.value; RS.page = 0; RS.open = null; records(); });
+  document.getElementById("rec-prev").addEventListener("click", () => { RS.page--; RS.open = null; records(); });
+  document.getElementById("rec-next").addEventListener("click", () => { RS.page++; RS.open = null; records(); });
+  document.getElementById("rec-export").addEventListener("click", exportCSV);
+})();
+
+function filtered() {
+  const pass = (r) => r.s.map((c) => { const v = score(c); return v == null ? null : v >= T; });
+  let out = R.filter((r) => {
+    if (RS.q && !r.hay.includes(RS.q)) return false;
+    if (RS.cat && r.cat !== RS.cat) return false;
+    const p = pass(r).filter((x) => x != null);
+    if (RS.filter === "anyfail" && !p.includes(false)) return false;
+    if (RS.filter === "allfail" && p.includes(true)) return false;
+    if (RS.filter === "allpass" && p.includes(false)) return false;
+    if (RS.filter === "disagree" && !(p.includes(true) && p.includes(false))) return false;
+    if (RS.model !== "any" && pass(r)[+RS.model] !== false) return false;
+    return true;
+  });
+  const key = { id: (r) => r.id, name: (r) => r.name.toLowerCase(), brand: (r) => r.brand.toLowerCase(),
+    cat: (r) => r.cat.toLowerCase(), low: lowest };
+  MODELS.forEach((m, i) => (key["m" + i] = (r) => score(r.s[i]) ?? -1));
+  const k = key[RS.sort];
+  out.sort((a, b) => { const x = k(a), y = k(b); const c = typeof x === "string" ? x.localeCompare(y, undefined, { numeric: true }) : x - y; return RS.asc ? c : -c; });
+  return out;
+}
+
+function recHead() {
+  const tr = document.getElementById("rec-head"); tr.replaceChildren();
+  const cols = [["id", "UID"], ["name", "Product"], ["brand", "Brand"], ["cat", "Category"]];
+  MODELS.forEach((m, i) => cols.push(["m" + i, m], [null, "Pass"]));
+  cols.push(["low", "Lowest"]);
+  cols.forEach(([k, label]) => {
+    const th = el("th", { class: (k && k.startsWith("m")) || k === "low" || !k ? "c" : "" }, tr);
+    if (k && k.startsWith("m")) { const s = el("span", {}, th); swatch(+k.slice(1), s); s.append(" " + label); }
+    else th.textContent = label;
+    if (!k) { th.style.cursor = "default"; return; }
+    if (RS.sort === k) th.classList.add("sorted", ...(RS.asc ? ["asc"] : []));
+    th.addEventListener("click", () => { RS.asc = RS.sort === k ? !RS.asc : k === "id" || k === "name" || k === "brand" || k === "cat"; RS.sort = k; RS.open = null; records(); });
+  });
+}
+
+function sideBySide(r) {
+  const t = el("table", { class: "side" });
+  const h = el("tr", {}, el("thead", {}, t));
+  el("th", {}, h, "Field"); el("th", {}, h, "Ground truth");
+  MODELS.forEach((m, i) => { const th = el("th", {}, h); const s = el("span", {}, th); swatch(i, s); s.append(" " + m); });
+  const tb = el("tbody", {}, t);
+  const val = (td, v) => { if (v === "" || v == null) el("span", { class: "empty" }, td, "empty"); else td.append(String(v)); };
+  const line = (label, gt, vals, marks, notes) => {
+    const tr = el("tr", {}, tb);
+    el("td", { class: "fl" }, tr, label);
+    val(el("td", { class: "gt" }, tr), gt);
+    vals.forEach((v, i) => {
+      const m = marks[i], cls = m === "✓" ? "ok" : m === "✗" ? "bad" : m === "~" ? "part" : "";
+      const td = el("td", { class: "mv " + cls }, tr);
+      if (m) el("span", { class: "mk" }, td, m);
+      val(td, v);
+      if (notes && notes[i] && m !== "✓") el("span", { class: "note" }, td, notes[i]);
+    });
+  };
+  const sec = (label) => { const tr = el("tr", { class: "sec" }, tb); el("td", { colspan: 2 + MODELS.length }, tr, label); };
+  sec("Product fields");
+  r.f.forEach(([k, gt, vals, marks, notes]) => line(D.field_labels[k], gt, vals, marks, notes));
+  if (r.n.length) { sec("Nutrients"); r.n.forEach(([nt, gt, vals, marks]) => line(pretty(nt), gt, vals, marks)); }
+  const sc = el("tr", { class: "sec" }, tb); el("td", { colspan: 2 }, sc, "Checks correct");
+  r.s.forEach((c) => el("td", {}, sc, c[1] ? `${c[0]} of ${c[1]} (${pct(score(c))})` : "—"));
+  return t;
+}
+
+function records() {
+  recHead();
+  const list = filtered(), pages = Math.max(1, Math.ceil(list.length / PAGE));
+  RS.page = Math.max(0, Math.min(RS.page, pages - 1));
+  document.getElementById("rec-count").textContent = `${int(list.length)} record${list.length === 1 ? "" : "s"}`;
+  document.getElementById("rec-page").textContent = `Page ${RS.page + 1} / ${pages}`;
+  document.getElementById("rec-prev").disabled = RS.page === 0;
+  document.getElementById("rec-next").disabled = RS.page >= pages - 1;
+  const tb = document.getElementById("rec-body"); tb.replaceChildren();
+  const cols = 5 + 2 * MODELS.length;
+  if (!list.length) { const tr = el("tr", {}, tb); el("td", { colspan: cols, class: "cat" }, tr, "No records match these filters."); return; }
+  list.slice(RS.page * PAGE, (RS.page + 1) * PAGE).forEach((r) => {
+    const tr = el("tr", { class: "row" + (RS.open === r.id ? " open" : ""), tabindex: 0, "aria-expanded": RS.open === r.id ? "true" : "false" }, tb);
+    el("td", { class: "uid" }, tr, r.id);
+    el("td", { class: "prodname" }, tr, r.name || "—");
+    el("td", {}, tr, r.brand || "—");
+    el("td", { class: "cat" }, tr, r.cat || "—");
+    r.s.forEach((c) => {
+      const v = score(c);
+      el("td", { class: "score", title: c[1] ? `${c[0]} of ${c[1]} checks correct` : "" }, tr, pct(v));
+      const td = el("td", { class: "c" }, tr);
+      if (v != null) el("span", { class: "yn " + (v >= T ? "ok" : "bad") }, td, v >= T ? "✓ YES" : "✗ NO");
+    });
+    el("td", { class: "low" }, tr, pct(lowest(r)));
+    const toggle = () => { RS.open = RS.open === r.id ? null : r.id; records(); };
+    tr.addEventListener("click", toggle);
+    tr.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+    if (RS.open === r.id) {
+      const d = el("tr", { class: "detail" }, tb), td = el("td", { colspan: cols }, d);
+      const w = el("div", { class: "tablewrap" }, td); w.appendChild(sideBySide(r));
+    }
+  });
+}
+
+function exportCSV() {
+  const q = (v) => { const s = String(v ?? ""); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const head = ["UID", "Product", "Brand", "Category"];
+  MODELS.forEach((m) => head.push(`${m} score (%)`, `${m} pass (${T}%)`));
+  head.push("Lowest score (%)");
+  const lines = [head.map(q).join(",")];
+  filtered().forEach((r) => {
+    const row = [r.id, r.name, r.brand, r.cat];
+    r.s.forEach((c) => { const v = score(c); row.push(v == null ? "" : v.toFixed(1), v == null ? "" : v >= T ? "YES" : "NO"); });
+    row.push(lowest(r).toFixed(1));
+    lines.push(row.map(q).join(","));
+  });
+  const blob = new Blob(["﻿" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `records_pass${T}.csv`;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function drawAll() { header(); cards(); scorecard(); productsChart(); nutrientChart(); records(); }
 
 const slider = document.getElementById("target");
 slider.value = T;

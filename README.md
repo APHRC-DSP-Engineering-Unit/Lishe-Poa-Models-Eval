@@ -91,6 +91,7 @@ Run it:
 - a scorecard of every area and field, green ✓ or red ✗
 - a "Products mostly right" count
 - a nutrient chart for nutrients found on 50+ products
+- **Records: side-by-side**: one row per product with each model's score (share of that product's checks correct), YES/NO against the pass mark, and the lowest score. Search by UID, product, brand or category; filter by which models fail or by category; sort by any column; 50 per page. Click a row to see every field and nutrient next to the ground truth, with the judge's reason for each ✗. **Export view (CSV)** downloads the rows you are looking at.
 
 **The pass-mark slider** (50–100%) changes the ✓/✗ marks, badges and product counts, but not the accuracy percentages, which are fixed by the results. The browser remembers your setting.
 
