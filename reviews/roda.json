@@ -1,0 +1,70 @@
+{
+ "batches": [
+  {
+   "created": "2026-11-18T07:34:14.765Z",
+   "helping": 0,
+   "id": 1,
+   "items": [
+    "S486",
+    "F268",
+    "S026",
+    "S438",
+    "J351",
+    "F249",
+    "S367",
+    "S265",
+    "F480",
+    "J377",
+    "J388",
+    "J299",
+    "J024",
+    "F183",
+    "F380",
+    "S113",
+    "J489",
+    "F036",
+    "J089",
+    "J342",
+    "S192",
+    "J481",
+    "S348",
+    "F053",
+    "J094",
+    "J273",
+    "J025",
+    "S284",
+    "J172",
+    "S375",
+    "S321",
+    "F057",
+    "S025"
+   ]
+  }
+ ],
+ "reviewer": "Roda",
+ "reviews": {
+  "S486": {
+   "by": "Roda",
+   "checks": {
+    "basis": {},
+    "identity": {
+     "Claude Opus 5.5": "bad",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {},
+    "label": {},
+    "nutrients": {},
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T07:37:30.346Z"
+  }
+ },
+ "version": 1
+}

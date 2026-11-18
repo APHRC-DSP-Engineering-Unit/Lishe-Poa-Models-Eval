@@ -110,13 +110,17 @@ details li { margin: 4px 0; }
 .btn:hover:not(:disabled) { border-color: var(--muted); }
 .btn:disabled { opacity: .45; cursor: default; }
 .rec-count { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; margin-left: auto; }
-table.rec { min-width: 900px; border-spacing: 0; }
+#records { width: min(1600px, calc(100vw - 48px)); align-self: center; }
+table.rec { min-width: 0; border-spacing: 0; table-layout: auto; }
 table.rec th { cursor: pointer; user-select: none; border-bottom: 1px solid var(--line); }
 table.rec th.sorted::after { content: " ▾"; } table.rec th.sorted.asc::after { content: " ▴"; }
 table.rec th.c, table.rec td.c { text-align: center; }
 table.rec td { border-radius: 0; border-bottom: 1px solid var(--line); padding: 6px 8px; }
-table.rec td.prodname { white-space: normal; min-width: 180px; max-width: 320px; }
-table.rec td.cat { white-space: normal; min-width: 140px; color: var(--muted); font-size: 12.5px; }
+table.rec td.prodname { white-space: normal; min-width: 160px; max-width: 300px; }
+table.rec td.cat { white-space: normal; min-width: 110px; max-width: 200px; color: var(--muted); font-size: 12.5px; }
+table.rec td.brandc { white-space: normal; max-width: 160px; }
+table.rec td.ms { text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
+table.rec td.ms .yn { margin-left: 6px; }
 table.rec tbody tr.row { cursor: pointer; }
 table.rec tbody tr.row:hover td, table.rec tbody tr.row.open td { background: var(--bg); }
 table.rec td.uid { font-weight: 600; font-variant-numeric: tabular-nums; }
@@ -125,9 +129,9 @@ table.rec td.low { font-weight: 600; font-variant-numeric: tabular-nums; text-al
 .yn { display: inline-block; border-radius: 999px; padding: 1px 8px; font-size: 12px; font-weight: 600; white-space: nowrap; }
 .yn.ok { background: var(--ok-bg); color: var(--ok); } .yn.bad { background: var(--bad-bg); color: var(--bad); }
 tr.detail > td { background: var(--bg); padding: 12px; }
-table.side { min-width: 760px; border-spacing: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+table.side { width: 100%; min-width: 0; border-spacing: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
 table.side th { cursor: default; border-bottom: 1px solid var(--line); background: var(--panel); }
-table.side td { border-radius: 0; border-bottom: 1px solid var(--line); white-space: normal; vertical-align: top; max-width: 320px; padding: 6px 8px; }
+table.side td { border-radius: 0; border-bottom: 1px solid var(--line); white-space: normal; vertical-align: top; padding: 6px 8px; overflow-wrap: anywhere; }
 table.side td.fl { font-weight: 600; white-space: nowrap; }
 table.side td.gt { color: var(--fg); }
 table.side td.mv.ok { background: var(--ok-bg); } table.side td.mv.bad { background: var(--bad-bg); }
@@ -443,7 +447,7 @@ function filtered() {
 function recHead() {
   const tr = document.getElementById("rec-head"); tr.replaceChildren();
   const cols = [["id", "UID"], ["name", "Product"], ["brand", "Brand"], ["cat", "Category"]];
-  MODELS.forEach((m, i) => cols.push(["m" + i, m], [null, "Pass"]));
+  MODELS.forEach((m, i) => cols.push(["m" + i, m]));
   cols.push(["low", "Lowest"]);
   cols.forEach(([k, label]) => {
     const th = el("th", { class: (k && k.startsWith("m")) || k === "low" || !k ? "c" : "" }, tr);
@@ -457,6 +461,10 @@ function recHead() {
 
 function sideBySide(r) {
   const t = el("table", { class: "side" });
+  t.style.tableLayout = "fixed";
+  const cg = el("colgroup", {}, t), rest = (88 / (1 + MODELS.length)).toFixed(2) + "%";
+  el("col", { style: "width:12%" }, cg);
+  for (let k = 0; k <= MODELS.length; k++) el("col", { style: "width:" + rest }, cg);
   const h = el("tr", {}, el("thead", {}, t));
   el("th", {}, h, "Field"); el("th", {}, h, "Ground truth");
   MODELS.forEach((m, i) => { const th = el("th", {}, h); const s = el("span", {}, th); swatch(i, s); s.append(" " + m); });
@@ -492,18 +500,17 @@ function records() {
   document.getElementById("rec-prev").disabled = RS.page === 0;
   document.getElementById("rec-next").disabled = RS.page >= pages - 1;
   const tb = document.getElementById("rec-body"); tb.replaceChildren();
-  const cols = 5 + 2 * MODELS.length;
+  const cols = 5 + MODELS.length;
   if (!list.length) { const tr = el("tr", {}, tb); el("td", { colspan: cols, class: "cat" }, tr, "No records match these filters."); return; }
   list.slice(RS.page * PAGE, (RS.page + 1) * PAGE).forEach((r) => {
     const tr = el("tr", { class: "row" + (RS.open === r.id ? " open" : ""), tabindex: 0, "aria-expanded": RS.open === r.id ? "true" : "false" }, tb);
     el("td", { class: "uid" }, tr, r.id);
     el("td", { class: "prodname" }, tr, r.name || "—");
-    el("td", {}, tr, r.brand || "—");
+    el("td", { class: "brandc" }, tr, r.brand || "—");
     el("td", { class: "cat" }, tr, r.cat || "—");
     r.s.forEach((c) => {
       const v = score(c);
-      el("td", { class: "score", title: c[1] ? `${c[0]} of ${c[1]} checks correct` : "" }, tr, pct(v));
-      const td = el("td", { class: "c" }, tr);
+      const td = el("td", { class: "ms", title: c[1] ? `${c[0]} of ${c[1]} checks correct` : "" }, tr, pct(v));
       if (v != null) el("span", { class: "yn " + (v >= T ? "ok" : "bad") }, td, v >= T ? "✓ YES" : "✗ NO");
     });
     el("td", { class: "low" }, tr, pct(lowest(r)));
