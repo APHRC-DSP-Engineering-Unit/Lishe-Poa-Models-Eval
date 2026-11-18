@@ -67,6 +67,7 @@ h2 { font-size: 17px; font-weight: 600; margin: 0; }
 .card .bigsub { color: var(--muted); font-size: 12.5px; }
 .chip { align-self: flex-start; border-radius: 999px; padding: 2px 10px; font-size: 12.5px; font-weight: 600; }
 .chip.ok { background: var(--ok-bg); color: var(--ok); } .chip.bad { background: var(--bad-bg); color: var(--bad); }
+.pf { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
 .mini { display: grid; grid-template-columns: 1fr auto auto; gap: 2px 8px; margin-top: 8px; font-size: 12.5px; font-variant-numeric: tabular-nums; }
 .mini .k { color: var(--muted); }
 .ic.ok { color: var(--ok); } .ic.bad { color: var(--bad); }
@@ -150,7 +151,7 @@ table.side tr.sec td { font-size: 12px; color: var(--muted); text-transform: upp
     <label for="target">Pass mark</label>
     <input type="range" id="target" min="50" max="100" step="1">
     <output id="target-val" for="target"></output>
-    <span class="hint">The pass mark decides ✓ or ✗. Accuracy percentages stay the same; what changes is which models and fields pass, and how many products count as mostly right.</span>
+    <span class="hint">Move the slider to re-score live. A product passes (YES) when at least this share of its checks match the ground truth; each model's pass rate, rank and YES/NO change with it. The judge's ✓/✗ on each single value is fixed, so "checks correct" percentages stay the same.</span>
   </div>
 
   <div class="cards" id="cards"></div>
@@ -167,8 +168,8 @@ table.side tr.sec td { font-size: 12px; color: var(--muted); text-transform: upp
   </section>
 
   <section class="panel">
-    <h2>Products mostly right</h2>
-    <p class="sub">Products where at least <span class="tval"></span> of their checks are correct, out of all products compared.</p>
+    <h2>Pass rate by model</h2>
+    <p class="sub">Products that pass, meaning at least <span class="tval"></span> of their checks are correct, out of all products compared.</p>
     <div class="chart" id="c-products"></div>
   </section>
 
@@ -250,16 +251,24 @@ function swatch(i, parent) { const s = el("i", { class: "sw" }, parent); s.style
 function measure(texts) { let w = 0; texts.forEach((t) => (w = Math.max(w, t.getComputedTextLength()))); return w; }
 function productsPassing(i) { return D.product_scores[i].filter(([k, n]) => n && (100 * k) / n >= T).length; }
 
+// pass rate = share of products with at least T% of their checks correct; ties broken by checks correct
+function passRates() { return MODELS.map((m, i) => (100 * productsPassing(i)) / D.products); }
+function ranks() {
+  const pr = passRates(), ov = area("overall").counts.map(acc);
+  const order = MODELS.map((m, i) => i).sort((a, b) => pr[b] - pr[a] || ov[b] - ov[a]);
+  return MODELS.map((m, i) => 1 + order.indexOf(i));
+}
+
 function header() {
-  const overall = area("overall").counts.map(acc);
-  const best = overall.indexOf(Math.max(...overall));
+  const pr = passRates(), rk = ranks();
+  const best = rk.indexOf(1);
   const nutPass = area("nutrients").counts.map(acc).filter((v) => v >= T).length;
   const txtPass = area("text").counts.map(acc).filter((v) => v >= T).length;
   const L = document.getElementById("lede"); L.replaceChildren();
   el("b", {}, L, MODELS[best]);
-  L.append(" reads labels most accurately, with ");
-  el("b", {}, L, pct(overall[best]));
-  L.append(` of all checks correct. ${nutPass} of ${MODELS.length} models meet the ${T}% pass mark on nutrient values, and ${txtPass} of ${MODELS.length} on text fields.`);
+  L.append(" has the highest pass rate: ");
+  el("b", {}, L, pct(pr[best]));
+  L.append(` of products have at least ${T}% of their checks correct. ${nutPass} of ${MODELS.length} models meet the ${T}% mark on nutrient values, and ${txtPass} of ${MODELS.length} on text fields.`);
   document.getElementById("meta").textContent =
     `${int(D.products)} food products · ground truth typed by people · text graded by ${D.judge}, numbers and codes checked exactly · generated ${D.when}`;
   document.getElementById("target-val").textContent = T + "%";
@@ -268,25 +277,27 @@ function header() {
 
 function cards() {
   const box = document.getElementById("cards"); box.replaceChildren();
-  const overall = area("overall").counts.map(acc);
+  const overall = area("overall").counts.map(acc), pr = passRates(), rk = ranks();
   MODELS.forEach((m, i) => {
     const c = el("div", { class: "panel card" }, box);
     const nm = el("div", { class: "name" }, c); swatch(i, nm); el("span", {}, nm, m);
-    el("span", { class: "rank" }, nm, `#${1 + overall.filter((v) => v > overall[i]).length} of ${MODELS.length}`);
-    el("div", { class: "big" }, c, pct(overall[i]));
-    el("div", { class: "bigsub" }, c, "of all checks correct");
-    const ok = overall[i] >= T;
-    el("span", { class: "chip " + (ok ? "ok" : "bad") }, c, (ok ? "✓ Meets " : "✗ Below ") + T + "% pass mark");
+    el("span", { class: "rank" }, nm, `#${rk[i]} by pass rate`);
+    el("div", { class: "big" }, c, pct(pr[i]));
+    el("div", { class: "bigsub" }, c, `pass rate (products with ≥ ${T}% of checks correct)`);
+    const passed = productsPassing(i);
+    const pf = el("div", { class: "pf" }, c);
+    el("span", { class: "chip ok" }, pf, `✓ Passed ${int(passed)}`);
+    el("span", { class: "chip bad" }, pf, `✗ Failed ${int(D.products - passed)}`);
     const mini = el("div", { class: "mini" }, c);
+    el("span", { class: "k" }, mini, "All checks correct");
+    el("span", {}, mini, pct(overall[i]));
+    el("span", {}, mini, "");
     ["nutrients", "codes", "text"].forEach((k) => {
       const v = acc(area(k).counts[i]), pass = v >= T;
       el("span", { class: "k" }, mini, k === "nutrients" ? "Nutrients" : AREA_LABEL[k]);
       el("span", {}, mini, pct(v));
       el("span", { class: "ic " + (pass ? "ok" : "bad"), "aria-label": pass ? "meets pass mark" : "below pass mark" }, mini, pass ? "✓" : "✗");
     });
-    const p = el("div", { class: "prod" }, c);
-    el("b", {}, p, int(productsPassing(i)));
-    p.append(` of ${int(D.products)} products at least ${T}% right`);
   });
 }
 
