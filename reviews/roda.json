@@ -43,18 +43,34 @@
  ],
  "reviewer": "Roda",
  "reviews": {
-  "S486": {
+  "F036": {
    "by": "Roda",
    "checks": {
-    "basis": {},
-    "identity": {
-     "Claude Opus 5.5": "bad",
-     "GPT-6-Sol": "bad",
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
      "Gemini 3.8 Flash": "ok"
     },
-    "ingredients": {},
-    "label": {},
-    "nutrients": {},
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
     "package": {
      "Claude Opus 5.5": "ok",
      "GPT-6-Sol": "ok",
@@ -63,7 +79,1243 @@
    },
    "gt_issue": {},
    "note": "",
-   "updated": "2026-11-18T07:37:30.346Z"
+   "updated": "2026-11-18T09:07:39.449Z"
+  },
+  "F053": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "bad",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:15:59.206Z"
+  },
+  "F057": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:27:21.932Z"
+  },
+  "F183": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:04:11.681Z"
+  },
+  "F249": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T08:29:57.302Z"
+  },
+  "F268": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T08:09:32.053Z"
+  },
+  "F380": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:05:04.005Z"
+  },
+  "F480": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T08:47:30.930Z"
+  },
+  "J024": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:03:14.376Z"
+  },
+  "J025": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:18:40.077Z"
+  },
+  "J089": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "nutrients": true
+   },
+   "note": "",
+   "updated": "2026-11-18T09:08:38.961Z"
+  },
+  "J094": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "nutrients": true
+   },
+   "note": "",
+   "updated": "2026-11-18T09:17:05.271Z"
+  },
+  "J172": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "bad"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:23:29.547Z"
+  },
+  "J273": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:17:52.137Z"
+  },
+  "J299": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "nutrients": true
+   },
+   "note": "",
+   "updated": "2026-11-18T09:02:26.773Z"
+  },
+  "J342": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "package": true
+   },
+   "note": "",
+   "updated": "2026-11-18T09:09:35.925Z"
+  },
+  "J351": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T08:26:33.872Z"
+  },
+  "J377": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T08:57:20.808Z"
+  },
+  "J388": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "bad",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "bad"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:12:56.863Z"
+  },
+  "J481": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:12:29.543Z"
+  },
+  "J489": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "nutrients": true
+   },
+   "note": "",
+   "updated": "2026-11-18T09:07:11.873Z"
+  },
+  "S025": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:28:19.771Z"
+  },
+  "S026": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T08:12:10.054Z"
+  },
+  "S113": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:06:22.808Z"
+  },
+  "S192": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "na",
+     "GPT-6-Sol": "na",
+     "Gemini 3.8 Flash": "na"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:11:29.138Z"
+  },
+  "S265": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T08:45:20.020Z"
+  },
+  "S284": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "nutrients": true
+   },
+   "note": "",
+   "updated": "2026-11-18T09:21:56.157Z"
+  },
+  "S321": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T09:26:22.482Z"
+  },
+  "S348": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "na",
+     "GPT-6-Sol": "na",
+     "Gemini 3.8 Flash": "na"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "package": true
+   },
+   "note": "",
+   "updated": "2026-11-18T09:13:46.980Z"
+  },
+  "S367": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "nutrients": true
+   },
+   "note": "",
+   "updated": "2026-11-18T08:42:04.546Z"
+  },
+  "S375": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "na",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "package": true
+   },
+   "note": "",
+   "updated": "2026-11-18T09:25:32.761Z"
+  },
+  "S438": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "nutrients": true
+   },
+   "note": "",
+   "updated": "2026-11-18T08:24:14.653Z"
+  },
+  "S486": {
+   "by": "Roda",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "bad",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "bad",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T08:07:50.957Z"
   }
  },
  "version": 1

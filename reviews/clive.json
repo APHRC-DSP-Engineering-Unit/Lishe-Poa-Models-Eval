@@ -43,18 +43,1267 @@
  ],
  "reviewer": "Clive",
  "reviews": {
-  "S463": {
+  "F027": {
+   "by": "Clive",
    "checks": {
-    "basis": {},
-    "identity": {},
-    "ingredients": {},
-    "label": {},
-    "nutrients": {},
-    "package": {}
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
    },
    "gt_issue": {},
    "note": "",
-   "updated": null
+   "updated": "2026-11-18T11:27:46.897Z"
+  },
+  "F043": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:53:00.720Z"
+  },
+  "F048": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "na",
+     "GPT-6-Sol": "na",
+     "Gemini 3.8 Flash": "na"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:39:13.965Z"
+  },
+  "F066": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:41:53.056Z"
+  },
+  "F118": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "bad",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:28:23.135Z"
+  },
+  "F234": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:31:24.512Z"
+  },
+  "F242": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:41:05.814Z"
+  },
+  "F415": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:47:30.681Z"
+  },
+  "F421": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "nutrients": true
+   },
+   "note": "",
+   "updated": "2026-11-18T11:49:04.110Z"
+  },
+  "J014": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:35:00.970Z"
+  },
+  "J037": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:54:08.422Z"
+  },
+  "J048": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:39:55.591Z"
+  },
+  "J142": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "package": true
+   },
+   "note": "",
+   "updated": "2026-11-18T11:48:11.652Z"
+  },
+  "J168": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:45:11.579Z"
+  },
+  "J201": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "bad",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:54:48.144Z"
+  },
+  "J224": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:34:30.330Z"
+  },
+  "J292": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:43:19.316Z"
+  },
+  "J310": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:43:49.991Z"
+  },
+  "J312": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:42:54.250Z"
+  },
+  "J319": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:37:28.524Z"
+  },
+  "J341": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:56:35.397Z"
+  },
+  "J384": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:33:04.221Z"
+  },
+  "J475": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:51:36.192Z"
+  },
+  "S030": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "nutrients": true
+   },
+   "note": "",
+   "updated": "2026-11-18T11:27:12.169Z"
+  },
+  "S125": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "na",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "na"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:36:44.898Z"
+  },
+  "S126": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:29:23.047Z"
+  },
+  "S179": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:38:00.689Z"
+  },
+  "S203": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:30:49.579Z"
+  },
+  "S327": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:33:43.847Z"
+  },
+  "S402": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:52:13.712Z"
+  },
+  "S437": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {
+    "nutrients": true
+   },
+   "note": "",
+   "updated": "2026-11-18T11:32:07.608Z"
+  },
+  "S463": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "bad",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:25:53.393Z"
+  },
+  "S471": {
+   "by": "Clive",
+   "checks": {
+    "basis": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "identity": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "ingredients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "label": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "nutrients": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    },
+    "package": {
+     "Claude Opus 5.5": "ok",
+     "GPT-6-Sol": "ok",
+     "Gemini 3.8 Flash": "ok"
+    }
+   },
+   "gt_issue": {},
+   "note": "",
+   "updated": "2026-11-18T11:26:31.091Z"
   }
  },
  "version": 1
