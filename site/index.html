@@ -100,7 +100,7 @@
   const offline = '<div class="stat"><span></span><span class="muted">Live numbers appear when the site is opened through <code>python3 serve.py</code>.</span><span></span></div>';
   const get = u => fetch(u).then(r => r.ok ? r.json() : null).catch(() => null);
 
-  get('/data/regex_summary.json').then(d => {
+  get('/data/regex/regex_summary.json').then(d => {
     if (!d) return document.getElementById('s-regex').innerHTML = offline;
     document.getElementById('s-regex').innerHTML = '<div class="stat"><span></span><span class="muted">Products passing (≥ ' + Math.round(d.meta.threshold * 100) + '%)</span><span class="muted">mean</span>' +
       d.meta.models.map((m, i) => `<span class="swatch" style="background:${S[i]}"></span><span>${esc(m)}</span><b>${pct(d.summary[m].passed, d.summary[m].matched)} <span class="muted" style="font-weight:400">· ${(d.summary[m].mean_score * 100).toFixed(1)}%</span></b>`).join('') + '</div>';
@@ -115,7 +115,7 @@
     }).join('');
     document.getElementById('s-llm').innerHTML = `<div class="stat"><span></span><span class="muted">Products passing (≥ ${Math.round(d.target * 100)}%)</span><span class="muted">values ✓</span>${rows}</div><div class="muted" style="font-size:12px">Judge: ${esc(d.judge)} · ${esc(d.when)} · ${ids.length.toLocaleString()} products</div>`;
   });
-  Promise.all([get('/api/reviews'), get('/data/regex_summary.json')]).then(([r, s]) => {
+  Promise.all([get('/api/reviews'), get('/data/regex/regex_summary.json')]).then(([r, s]) => {
     if (!r || !s) return document.getElementById('s-manual').innerHTML = offline;
     const REV = [['Clive', 'var(--rev-1)'], ['Abigail', 'var(--rev-2)'], ['Roda', 'var(--rev-3)']];
     const total = Math.max(...s.meta.models.map(m => s.summary[m].matched));  // products with model output (F406_1 is an empty GT split)

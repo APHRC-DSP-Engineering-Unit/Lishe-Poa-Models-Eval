@@ -20,10 +20,11 @@ Usage:
     python3 compare.py --gt ground_truth.json --model "Claude=claude.json" ...
 
 Outputs:
-    results/comparison.json   full per-record, per-field results
-    results/summary.csv       one row per model
-    results/records.csv       one row per record x model
-    results/regex_summary.json  per-model summary for the overview page
+    results/regex/comparison.json     full per-record, per-field results
+    results/regex/summary.csv         one row per model
+    results/regex/records.csv         one row per record x model
+    results/regex/regex_summary.json  per-model summary for the overview page
+    (results/regex/README.md explains every file, column and weight)
     site/regex.html           self-contained dashboard (data inlined, built from templates/regex.html)
 """
 from __future__ import annotations
@@ -586,7 +587,7 @@ def main() -> None:
     ap.add_argument("--threshold", type=float, default=0.80, help="pass threshold, 0..1 (default 0.80)")
     ap.add_argument("--no-penalise-extra", action="store_true",
                     help="don't penalise nutrients reported by a model but absent from GT")
-    ap.add_argument("--out", default=str(ROOT / "results"))
+    ap.add_argument("--out", default=str(ROOT / "results" / "regex"))
     ap.add_argument("--site", default=str(ROOT / "site"), help="where regex.html is written")
     a = ap.parse_args()
 

@@ -940,7 +940,7 @@
   (async () => {
     $('productPane').innerHTML = '<div class="product empty">Loading products…</div>';
     try {
-      const [c, rv] = await Promise.all([fetch('/data/comparison.json').then(r => { if (!r.ok) throw new Error('comparison'); return r.json(); }),
+      const [c, rv] = await Promise.all([fetch('/data/regex/comparison.json').then(r => { if (!r.ok) throw new Error('comparison'); return r.json(); }),
                                          fetch('/api/reviews').then(r => { if (!r.ok) throw new Error('api'); return r.json(); })]);
       C = c; docs = rv;
     } catch (e) {
