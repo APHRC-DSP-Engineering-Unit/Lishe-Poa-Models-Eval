@@ -42,8 +42,20 @@ This folder holds the results of the **LLM-as-a-judge evaluation**. It checks ho
 | `dashboard/nutrients.json` | Accuracy per model, per nutrient (240 rows = 80 nutrients × 3 models) |
 | `dashboard/products.json` | Correct ÷ checked per product, per model (4,500 rows = 1,500 × 3) |
 | `judge_cache.jsonl` | Every answer the judge gave (1,477 products). **Don't delete it.** It is what lets reruns cost nothing. |
+| `llm_judge_rows.json` | The per-product marks for the website. The overview and manual-review pages load it from `/data/llm_judge_rows.json` (served by `serve.py`). Written only by full runs of `judge_eval.py`, not `--limit` test runs. |
 
-The per-product marks that the manual-review page reads are in `results/llm_judge_rows.json`, one level up. They stay there because `serve.py` serves them from `results/`.
+### `llm_judge_rows.json`
+
+```jsonc
+{"models": ["GPT-6-Sol", "Gemini 3.8 Flash", "Claude Opus 5.5"],
+ "judge": "gpt-4o-mini", "when": "2026-11-18 10:28", "target": 0.85,
+ "rows": {
+   "J001": {
+     "f": {"name": [["✗", "Incorrect product name."], ["✗", "…"], ["✓", ""]], …},  // per field: [mark, judge note] for each model, in "models" order
+     "n": {"energy_kj": ["✓", "✓", "✓"], …},                                       // per nutrient: one mark for each model
+     "v": [["✗", 19, 21], ["✗", 20, 21], ["✗", 20, 21]]                             // per model: [✓ only if every scored item is ✓, correct, scored]
+   }, …}}
+```
 
 ### Excel workbook sheets
 

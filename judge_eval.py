@@ -885,7 +885,7 @@ def main():
         os.makedirs(site_dir, exist_ok=True)
         write_report(os.path.join(site_dir, "llm-judge.html"), report_data(rows, names, args.target, info),
                      site_page=True)
-        rows_path = os.path.join(here, "results", "llm_judge_rows.json")
+        rows_path = os.path.join(here, "results", "llm_judge", "llm_judge_rows.json")
         os.makedirs(os.path.dirname(rows_path), exist_ok=True)
         with open(rows_path, "w", encoding="utf-8") as f:
             json.dump(export_rows(rows, names, args.target, info), f, ensure_ascii=False, separators=(",", ":"))

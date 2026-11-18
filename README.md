@@ -92,7 +92,7 @@ Run it:
 ```
 
 - **Restarting costs nothing extra.** Every judge answer is cached in `results/llm_judge/judge_cache.jsonl`, so a rerun continues where it stopped and never pays twice.
-- **Full runs publish their results:** `site/llm-judge.html` and `results/llm_judge_rows.json` (the per-product marks used by the manual review page).
+- **Full runs publish their results:** `site/llm-judge.html` and `results/llm_judge/llm_judge_rows.json` (the per-product marks used by the manual review page).
 - **Every run rebuilds:** the terminal summary (PASS/FAIL per model, field and nutrient), `results/llm_judge/dashboard.html`, and `results/llm_judge/extraction_judge_results.xlsx`.
 
 **The LLM-judge dashboard** is the same page whether you open `site/llm-judge.html` (with the site's top navigation) or `results/llm_judge/dashboard.html` (standalone; just double-click it). It shows:
@@ -161,7 +161,6 @@ site_nav.py      shared top navigation for generated pages
 templates/       source template for the regex page
 results/         generated results (committed)
   regex/         ① regex outputs: comparison.json, summary.csv, records.csv, regex_summary.json + README.md
-  llm_judge/     ② LLM-judge Excel, dashboard.html, online-dashboard JSONs, answer cache + README.md
-  llm_judge_rows.json   ② LLM-judge per-product marks (read by the manual-review page)
+  llm_judge/     ② LLM-judge Excel, dashboard.html, online-dashboard JSONs, answer cache, llm_judge_rows.json (per-product marks for the site) + README.md
 reviews/         manual review files, one per reviewer (committed)
 ```

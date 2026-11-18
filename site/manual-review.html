@@ -951,7 +951,7 @@
       $('productPane').innerHTML = ''; return;
     }
     try { const r = await fetch('/data/llm_judge_rows.json'); if (r.ok) J = await r.json(); } catch { }
-    if (!J) $('banner').innerHTML = `<div class="banner info">LLM-judge results not found (<code>results/llm_judge_rows.json</code>), so the LLM-judge comparison is hidden. Run <code>judge_eval.py</code> to add it.</div>`;
+    if (!J) $('banner').innerHTML = `<div class="banner info">LLM-judge results not found (<code>results/llm_judge/llm_judge_rows.json</code>), so the LLM-judge comparison is hidden. Run <code>judge_eval.py</code> to add it.</div>`;
     M = C.meta.models;
     C.records.forEach(r => { byUid[r.uid] = r; });
     allUids = C.records.filter(r => Object.keys(r.models).length).map(r => r.uid);

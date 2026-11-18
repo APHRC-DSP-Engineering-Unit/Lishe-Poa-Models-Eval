@@ -17,7 +17,7 @@ Data (read-only, from results/):
     /data/regex/regex_summary.json   regex per-model summary
     /data/regex/summary.csv          regex one row per model
     /data/regex/records.csv          regex one row per product x model
-    /data/llm_judge_rows.json        LLM-judge per-product marks          (results/)
+    /data/llm_judge_rows.json        LLM-judge per-product marks          (results/llm_judge/)
 
 Manual-review API (one JSON file per reviewer in reviews/, so every reviewer's
 work can be committed to git without merge conflicts):
@@ -51,7 +51,7 @@ DATA_FILES = {
     "regex/regex_summary.json": "regex/regex_summary.json",
     "regex/summary.csv": "regex/summary.csv",
     "regex/records.csv": "regex/records.csv",
-    "llm_judge_rows.json": "llm_judge_rows.json",
+    "llm_judge_rows.json": "llm_judge/llm_judge_rows.json",
 }
 MAX_BODY = 5 * 1024 * 1024
 _write_lock = threading.Lock()
