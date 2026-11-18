@@ -13,9 +13,11 @@ Pages (site/):
     /manual-review.html    ③ Manual review (needs this server to save work)
 
 Data (read-only, from results/):
-    /data/comparison.json        regex per-record, per-field results
-    /data/llm_judge_rows.json    LLM-judge per-product marks
-    /data/regex_summary.json     regex per-model summary
+    /data/regex/comparison.json      regex per-record, per-field results  (results/regex/)
+    /data/regex/regex_summary.json   regex per-model summary
+    /data/regex/summary.csv          regex one row per model
+    /data/regex/records.csv          regex one row per product x model
+    /data/llm_judge_rows.json        LLM-judge per-product marks          (results/)
 
 Manual-review API (one JSON file per reviewer in reviews/, so every reviewer's
 work can be committed to git without merge conflicts):
@@ -43,7 +45,14 @@ SITE = ROOT / "site"
 RESULTS = ROOT / "results"
 REVIEWS = ROOT / "reviews"
 REVIEWERS = ("Clive", "Abigail", "Roda")
-DATA_FILES = {"comparison.json", "llm_judge_rows.json", "regex_summary.json"}
+# URL path under /data/  ->  file under results/
+DATA_FILES = {
+    "regex/comparison.json": "regex/comparison.json",
+    "regex/regex_summary.json": "regex/regex_summary.json",
+    "regex/summary.csv": "regex/summary.csv",
+    "regex/records.csv": "regex/records.csv",
+    "llm_judge_rows.json": "llm_judge_rows.json",
+}
 MAX_BODY = 5 * 1024 * 1024
 _write_lock = threading.Lock()
 
@@ -109,11 +118,12 @@ class Handler(SimpleHTTPRequestHandler):
             return self._json(200, {n: load_doc(n) for n in REVIEWERS})
         if path.startswith("/data/"):
             name = path[len("/data/"):]
-            if name not in DATA_FILES or not (RESULTS / name).exists():
+            if name not in DATA_FILES or not (RESULTS / DATA_FILES[name]).exists():
                 return self._json(404, {"error": f"{name} not found. Run compare.py / judge_eval.py first."})
-            body = (RESULTS / name).read_bytes()
+            body = (RESULTS / DATA_FILES[name]).read_bytes()
             self.send_response(200)
-            self.send_header("Content-Type", "application/json; charset=utf-8")
+            ctype = "text/csv" if name.endswith(".csv") else "application/json"
+            self.send_header("Content-Type", f"{ctype}; charset=utf-8")
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             return self.wfile.write(body)

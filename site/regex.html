@@ -521,7 +521,7 @@
     `<b>Ingredients:</b> 55% token Dice + 25% sequence similarity + 20% recall of regex-extracted key facts: E-numbers/INS codes (<code>E\\s?\\d{3,4}[a-z]?</code>) and percentages (<code>\\d+(\\.\\d+)?\\s*%</code>). <b>Other label info:</b> recall of GT words (models may add extra lines).`,
     `<b>Missing</b> (GT has a value, model doesn't) = 0. <b>Extra</b> nutrients (model invents a value GT doesn't have) = ${D.meta.penalise_extra_nutrients ? '0 (penalized)' : 'not scored'}. Extra non-nutrient text is shown but not scored.`,
     `<b>Record score</b> = weighted mean of group scores, re-weighted over the groups present: ${Object.entries(W).map(([g, w]) => `${GROUP_LABEL[g]} ${Math.round(w / tw * 100)}%`).join(', ')}. A record passes (YES) when score ≥ threshold (default ${Math.round(D.meta.threshold * 100)}%).`,
-    `Regenerate with <code>python3 compare.py [--threshold 0.85]</code>. Outputs go to <code>results/</code> (comparison.json, summary.csv, records.csv) and <code>site/regex.html</code> (self-contained, data inlined).`,
+    `Regenerate with <code>python3 compare.py [--threshold 0.85]</code>. Outputs go to <code>results/regex/</code> (comparison.json, summary.csv, records.csv, regex_summary.json; explained in <code>results/regex/README.md</code>) and <code>site/regex.html</code> (self-contained, data inlined).`,
   ].map(x => `<li>${x}</li>`).join('');
 
   // ---------- threshold ----------

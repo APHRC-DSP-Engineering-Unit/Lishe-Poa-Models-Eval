@@ -70,7 +70,7 @@ python3 compare.py --threshold 0.85
 Outputs:
 
 - `site/regex.html`: self-contained dashboard. It's built from `templates/regex.html`, so edit the template, not the output.
-- `results/summary.csv`, `results/records.csv`, `results/comparison.json`, and `results/regex_summary.json`
+- `results/regex/`: `summary.csv`, `records.csv`, `comparison.json` and `regex_summary.json`. **[`results/regex/README.md`](results/regex/README.md)** explains every file, column, weight and scoring rule.
 
 Category weights: Identity 20%, Package 10%, Nutrition basis 10%, Nutrients 40%, Ingredients 15%, Other label info 5%. The page's Methodology section has the full rules.
 
@@ -160,6 +160,8 @@ site/            the web pages: index, regex, llm-judge, manual-review
 site_nav.py      shared top navigation for generated pages
 templates/       source template for the regex page
 results/         generated results (committed)
+  regex/         ① regex outputs: comparison.json, summary.csv, records.csv, regex_summary.json + README.md
+  llm_judge_rows.json   ② LLM-judge per-product marks
 reviews/         manual review files, one per reviewer (committed)
 output/          LLM-judge Excel, dashboard.html and answer cache (not committed)
 ```
