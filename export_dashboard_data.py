@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """Export the judged results as small JSON files for the online dashboard.
 
-Uses the saved judge answers (output/judge_cache.jsonl), so it makes no API calls.
-Run judge_eval.py first. Writes output/dashboard/{scorecard,nutrients,products}.json
+Uses the saved judge answers (results/llm_judge/judge_cache.jsonl), so it makes no API calls.
+Run judge_eval.py first. Writes results/llm_judge/dashboard/{scorecard,nutrients,products}.json
 """
 import json, os
 import judge_eval as J
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, "output", "dashboard")
-CACHE = os.path.join(HERE, "output", "judge_cache.jsonl")
+OUT = os.path.join(HERE, "results", "llm_judge", "dashboard")
+CACHE = os.path.join(HERE, "results", "llm_judge", "judge_cache.jsonl")
 
 
 def main():

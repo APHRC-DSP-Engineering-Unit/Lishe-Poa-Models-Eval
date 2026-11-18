@@ -1,4 +1,4 @@
-"""Builds output/dashboard.html: a self-contained dashboard of the judge results.
+"""Builds results/llm_judge/dashboard.html: a self-contained dashboard of the judge results.
 Called by judge_eval.py on every run. Opens in any browser, no internet needed."""
 import json
 

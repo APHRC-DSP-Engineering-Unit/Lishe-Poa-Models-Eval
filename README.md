@@ -91,11 +91,11 @@ Run it:
 .venv/bin/python judge_eval.py               # all products (asks before spending; well under US$1)
 ```
 
-- **Restarting costs nothing extra.** Every judge answer is cached in `output/judge_cache.jsonl`, so a rerun continues where it stopped and never pays twice.
+- **Restarting costs nothing extra.** Every judge answer is cached in `results/llm_judge/judge_cache.jsonl`, so a rerun continues where it stopped and never pays twice.
 - **Full runs publish their results:** `site/llm-judge.html` and `results/llm_judge_rows.json` (the per-product marks used by the manual review page).
-- **Every run rebuilds:** the terminal summary (PASS/FAIL per model, field and nutrient), `output/dashboard.html`, and `output/extraction_judge_results.xlsx`.
+- **Every run rebuilds:** the terminal summary (PASS/FAIL per model, field and nutrient), `results/llm_judge/dashboard.html`, and `results/llm_judge/extraction_judge_results.xlsx`.
 
-**The LLM-judge dashboard** is the same page whether you open `site/llm-judge.html` (with the site's top navigation) or `output/dashboard.html` (standalone; just double-click it). It shows:
+**The LLM-judge dashboard** is the same page whether you open `site/llm-judge.html` (with the site's top navigation) or `results/llm_judge/dashboard.html` (standalone; just double-click it). It shows:
 
 - a one-sentence summary
 - one card per model with its rank and pass/fail
@@ -122,7 +122,7 @@ Run it:
 .venv/bin/python export_dashboard_data.py
 ```
 
-This writes `output/dashboard/scorecard.json`, `nutrients.json` and `products.json` from the saved judge answers, with no API calls. It feeds the online "Label Extraction Scorecard". Rerun it after a new judge run.
+This writes `results/llm_judge/dashboard/scorecard.json`, `nutrients.json` and `products.json` from the saved judge answers, with no API calls. It feeds the online "Label Extraction Scorecard". Rerun it after a new judge run.
 
 Options:
 
@@ -159,7 +159,7 @@ serve.py         local server for the site + manual review storage
 site/            the web pages: index, regex, llm-judge, manual-review
 site_nav.py      shared top navigation for generated pages
 templates/       source template for the regex page
-results/         generated results (committed)
+results/         generated results (committed): regex files at the top level
+  llm_judge/     LLM-judge Excel, dashboard.html, online-dashboard JSONs and answer cache
 reviews/         manual review files, one per reviewer (committed)
-output/          LLM-judge Excel, dashboard.html and answer cache (not committed)
 ```

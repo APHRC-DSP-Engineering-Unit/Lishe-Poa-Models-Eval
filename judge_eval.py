@@ -23,7 +23,7 @@ Folder layout
     data/gpt-6-sol.json
     data/gemini-3.8-flash.json
     data/claude-opus-5-5.json
-    output/                  (created automatically: Excel + progress cache)
+    results/llm_judge/       (created automatically: Excel + progress cache)
 
 Usage
   pip install openai openpyxl
@@ -792,7 +792,7 @@ def main():
     load_dotenv()
     here = os.path.dirname(os.path.abspath(__file__))
     data = lambda name: os.path.join(here, "data", name)
-    out = lambda name: os.path.join(here, "output", name)
+    out = lambda name: os.path.join(here, "results", "llm_judge", name)
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--gt", default=data("ground_truth.json"))
     ap.add_argument("--model-file", action="append", metavar="NAME=PATH",
