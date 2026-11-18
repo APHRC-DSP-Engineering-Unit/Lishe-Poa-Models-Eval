@@ -143,6 +143,64 @@
   .meter i { display: block; height: 100%; border-radius: 3px; }
   .empty { padding: 40px; text-align: center; color: var(--text-secondary); }
   .kbd { font: 11px ui-monospace, monospace; border: 1px solid var(--axis); border-radius: 4px; padding: 0 4px; }
+
+  /* shared pass threshold (tab row) */
+  .tabs { align-items: center; flex-wrap: wrap; }
+  .tabs .thr { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); }
+  .tabs .thr input[type=range] { width: 170px; accent-color: var(--text-primary); }
+  .tabs .thr b { min-width: 40px; text-align: right; color: var(--text-primary); font-size: 15px; }
+  .tabs .thr button { padding: 3px 8px; font-size: 12px; }
+
+  /* snapshot */
+  .snapbar { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; font-size: 13px; }
+  .seg2 { display: inline-flex; border: 1px solid var(--axis); border-radius: 6px; overflow: hidden; }
+  .seg2 button { border: none; border-radius: 0; padding: 5px 11px; }
+  .seg2 button + button { border-left: 1px solid var(--axis); }
+  .seg2 button.on { background: var(--text-primary); color: var(--surface-1); font-weight: 600; }
+  .headline { font-size: 14px; margin: 10px 0 0; color: var(--text-secondary); }
+  .headline b { color: var(--text-primary); }
+  .snapcards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+  @media (max-width: 1000px) { .snapcards { grid-template-columns: 1fr; } }
+  .scard { border: 1px solid var(--grid); border-radius: 10px; padding: 12px 14px; background: var(--surface-1); }
+  .scard h3 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: center; }
+  .scard .mrow { display: grid; grid-template-columns: 92px 1fr 58px 64px; gap: 8px; align-items: center; font-size: 13px; padding: 5px 0; border-top: 1px solid var(--grid); }
+  .scard .mrow.hd { border-top: none; font-size: 11.5px; color: var(--muted); padding: 0; }
+  .scard .mrow b { text-align: right; }
+  .scard .mrow .muted { text-align: right; font-size: 12px; }
+  .hbar { height: 8px; background: var(--surface-2); border-radius: 4px; position: relative; }
+  .hbar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; }
+  .hbar .tl { position: absolute; top: -4px; bottom: -4px; width: 0; border-left: 2px dashed var(--text-secondary); }
+  table.snap { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  table.snap th, table.snap td { padding: 6px 7px; border-bottom: 1px solid var(--grid); text-align: right; font-size: 12.5px; white-space: nowrap; }
+  table.snap th:first-child, table.snap td:first-child { text-align: left; white-space: normal; }
+  table.snap thead th { color: var(--text-secondary); font-size: 11.5px; font-weight: 600; }
+  table.snap thead tr:first-child th { font-size: 12.5px; color: var(--text-primary); border-bottom: none; text-align: center; }
+  table.snap th.mstart, table.snap td.mstart { border-left: 1px solid var(--grid); }
+  table.snap tr.tot td { font-weight: 650; background: var(--surface-2); }
+  table.snap tr.sub td:first-child { padding-left: 20px; color: var(--text-secondary); }
+  table.snap tr.grp td { background: var(--surface-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-secondary); font-weight: 650; }
+  table.snap td.na { color: var(--muted); }
+  .okb { color: var(--good-text); font-weight: 700; } .badb { color: var(--critical); font-weight: 700; }
+  .meter.sm { width: 36px; height: 5px; margin-left: 5px; }
+  .dots { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; margin-top: 10px; }
+  .dpanel { border: 1px solid var(--grid); border-radius: 8px; padding: 10px 12px 8px; }
+  .dpanel h4 { margin: 0 0 4px; font-size: 13px; }
+  .drow { display: grid; grid-template-columns: 118px 1fr; align-items: center; gap: 8px; height: 26px; font-size: 12px; }
+  .drow > span { display: flex; align-items: center; gap: 6px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .dtrack { position: relative; height: 24px; margin: 0 6px; }
+  .dtrack::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px solid var(--grid); }
+  .dtrack .tl { position: absolute; top: 0; bottom: 0; width: 0; border-left: 2px dashed var(--muted); }
+  .mk { position: absolute; top: 50%; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; box-shadow: 0 0 0 2px var(--surface-1); }
+  .mk.regex { border-radius: 50%; }
+  .mk.llm { transform: rotate(45deg) scale(.92); border-radius: 1px; }
+  .mk.human { border-radius: 2px; }
+  .mk.lg { position: relative; display: inline-block; top: auto; margin: 0 2px 0 0; vertical-align: -1px; background: var(--text-secondary); box-shadow: none; }
+  .daxis { display: flex; justify-content: space-between; margin: 2px 6px 0 132px; font-size: 10.5px; color: var(--muted); }
+  #tip { position: fixed; pointer-events: none; z-index: 50; background: var(--text-primary); color: var(--surface-1); font-size: 12px; line-height: 1.4;
+         padding: 6px 9px; border-radius: 6px; max-width: 340px; display: none; white-space: pre-line; box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+  details.method { margin-top: 10px; font-size: 13px; color: var(--text-secondary); }
+  details.method summary { cursor: pointer; font-weight: 600; color: var(--text-primary); }
+  details.method li { margin: 3px 0; }
 </style>
 </head>
 <body>
@@ -167,8 +225,13 @@
 
   <div class="tabs">
     <button data-tab="review" class="active">My batch</button>
+    <button data-tab="snapshot">📊 Snapshot: regex · LLM judge · manual</button>
     <button data-tab="results">Team results</button>
     <button data-tab="help">How to review</button>
+    <label class="thr" title="One pass mark for every method on this page: a category or product counts as ✓ / PASS when its score is at least this value. Saved in this browser.">
+      Pass threshold <input type="range" id="thr" min="50" max="100" step="1" value="80" aria-label="Pass threshold (percent)"> <b id="thrVal">80%</b>
+      <button id="thrReset" title="Back to the regex default (80%)">Reset</button>
+    </label>
   </div>
 
   <div id="tab-review">
@@ -179,7 +242,10 @@
     </div>
   </div>
 
+  <div id="tab-snapshot" hidden></div>
+
   <div id="tab-results" hidden></div>
+  <div id="tip" role="tooltip"></div>
 
   <section id="tab-help" hidden>
     <h2>How to review</h2>
@@ -196,6 +262,7 @@
       <li>A product counts as <b>checked</b> once all 18 boxes (6 categories × 3 models) are set. Work is saved automatically to <code>reviews/&lt;your-name&gt;.json</code>.</li>
       <li><b>Share progress</b> by committing your <code>reviews/&lt;name&gt;.json</code> file to git (each reviewer has their own file, so there are no merge conflicts), or have one person run <code>python3 serve.py --lan</code> so everyone reviews on the same server.</li>
     </ol>
+    <p class="muted">The <b>📊 Snapshot</b> tab compares regex, LLM judge and manual review per category and field. The <b>Pass threshold</b> slider in the tab bar sets one pass mark for all three methods, everywhere on this page.</p>
     <p class="muted">Tip: keep “Show automated verdicts” off while you review so the regex and LLM-judge results don't influence your decision. The Team results tab compares human verdicts with both automated methods.</p>
     <p class="muted">Keyboard: <span class="kbd">J</span>/<span class="kbd">K</span> next/previous product · <span class="kbd">N</span> next unchecked.</p>
   </section>
@@ -224,6 +291,9 @@
 
   let C, J = null, docs = {}, me = localStorage.getItem('lp-reviewer'), M = [], byUid = {}, pools = {}, allUids = [];
   let curUid = null, viewBatch = null, showAuto = localStorage.getItem('lp-show-auto') === '1', online = true;
+  // one pass threshold shared by every method on this page (snapshot, team results, verdict hints)
+  let thr = parseFloat(localStorage.getItem('lp-threshold')) || null, PRE = null;
+  const GE = (a, b) => a >= b - 1e-9;
 
   // ---------- deterministic split of the dataset between reviewers ----------
   function seededRandom(seedStr) {
@@ -290,6 +360,7 @@
       REVIEWERS.forEach(r => { if (r !== me) docs[r] = all[r] || blankDoc(r); });
       renderTop();
       if (!$('tab-results').hidden) renderResults();
+      if (!$('tab-snapshot').hidden) renderSnapshot();
     } catch { /* offline: keep what we have */ }
   }
 
@@ -433,20 +504,49 @@
   }
 
   // ---------- automated verdicts per category ----------
+  // Precompute per-product, per-model, per-category numbers once, so moving the threshold is instant.
+  //   R[uid][i]          regex record for model i ({score, groups:{g: 0..1}})
+  //   L[uid][i]          LLM judge: {g: {group: [✓ count, marks counted]}, p: [✓, marks] for the whole product}
+  //   FR / FL[key][i]    per-field lists of [uid, score] (regex 0..1; LLM 1 = ✓, 0 = ✗ or ~)
+  function precompute() {
+    const R = {}, L = {}, FR = {}, FL = {};
+    allUids.forEach(u => {
+      const rec = byUid[u];
+      R[u] = M.map(m => rec.models[m]);
+      rec.fields.forEach(f => M.forEach((m, i) => {
+        const s = f.m[m]?.s; if (s == null) return;
+        (FR[f.key] = FR[f.key] || M.map(() => []))[i].push([u, s]);
+      }));
+      const row = J?.rows[u]; if (!row) return;
+      L[u] = M.map((m, i0) => {
+        const i = J.models.indexOf(m); if (i < 0) return null;
+        const g = {};
+        const add = (grp, mk, key) => {
+          if (!grp || !mk || mk === '?') return;  // '' = empty everywhere, not scored
+          const c = g[grp] = g[grp] || [0, 0]; c[0] += mk === '✓'; c[1]++;
+          (FL[key] = FL[key] || M.map(() => []))[i0].push([u, mk === '✓' ? 1 : 0]);
+        };
+        Object.entries(row.f).forEach(([f, ms]) => add(LLM_GROUP[f], ms[i]?.[0], f));
+        Object.entries(row.n).forEach(([n, ms]) => add('nutrients', ms[i], 'nutrients.' + n));
+        return { g, p: row.v?.[i] ? [row.v[i][1], row.v[i][2]] : [0, 0] };
+      });
+    });
+    PRE = { R, L, FR, FL };
+  }
+  // true / false / null (nothing to judge) for one method, product, model index and category, at the current threshold
+  function verdictAt(method, u, i, g, rv) {
+    if (method === 'regex') { const s = PRE.R[u]?.[i]?.groups?.[g]; return s == null ? null : GE(s, thr); }
+    if (method === 'llm') { const c = PRE.L[u]?.[i]?.g[g]; return c && c[1] ? GE(c[0] / c[1], thr) : null; }
+    const v = rv?.checks?.[g]?.[M[i]]; return v === 'ok' ? true : v === 'bad' ? false : null;
+  }
   function regexVerdict(rec, m, g) {
-    const s = rec.models[m]?.groups?.[g];
-    return s == null ? 'na' : (s >= C.meta.threshold ? 'ok' : 'bad');
+    const v = verdictAt('regex', rec.uid, M.indexOf(m), g);
+    return v == null ? 'na' : v ? 'ok' : 'bad';
   }
   function llmVerdict(uid, m, g) {
-    if (!J) return null;
-    const row = J.rows[uid]; if (!row) return null;
-    const i = J.models.indexOf(m); if (i < 0) return null;
-    let marks = [];
-    if (g === 'nutrients') marks = Object.values(row.n).map(x => x[i]);
-    else Object.entries(row.f).forEach(([f, ms]) => { if (LLM_GROUP[f] === g) marks.push(ms[i]?.[0]); });
-    marks = marks.filter(x => x && x !== '' && x !== '?');
-    if (!marks.length) return 'na';
-    return marks.every(x => x === '✓') ? 'ok' : 'bad';
+    if (!J || !J.rows[uid]) return null;
+    const v = verdictAt('llm', uid, M.indexOf(m), g);
+    return v == null ? 'na' : v ? 'ok' : 'bad';
   }
   const VLABEL = { ok: '✓', bad: '✗', na: 'N/A' };
 
@@ -529,10 +629,14 @@
   }
 
   // ---------- team results ----------
+  function reviewedList() {  // fully checked products: [uid, review, reviewer]
+    const out = [];
+    REVIEWERS.forEach(r => Object.entries(docs[r]?.reviews || {}).forEach(([u, rv]) => { if (isComplete(rv) && byUid[u]) out.push([u, rv, r]); }));
+    return out;
+  }
   function renderResults() {
     const cell = (a, b, color) => b ? `${pct(a, b)}<span class="meter"><i style="width:${a / b * 100}%;background:${color}"></i></span> <span class="muted">(${b})</span>` : '<span class="muted">–</span>';
-    const reviewed = [];
-    REVIEWERS.forEach(r => Object.entries(docs[r]?.reviews || {}).forEach(([u, rv]) => { if (isComplete(rv) && byUid[u]) reviewed.push([u, rv, r]); }));
+    const reviewed = reviewedList();
     let h = `<section><h2>Team results: ${reviewed.length.toLocaleString()} products manually checked</h2>
       <p class="sub">Human accuracy = share of categories marked ✓ Correct (N/A excluded). Only fully checked products are counted.</p>
       <div class="row" style="margin-top:8px"><button id="expCsv">⬇ Export all manual reviews (CSV)</button><span class="muted" style="font-size:12.5px">One row per product × category × model, with the regex and LLM-judge verdicts alongside.</span></div>`;
@@ -557,7 +661,7 @@
     const ra = agree((u, m, g) => regexVerdict(byUid[u], m, g));
     const la = J ? agree((u, m, g) => llmVerdict(u, m, g)) : null;
     h += `<h3 style="font-size:14px;margin:18px 0 0">Do the automated methods agree with the humans?</h3>
-      <p class="sub">Share of category verdicts where the automated method gives the same ✓/✗ as the reviewer. Regex: category score ≥ ${Math.round(C.meta.threshold * 100)}% counts as ✓. LLM judge: ✓ only if every field in the category is ✓.</p>
+      <p class="sub">Share of category verdicts where the automated method gives the same ✓/✗ as the reviewer. Using the pass threshold of <b>${Math.round(thr * 100)}%</b> (slider above): regex counts a category as ✓ when its score is at least that; the LLM judge when at least that share of the category's checks are ✓. Move the slider to see how agreement changes. The 📊 Snapshot tab has the full side-by-side.</p>
       <table class="res"><thead><tr><th>Category</th>${M.map((m, i) => `<th><i class="swatch" style="background:${SERIES[i]}"></i> ${esc(m)}<br><span class="muted">regex · LLM judge</span></th>`).join('')}</tr></thead><tbody>` +
       GROUPS.map((g, gi) => `<tr><td>${GROUP_LABEL[g]}</td>${M.map((m, i) => `<td>${pct(...ra[gi][i])} · ${la ? pct(...la[gi][i]) : '<span class="muted">n/a</span>'}</td>`).join('')}</tr>`).join('');
     const sumA = arr => arr.flat().reduce((x, [a, n]) => [x[0] + a, x[1] + n], [0, 0]);
@@ -583,11 +687,248 @@
   }
   function download(name, text, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; a.click(); }
 
+  // ---------- shared pass threshold ----------
+  function initThreshold() {
+    const show = () => { $('thr').value = Math.round(thr * 100); $('thrVal').textContent = Math.round(thr * 100) + '%'; };
+    show();
+    let t = null;
+    $('thr').oninput = e => {
+      thr = +e.target.value / 100; $('thrVal').textContent = e.target.value + '%';
+      localStorage.setItem('lp-threshold', String(thr));
+      clearTimeout(t); t = setTimeout(rerenderForThreshold, 60);
+    };
+    $('thrReset').onclick = () => { thr = C.meta.threshold; localStorage.setItem('lp-threshold', String(thr)); show(); rerenderForThreshold(); };
+  }
+  function rerenderForThreshold() {
+    if (!$('tab-snapshot').hidden) renderSnapshot();
+    if (!$('tab-results').hidden) renderResults();
+    if (!$('tab-review').hidden && showAuto && me && shownBatch()) renderProduct();
+  }
+
+  // ---------- 📊 snapshot: regex vs LLM judge vs manual, per category ----------
+  const METHODS = [['regex', 'Regex', 'Rule-based regex comparison'], ['llm', 'LLM judge', 'GPT-4o mini judge + exact checks'], ['human', 'Manual', 'Clive, Abigail and Roda']];
+  const FIELD_ROWS = [
+    ['identity', 'Product name', ['product.name'], ['name']], ['identity', 'Brand', ['product.brand'], ['brand']],
+    ['identity', 'Manufacturer', ['product.manufacturer'], ['manufacturer']], ['identity', 'Category', ['product.category'], ['category']],
+    ['identity', 'Country of origin', ['product.country_of_origin'], ['country_of_origin']], ['identity', 'Barcode', ['product.barcode'], ['barcode']],
+    ['package', 'Package size & unit', ['package.size', 'package.unit'], ['package_size']], ['package', 'Package count', ['package.count'], ['package_count']],
+    ['package', 'Package type', ['package.type'], ['package_type']],
+    ['basis', 'Nutrition basis (per 100 g / ml / serving)', ['nutrition_basis.type', 'nutrition_basis.amount'], ['nutrition_basis']],
+    ['basis', 'Serving size', ['serving_size.amount', 'serving_size.unit'], ['serving_size']],
+    ['nutrients', 'All nutrient values', 'nutrients', 'nutrients'],
+    ['ingredients', 'Ingredient list', ['ingredients_verbatim'], ['ingredients']],
+    ['label', 'Other label information', ['other_label_information'], ['other_info']],
+  ];
+  let snapMetric = localStorage.getItem('lp-snap-metric') || 'acc', snapScope = localStorage.getItem('lp-snap-scope') || 'all', snapAllNut = false, snapCsv = [];
+  const fmtP = v => (v * 100).toFixed(1) + '%';
+  const nutLabel = k => { const m = k.replace(/^nutrients\./, '').match(/^(.*?)(?:_(g|mg|kcal|kj|million_cfu))?$/); const n = m[1].replace(/_/g, ' ');
+    return n.charAt(0).toUpperCase() + n.slice(1) + (m[2] ? ` (${m[2] === 'kj' ? 'kJ' : m[2].replace('_', ' ')})` : ''); };
+
+  function snapScopeData() {
+    const all = reviewedList();
+    let reviewed = all, uids;
+    if (snapScope === 'all') uids = allUids;
+    else { if (REVIEWERS.includes(snapScope)) reviewed = all.filter(x => x[2] === snapScope); uids = [...new Set(reviewed.map(x => x[0]))]; }
+    return { uids, uidSet: snapScope === 'all' ? null : new Set(uids), reviewed, allReviewed: all.length };
+  }
+  function humanScore(rv, m) {  // weighted share of ✓ categories, same weights as regex (N/A left out)
+    let a = 0, w = 0;
+    GROUPS.forEach(g => { const v = rv.checks?.[g]?.[m]; if (v === 'ok' || v === 'bad') { const wg = C.meta.group_weights[g]; w += wg; if (v === 'ok') a += wg; } });
+    return w ? a / w : null;
+  }
+  // [numerator, denominator] for one method × model × category. mode 'acc' = accuracy, 'pass' = share of products at/above threshold.
+  function catStat(method, i, g, S, mode) {
+    let num = 0, den = 0;
+    if (method === 'regex') S.uids.forEach(u => { const s = PRE.R[u]?.[i]?.groups?.[g]; if (s == null) return; den++; num += mode === 'acc' ? s : GE(s, thr); });
+    else if (method === 'llm') { if (!J) return null;
+      S.uids.forEach(u => { const c = PRE.L[u]?.[i]?.g[g]; if (!c || !c[1]) return; if (mode === 'acc') { num += c[0]; den += c[1]; } else { den++; num += GE(c[0] / c[1], thr); } }); }
+    else S.reviewed.forEach(([, rv]) => { const v = rv.checks?.[g]?.[M[i]]; if (v !== 'ok' && v !== 'bad') return; den++; num += v === 'ok'; });
+    return [num, den];
+  }
+  function prodStat(method, i, S, mode) {
+    let num = 0, den = 0;
+    if (method === 'regex') S.uids.forEach(u => { const s = PRE.R[u]?.[i]?.score; if (s == null) return; den++; num += mode === 'acc' ? s : GE(s, thr); });
+    else if (method === 'llm') { if (!J) return null;
+      S.uids.forEach(u => { const p = PRE.L[u]?.[i]?.p; if (!p || !p[1]) return; if (mode === 'acc') { num += p[0]; den += p[1]; } else { den++; num += GE(p[0] / p[1], thr); } }); }
+    else S.reviewed.forEach(([, rv]) => { const s = humanScore(rv, M[i]); if (s == null) return; den++; num += mode === 'acc' ? s : GE(s, thr); });
+    return [num, den];
+  }
+  function fieldStat(keys, src, i, S, mode, binary) {
+    let num = 0, den = 0;
+    keys.forEach(k => (src[k]?.[i] || []).forEach(([u, s]) => { if (S.uidSet && !S.uidSet.has(u)) return; den++; num += (mode === 'pass' && !binary) ? GE(s, thr) : s; }));
+    return [num, den];
+  }
+  function agreeStat(a, b, g, S, onlyI) {
+    let agree = 0, n = 0;
+    const human = a === 'human' || b === 'human';
+    const rows = human ? S.reviewed : S.uids.map(u => [u, null]);
+    rows.forEach(([u, rv]) => M.forEach((m, i) => {
+      if (onlyI != null && i !== onlyI) return;
+      (g ? [g] : GROUPS).forEach(gg => { const va = verdictAt(a, u, i, gg, rv), vb = verdictAt(b, u, i, gg, rv); if (va == null || vb == null) return; n++; agree += va === vb; });
+    }));
+    return [agree, n];
+  }
+  // one table cell with value, ✓/✗ against the threshold (optional), mini bar and hover detail
+  function sCell(st, color, tip, badge, cls = '') {
+    if (!st || !st[1]) return `<td class="na ${cls}" data-tip="${esc(tip + '\nNo data in this scope.')}">–</td>`;
+    const v = st[0] / st[1], ok = GE(v, thr);
+    const nTxt = Number.isInteger(st[0]) ? `${st[0].toLocaleString()} of ${st[1].toLocaleString()}` : `mean over ${st[1].toLocaleString()}`;
+    return `<td class="${cls}" data-tip="${esc(`${tip}\n${fmtP(v)} (${nTxt})${badge ? `\n${ok ? '✓ at or above' : '✗ below'} the ${Math.round(thr * 100)}% threshold` : ''}`)}">` +
+      `${badge ? `<span class="${ok ? 'okb' : 'badb'}">${ok ? '✓' : '✗'}</span> ` : ''}${fmtP(v)}<span class="meter sm"><i style="width:${v * 100}%;background:${color}"></i></span></td>`;
+  }
+
+  function renderSnapshot() {
+    if (!PRE) return;
+    const S = snapScopeData(), T = Math.round(thr * 100), mode = snapMetric;
+    const methods = METHODS.filter(([k]) => k !== 'llm' || J);
+    const scopeName = snapScope === 'all' ? `all ${allUids.length.toLocaleString()} products` : snapScope === 'manual' ? `the ${S.uids.length} products checked by hand` : `the ${S.uids.length} products checked by ${snapScope}`;
+    const csv = snapCsv = [['section', 'item', 'model', 'method', 'metric', 'value_pct', 'numerator', 'denominator', 'threshold_pct', 'scope']];
+    const push = (sec, item, m, meth, metric, st) => csv.push([sec, item, m, meth, metric, st && st[1] ? (st[0] / st[1] * 100).toFixed(2) : '', st ? +st[0].toFixed(4) : '', st ? st[1] : '', T, snapScope]);
+    const metricName = mode === 'acc' ? 'accuracy' : `pass rate (≥ ${T}%)`;
+
+    let h = `<section><div class="row" style="align-items:flex-start"><div style="flex:1;min-width:300px">
+      <h2>Snapshot: every category, three ways of checking, side by side</h2>
+      <p class="sub">The same six categories as the regex and LLM-judge pages, next to what Clive, Abigail and Roda found by hand. The <b>pass threshold (${T}%)</b> in the tab bar drives every ✓/✗ and pass rate below.</p></div>
+      <button id="snapCsv">⬇ Export snapshot (CSV)</button></div>
+      <div class="snapbar" style="margin-top:10px">
+        <span>Show categories as</span>
+        <span class="seg2"><button data-metric="acc" class="${mode === 'acc' ? 'on' : ''}">Accuracy</button><button data-metric="pass" class="${mode === 'pass' ? 'on' : ''}">Pass rate at ${T}%</button></span>
+        <label class="row" style="gap:6px">Products <select id="snapScope">
+          <option value="all" ${snapScope === 'all' ? 'selected' : ''}>All ${allUids.length.toLocaleString()} products</option>
+          <option value="manual" ${snapScope === 'manual' ? 'selected' : ''}>Only products checked by hand (${S.allReviewed})</option>
+          ${REVIEWERS.map(r => `<option value="${r}" ${snapScope === r ? 'selected' : ''}>Checked by ${r} (${reviewedList().filter(x => x[2] === r).length})</option>`).join('')}
+        </select></label>
+        <span class="muted">Manual columns use ${S.reviewed.length} fully checked product${S.reviewed.length === 1 ? '' : 's'}.${snapScope === 'all' && S.reviewed.length ? ' Pick “Only products checked by hand” for a like-for-like comparison.' : ''}</span>
+      </div>`;
+    if (!J) h += `<div class="banner info">LLM-judge results not found, so only regex and manual are shown. Run <code>judge_eval.py</code> to add them.</div>`;
+
+    // headline: best model per method at this threshold
+    const prodPass = methods.map(([k]) => M.map((m, i) => prodStat(k, i, S, 'pass')));
+    const best = methods.map(([k, lbl], mi) => {
+      const arr = prodPass[mi].map((st, i) => [st && st[1] ? st[0] / st[1] : -1, i]).sort((a, b) => b[0] - a[0]);
+      return arr[0][0] < 0 ? `${lbl}: <span class="muted">no data yet</span>` : `${lbl} → <i class="swatch" style="background:${SERIES[arr[0][1]]}"></i> <b>${esc(M[arr[0][1]])}</b> (${fmtP(arr[0][0])})`;
+    });
+    h += `<p class="headline">Most products passing at ${T}%, for ${esc(scopeName)}: ${best.join(' · ')}</p>`;
+
+    // model cards
+    h += `<div class="snapcards">` + M.map((m, i) => `<div class="scard"><h3><i class="swatch" style="background:${SERIES[i]}"></i>${esc(m)}</h3>
+      <div class="mrow hd"><span>Method</span><span>Products passing at ${T}% (dashed line = threshold)</span><span style="text-align:right">pass</span><span style="text-align:right">mean score</span></div>` +
+      methods.map(([k, lbl], mi) => {
+        const p = prodPass[mi][i], a = prodStat(k, i, S, 'acc');
+        const pv = p && p[1] ? p[0] / p[1] : null, av = a && a[1] ? a[0] / a[1] : null;
+        push('products', 'Products passing', m, lbl, 'pass rate', p); push('products', 'Overall score', m, lbl, 'accuracy', a);
+        return `<div class="mrow" data-tip="${esc(`${m} · ${lbl}\n${pv == null ? 'No data in this scope.' : `${p[0]} of ${p[1]} products score ≥ ${T}%\nMean product score ${fmtP(av)}`}`)}">
+          <span>${lbl}</span><span class="hbar">${pv == null ? '' : `<i style="width:${pv * 100}%;background:${SERIES[i]}"></i>`}<span class="tl" style="left:${T}%"></span></span>
+          <b>${pv == null ? '–' : fmtP(pv)}</b><span class="muted">${av == null ? '–' : fmtP(av)}</span></div>`;
+      }).join('') + `</div>`).join('') + `</div></section>`;
+
+    // category matrix
+    const head = `<thead><tr><th></th>${M.map((m, i) => `<th colspan="${methods.length}" class="mstart"><i class="swatch" style="background:${SERIES[i]}"></i> ${esc(m)}</th>`).join('')}</tr>
+      <tr><th>Category</th>${M.map(() => methods.map(([, lbl], mi) => `<th class="${mi ? '' : 'mstart'}">${lbl}</th>`).join('')).join('')}</tr></thead>`;
+    h += `<section><h2>Category scorecard: ${metricName}</h2>
+      <p class="sub">${mode === 'acc'
+        ? `Accuracy per category. ✓ = at or above the ${T}% threshold, ✗ = below. Regex: mean category score. LLM judge: share of checks marked ✓. Manual: share of category verdicts marked ✓ Correct.`
+        : `Share of products whose category score is at least ${T}%. Manual verdicts are already ✓ or ✗, so the manual pass rate is the share marked ✓ Correct.`} Hover any cell for counts.</p>
+      <div style="overflow-x:auto"><table class="snap">${head}<tbody>`;
+    const catVals = {};
+    GROUPS.forEach(g => {
+      h += `<tr><td>${GROUP_LABEL[g]} <span class="muted" style="font-size:11px">· weight ${C.meta.group_weights[g]}%</span></td>` + M.map((m, i) => methods.map(([k, lbl], mi) => {
+        const st = catStat(k, i, g, S, mode); push('category', GROUP_LABEL[g], m, lbl, mode === 'acc' ? 'accuracy' : 'pass rate', st);
+        (catVals[g] = catVals[g] || {})[`${k}|${i}`] = st;
+        return sCell(st, SERIES[i], `${GROUP_LABEL[g]} · ${m} · ${lbl}`, mode === 'acc', mi ? '' : 'mstart');
+      }).join('')).join('') + '</tr>';
+    });
+    h += `<tr class="tot"><td>Overall product score <span class="muted" style="font-size:11px;font-weight:400">(weighted)</span></td>` + M.map((m, i) => methods.map(([k, lbl], mi) =>
+      sCell(prodStat(k, i, S, 'acc'), SERIES[i], `Overall · ${m} · ${lbl}`, true, mi ? '' : 'mstart')).join('')).join('') + '</tr>';
+    h += `<tr class="tot"><td>Products passing (≥ ${T}%)</td>` + M.map((m, i) => methods.map(([k, lbl], mi) =>
+      sCell(prodPass[mi][i], SERIES[i], `Products passing · ${m} · ${lbl}`, false, mi ? '' : 'mstart')).join('')).join('') + '</tr>';
+    h += `</tbody></table></div></section>`;
+
+    // dot plot: each category, each model, three methods on one scale
+    const dotGroups = [...GROUPS.map(g => [g, GROUP_LABEL[g], i => methods.map(([k]) => [k, catVals[g][`${k}|${i}`]])]),
+      ['overall', 'Overall product score', i => methods.map(([k]) => [k, prodStat(k, i, S, 'acc')])]];
+    const pts = dotGroups.map(([g, lbl, f]) => [g, lbl, M.map((m, i) => f(i))]);
+    const vals = pts.flatMap(([, , rows]) => rows.flatMap(r => r.map(([, st]) => st && st[1] ? st[0] / st[1] : null))).filter(v => v != null);
+    const lo = Math.max(0, Math.floor(Math.min(thr, ...vals) * 10) * 10 - 10), x = v => (v * 100 - lo) / (100 - lo) * 100;
+    const shapeLegend = methods.map(([k, lbl]) => `<span><i class="mk lg ${k}"></i>${lbl}</span>`).join('');
+    h += `<section><h2>Where the methods agree and differ</h2>
+      <p class="sub">Each row is one model; the three marks are the three methods (${mode === 'acc' ? 'accuracy' : `pass rate at ${T}%`}${mode === 'pass' ? '; overall = mean product score' : ''}). Marks far apart mean the methods disagree on that category. The dashed line is the ${T}% threshold.</p>
+      <div class="legend" style="margin-top:8px">${M.map((m, i) => `<span><i class="swatch" style="background:${SERIES[i]}"></i>${esc(m)}</span>`).join('')}<span style="margin-left:10px"></span>${shapeLegend}</div>
+      <div class="dots">` + pts.map(([g, lbl, rows]) => `<div class="dpanel"><h4>${lbl}</h4>` + rows.map((r, i) => `<div class="drow"><span><i class="swatch" style="background:${SERIES[i]}"></i>${esc(M[i])}</span>
+        <div class="dtrack"><span class="tl" style="left:${x(thr)}%"></span>${r.map(([k, st]) => {
+          if (!st || !st[1]) return ''; const v = st[0] / st[1], lblM = METHODS.find(z => z[0] === k)[1];
+          return `<i class="mk ${k}" style="left:${x(v)}%;background:${SERIES[i]}" data-tip="${esc(`${lbl} · ${M[i]}\n${lblM}: ${fmtP(v)} (n = ${st[1].toLocaleString()})`)}"></i>`; }).join('')}</div></div>`).join('') +
+        `<div class="daxis"><span>${lo}%</span><span>${Math.round((lo + 100) / 20) * 10}%</span><span>100%</span></div></div>`).join('') + `</div></section>`;
+
+    // agreement between methods
+    const pairs = [['regex', 'llm'], ['regex', 'human'], ['llm', 'human']].filter(p => p.every(k => methods.some(([mk]) => mk === k)));
+    const ML = Object.fromEntries(METHODS.map(([k, l]) => [k, l]));
+    h += `<section><h2>Do the methods agree? (category verdicts at ${T}%)</h2>
+      <p class="sub">Each method's ✓/✗ per product, model and category, compared pairwise. Pairs with Manual only use products checked by hand. Hover for the per-model split.</p>
+      <table class="snap" style="max-width:860px"><thead><tr><th>Category</th>${pairs.map(([a, b]) => `<th>${ML[a]} ↔ ${ML[b]}</th>`).join('')}</tr></thead><tbody>` +
+      [...GROUPS, null].map(g => `<tr class="${g ? '' : 'tot'}"><td>${g ? GROUP_LABEL[g] : 'All categories'}</td>${pairs.map(([a, b]) => {
+        const st = agreeStat(a, b, g, S); push('agreement', g ? GROUP_LABEL[g] : 'All categories', 'all models', `${ML[a]} vs ${ML[b]}`, 'agreement', st);
+        const tip = `${g ? GROUP_LABEL[g] : 'All categories'} · ${ML[a]} ↔ ${ML[b]}\n` + M.map((m, i) => { const s = agreeStat(a, b, g, S, i); return `${m}: ${s[1] ? fmtP(s[0] / s[1]) : '–'} (${s[1]})`; }).join('\n');
+        if (!st[1]) return `<td class="na" data-tip="${esc(tip)}">–</td>`;
+        const v = st[0] / st[1];
+        return `<td data-tip="${esc(tip)}">${fmtP(v)}<span class="meter sm"><i style="width:${v * 100}%;background:var(--text-secondary)"></i></span> <span class="muted">(${st[1].toLocaleString()})</span></td>`;
+      }).join('')}</tr>`).join('') + `</tbody></table></section>`;
+
+    // field detail (regex vs LLM; manual is per category only)
+    const autoM = methods.filter(([k]) => k !== 'human');
+    const fHead = `<thead><tr><th></th>${M.map((m, i) => `<th colspan="${autoM.length}" class="mstart"><i class="swatch" style="background:${SERIES[i]}"></i> ${esc(m)}</th>`).join('')}</tr>
+      <tr><th>Field</th>${M.map(() => autoM.map(([, lbl], mi) => `<th class="${mi ? '' : 'mstart'}">${lbl}</th>`).join('')).join('')}</tr></thead>`;
+    const nutKeys = Object.keys(PRE.FR).filter(k => k.startsWith('nutrients.'));
+    const fRow = (label, rk, lk, cls, cat) => `<tr class="${cls}"><td>${esc(label)}</td>` + M.map((m, i) => autoM.map(([k, lbl], mi) => {
+      const st = k === 'regex' ? fieldStat(rk, PRE.FR, i, S, mode, false) : fieldStat(lk, PRE.FL, i, S, mode, true);
+      push('field', `${cat} / ${label}`, m, lbl, mode === 'acc' ? 'accuracy' : 'pass rate', st);
+      return sCell(st, SERIES[i], `${label} · ${m} · ${lbl}`, mode === 'acc', mi ? '' : 'mstart');
+    }).join('')).join('') + '</tr>';
+    h += `<section><h2>Field by field: ${metricName}</h2>
+      <p class="sub">Everything the two automated pages compare, field by field, for ${esc(scopeName)}. Regex: mean field score${mode === 'pass' ? ` (pass rate: share of values scoring ≥ ${T}%)` : ''}. LLM judge: share of values marked ✓ (~ partial counts as not correct). Manual review is recorded per category, so it appears in the scorecard above.</p>
+      <div style="overflow-x:auto"><table class="snap">${fHead}<tbody>`;
+    GROUPS.forEach(g => {
+      h += `<tr class="grp"><td colspan="${1 + M.length * autoM.length}">${GROUP_LABEL[g]}</td></tr>`;
+      FIELD_ROWS.filter(r => r[0] === g).forEach(([, label, rk, lk]) => {
+        if (rk === 'nutrients') {
+          h += fRow(label, nutKeys, nutKeys, '', GROUP_LABEL[g]);
+          const counted = nutKeys.map(k => [k, (PRE.FR[k][0] || []).filter(([u]) => !S.uidSet || S.uidSet.has(u)).length]).filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
+          const minN = snapScope === 'all' ? 50 : 5;
+          const shown = snapAllNut ? counted : counted.filter(([, n]) => n >= minN);
+          shown.forEach(([k, n]) => { h += fRow(`${nutLabel(k)} · ${n.toLocaleString()} products`, [k], [k], 'sub', 'Nutrients'); });
+          if (counted.length > shown.length || snapAllNut)
+            h += `<tr class="sub"><td colspan="${1 + M.length * autoM.length}"><button id="snapNut">${snapAllNut ? `Show only nutrients on ${minN}+ products` : `Show all ${counted.length} nutrients (${counted.length - shown.length} rarer ones hidden)`}</button></td></tr>`;
+        } else h += fRow(label, rk, lk, '', GROUP_LABEL[g]);
+      });
+    });
+    h += `</tbody></table></div>
+      <details class="method"><summary>How these numbers are calculated</summary><ul>
+        <li><b>Regex</b> scores every field 0–100% after normalizing text, units and numbers (see ① Regex comparison → Methodology). A category's score is the mean of its fields; a product's score weights the categories ${GROUPS.map(g => `${GROUP_LABEL[g]} ${C.meta.group_weights[g]}%`).join(', ')}.</li>
+        <li><b>LLM judge</b> marks each field ✓, ~ or ✗ (${esc(J?.judge || 'gpt-4o-mini')} for text; exact checks for numbers and codes). Accuracy = ✓ ÷ all marks; a category or product passes when at least ${T}% of its marks are ✓.</li>
+        <li><b>Manual</b>: each reviewer marks every category ✓ Correct, ✗ Wrong or N/A per model. Only fully checked products count; N/A is left out. A product's manual score uses the same category weights as regex.</li>
+        <li><b>The threshold</b> is shared by all three methods so they are judged on the same bar. The ① and ② pages have their own defaults (80% and 85%).</li>
+        <li><b>Scope</b>: “All products” compares the automated methods over the full dataset and manual over whatever has been checked so far. For a like-for-like comparison, limit the scope to products checked by hand.</li>
+      </ul></details></section>`;
+
+    $('tab-snapshot').innerHTML = h;
+    $('tab-snapshot').querySelectorAll('[data-metric]').forEach(b => b.onclick = () => { snapMetric = b.dataset.metric; localStorage.setItem('lp-snap-metric', snapMetric); renderSnapshot(); });
+    $('snapScope').onchange = e => { snapScope = e.target.value; localStorage.setItem('lp-snap-scope', snapScope); renderSnapshot(); };
+    if ($('snapNut')) $('snapNut').onclick = () => { snapAllNut = !snapAllNut; renderSnapshot(); };
+    $('snapCsv').onclick = () => download(`lishepoa_snapshot_${snapScope}_${T}pct.csv`, snapCsv.map(r => r.map(x => `"${String(x ?? '').replace(/"/g, '""')}"`).join(',')).join('\n'), 'text/csv');
+  }
+
+  // hover tooltip for anything with data-tip
+  document.addEventListener('mouseover', e => { const t = e.target.closest?.('[data-tip]'); const tip = $('tip'); if (!t) { tip.style.display = 'none'; return; } tip.textContent = t.dataset.tip; tip.style.display = 'block'; });
+  document.addEventListener('mousemove', e => { const tip = $('tip'); if (tip.style.display !== 'block') return;
+    const w = tip.offsetWidth, hgt = tip.offsetHeight; tip.style.left = Math.min(e.clientX + 14, innerWidth - w - 8) + 'px'; tip.style.top = (e.clientY + 16 + hgt > innerHeight ? e.clientY - hgt - 10 : e.clientY + 16) + 'px'; });
+
   // ---------- tabs + keys ----------
   document.querySelectorAll('.tabs button').forEach(bt => bt.onclick = () => {
     document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('active', x === bt));
-    ['review', 'results', 'help'].forEach(t => $('tab-' + t).hidden = t !== bt.dataset.tab);
+    ['review', 'snapshot', 'results', 'help'].forEach(t => $('tab-' + t).hidden = t !== bt.dataset.tab);
+    localStorage.setItem('lp-tab', bt.dataset.tab);
     if (bt.dataset.tab === 'results') { renderResults(); refreshOthers(); }
+    if (bt.dataset.tab === 'snapshot') { renderSnapshot(); refreshOthers(); }
   });
   document.addEventListener('keydown', e => {
     if (e.target.matches('textarea, input[type=text], select') || e.ctrlKey || e.metaKey || e.altKey || $('tab-review').hidden) return;
@@ -615,10 +956,15 @@
     C.records.forEach(r => { byUid[r.uid] = r; });
     allUids = C.records.filter(r => Object.keys(r.models).length).map(r => r.uid);
     buildPools();
+    precompute();
+    if (!thr || thr < .5 || thr > 1) thr = C.meta.threshold;
+    initThreshold();
     REVIEWERS.forEach(r => docs[r] = docs[r] || blankDoc(r));
     if (me && !REVIEWERS.includes(me)) me = null;
     if (me) { const unsaved = localStorage.getItem('lp-unsaved-' + me); if (unsaved) { try { docs[me] = JSON.parse(unsaved); queueSave(); } catch { } } }
     renderTop(); renderBatch();
+    const lastTab = document.querySelector(`.tabs button[data-tab="${localStorage.getItem('lp-tab')}"]`);
+    if (lastTab && lastTab.dataset.tab !== 'review') lastTab.click();
     setInterval(refreshOthers, 30000);
   })();
 })();

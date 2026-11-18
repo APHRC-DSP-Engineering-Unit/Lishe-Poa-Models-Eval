@@ -42,6 +42,17 @@ python3 serve.py          # then open http://localhost:8000
 - **Through git:** each reviewer commits their own `reviews/<name>.json`, and the team's progress adds up after a `git pull`. One file per person means no merge conflicts.
 - **One shared server:** one person runs `python3 serve.py --lan`, and the others open `http://<that-computer's-IP>:8000` on the same network.
 
+**📊 Snapshot** (a tab on the same page) puts all three methods side by side, using the same six categories:
+
+- **Pass threshold slider** (50–100%, in the tab bar). One pass mark drives every ✓/✗, pass rate and agreement figure on the page, including Team results and the verdict hints. The browser remembers it; **Reset** returns to 80%.
+- **Per model:** products passing and mean score by regex, by LLM judge and by hand.
+- **Category scorecard:** model × method. Switch between **Accuracy** and **Pass rate at the threshold**.
+- **Dot plot:** one panel per category, showing where the three methods agree or disagree.
+- **Method agreement:** Regex ↔ LLM judge, Regex ↔ Manual and LLM judge ↔ Manual, per category.
+- **Field by field:** regex vs LLM judge for every field and nutrient.
+- **Scope:** all 1,500 products, only the products checked by hand, or one reviewer's products.
+- **CSV export:** everything shown, at the current threshold and scope.
+
 **Team results** (on the same page) shows:
 
 - human-judged accuracy per model and category
