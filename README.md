@@ -16,7 +16,7 @@ The project has three ways of checking, each with its own page:
 | Page | What it does |
 |---|---|
 | **① Regex comparison** (`site/regex.html`) | Rule-based and fully automatic. Regex normalization, a 0–100% score per field, and PASS when the weighted score is at least 80%. |
-| **② LLM judge** (`site/llm-judge.html`) | GPT-4o mini grades text fields blind; numbers and codes are checked exactly in Python. PASS at 85%. |
+| **② LLM judge** (`site/llm-judge.html`) | GPT-4o mini grades text fields blind; numbers and codes are checked. PASS at 85%. |
 | **③ Manual review** (`site/manual-review.html`) | Clive, Abigail and Roda check random batches of 33 products by hand. |
 
 All three use the same six categories: **Identity**, **Package**, **Nutrition basis**, **Nutrients**, **Ingredients**, and **Other label information**.
@@ -81,7 +81,7 @@ One-time setup:
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
-echo "OPENAI_API_KEY=sk-..." > .env       # never commit this file (it is in .gitignore)
+echo "OPENAI_API_KEY=sk-..." > .env       
 ```
 
 Run it:
